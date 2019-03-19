@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- *   Information synth&eacute;tique sur un film.
+ * Information synthetique sur un film.
  */
 public class InfoFilm implements Comparable<InfoFilm> {
     private String                 _titre;
@@ -14,15 +14,14 @@ public class InfoFilm implements Comparable<InfoFilm> {
     private ArrayList<String>      _autres_titres;
 
     /**
-     *  Constructeur.
-     *
-     *  @param titre Titre (fran&ccedil;ais en g&eacute;n&eacute;ral) du film
-     *  @param realisateurs Liste des r&eacute;alisateurs (peut &ecirc;tre vide)
-     *  @param acteurs Liste des acteurs (peut &ecirc;tre vide)
-     *  @param pays Nom (fran&ccedil;ais) du pays
-     *  @param annee Ann&eacute;e de sortie
-     *  @param duree Dur&eacute;e en minutes; 0 ou valeur n&eacute;gative si l'information n'est pas connue
-     *  @param autres_titres Liste des titres alternatifs (peut &ecirc;tre vide), type titre original ou titre anglais &agrave; l'international
+     * Constructeur.
+     *  @param titre Titre (fracais en general) du film.
+     *  @param realisateurs Liste des realisateurs (peut etre vide).
+     *  @param acteurs Liste des acteurs (peut etre vide).
+     *  @param pays Nom (francais) du pays.
+     *  @param annee Annee de sortie.
+     *  @param duree Duree en minutes; 0 ou valeur negative si l'information n'est pas connue.
+     *  @param autres_titres Liste des titres alternatifs (peut etre vide), type titre original ou titre anglais a l'international.
      */
     public InfoFilm(String titre,
                     ArrayList<NomPersonne> realisateurs,
@@ -44,9 +43,8 @@ public class InfoFilm implements Comparable<InfoFilm> {
     }
 
     /**
-     *   Comparaison par titre, puis ann&eacute;e, puis pays.
-     *
-     *    @return un entier inf&eacute;rieur, &eacute;gal ou sup&eacute;rieur &agrave; z&eacute;ro suivant le cas
+     * Comparaison par titre, puis annee, puis pays.
+     *  @return Un entier inferieur, egal ou superieur a zero suivant le cas.
      */
     @Override
     public int compareTo(InfoFilm autre) {
@@ -65,11 +63,10 @@ public class InfoFilm implements Comparable<InfoFilm> {
     }
 
     /**
-     *   Affiche sous forme d'objet JSON des informations sous un film.
-     *   <p>
-     *   R&eacute;alisateurs et acteurs sont tri&eacute;s par ordre alphab&eacute;tique, la dur&eacute;e est convertie en heures et minutes.
-     *
-     *   @return Une cha&icirc;ne de caract&egrave;res repr&eacute;sentant un objet JSON.
+     * Affiche sous forme d'objet JSON des informations sous un film.
+     * <p>
+     * Realisateurs et acteurs sont tries par ordre alphabetique, la duree est convertie en heures et minutes.
+     *  @return Une chaine de caracteres representant un objet JSON.
      */
     @Override
     public String toString() {
