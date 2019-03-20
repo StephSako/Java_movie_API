@@ -1,3 +1,5 @@
+import java.sql.*;
+
 /**
  * Classe de recherche simplifiée sur la BDD IMDB.
  *  @author Machon
@@ -11,7 +13,14 @@ public class RechercheFilm {
      *  @param nomFichierSQLite Nom du ficher BDD.
      */
     public RechercheFilm(String nomFichierSQLite) {
-        //TODO connexion BDD
+        Connection co = null;
+        String bdd = "jdbc:sqlite:bdd/bdfilm.sqlite";
+        try {
+            co = DriverManager.getConnection(bdd);
+            System.out.println("Connection successful !");
+        } catch(Exception err) {
+            System.err.println(err.getMessage());
+        }
     }
 
     /**
@@ -23,7 +32,7 @@ public class RechercheFilm {
 
     /**
      * Effectue une recherche dans la BDD.
-     *  @param requete Langage de recherce simplifée:
+     *  @param requete Langage de recherce simplifee:
      *      TITRE suivi d'un titre de film;
      *      DE suivi d'un nom de réalisateur;
      *      AVEC suivi d'un nom d'acteur ou d'actrice;

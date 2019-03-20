@@ -15,7 +15,7 @@ public class InfoFilm implements Comparable<InfoFilm> {
 
     /**
      * Constructeur.
-     *  @param titre Titre (fracais en general) du film.
+     *  @param titre Titre (francais en general) du film.
      *  @param realisateurs Liste des realisateurs (peut etre vide).
      *  @param acteurs Liste des acteurs (peut etre vide).
      *  @param pays Nom (francais) du pays.
