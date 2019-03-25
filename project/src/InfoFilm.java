@@ -15,13 +15,13 @@ public class InfoFilm implements Comparable<InfoFilm> {
 
     /**
      * Constructeur.
-     *  @param titre Titre (francais en general) du film.
-     *  @param realisateurs Liste des realisateurs (peut etre vide).
-     *  @param acteurs Liste des acteurs (peut etre vide).
-     *  @param pays Nom (francais) du pays.
-     *  @param annee Annee de sortie.
-     *  @param duree Duree en minutes; 0 ou valeur negative si l'information n'est pas connue.
-     *  @param autres_titres Liste des titres alternatifs (peut etre vide), type titre original ou titre anglais a l'international.
+     * @param titre Titre (francais en general) du film.
+     * @param realisateurs Liste des realisateurs (peut etre vide).
+     * @param acteurs Liste des acteurs (peut etre vide).
+     * @param pays Nom (francais) du pays.
+     * @param annee Annee de sortie.
+     * @param duree Duree en minutes; 0 ou valeur negative si l'information n'est pas connue.
+     * @param autres_titres Liste des titres alternatifs (peut etre vide), type titre original ou titre anglais a l'international.
      */
     public InfoFilm(String titre,
                     ArrayList<NomPersonne> realisateurs,
@@ -44,7 +44,7 @@ public class InfoFilm implements Comparable<InfoFilm> {
 
     /**
      * Comparaison par titre, puis annee, puis pays.
-     *  @return Un entier inferieur, egal ou superieur a zero suivant le cas.
+     * @return Un entier inferieur, egal ou superieur a zero suivant le cas.
      */
     @Override
     public int compareTo(InfoFilm autre) {
@@ -64,9 +64,8 @@ public class InfoFilm implements Comparable<InfoFilm> {
 
     /**
      * Affiche sous forme d'objet JSON des informations sous un film.
-     * <p>
-     * Realisateurs et acteurs sont tries par ordre alphabetique, la duree est convertie en heures et minutes.
-     *  @return Une chaine de caracteres representant un objet JSON.
+     * <p>Realisateurs et acteurs sont tries par ordre alphabetique, la duree est convertie en heures et minutes.
+     * @return Une chaine de caracteres representant un objet JSON.
      */
     @Override
     public String toString() {

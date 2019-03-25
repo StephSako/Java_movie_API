@@ -1,7 +1,6 @@
 /**
  * Gestion des noms (noms de famille + prenom) des personnes.
- * <p>
- * La classe NomPersonne permet de gerer les noms et tient en particulier compte des prefixes des noms ('de', 'von', 'van') dans le tri.
+ * <p>La classe NomPersonne permet de gerer les noms et tient en particulier compte des prefixes des noms ('de', 'von', 'van') dans le tri.
  */
 public class NomPersonne implements Comparable<NomPersonne>{
     private String _nom;
@@ -10,8 +9,8 @@ public class NomPersonne implements Comparable<NomPersonne>{
 
     /**
      * Creation d'un nouveau NomPersonne, le prenom est passe en deuxieme.
-     *  @param nom Nom de famille ou nom d'artiste.
-     *  @param prenom Prenom (peut etre "null").
+     * @param nom Nom de famille ou nom d'artiste.
+     * @param prenom Prenom (peut etre "null").
      */
     public NomPersonne(String nom, String prenom) {
         _nom = new String(nom);
@@ -29,8 +28,8 @@ public class NomPersonne implements Comparable<NomPersonne>{
 
     /**
      * Comparateur qui tient compte des prefixes de noms.
-     *  @param autre NomPersonne qui est compare a l'objet courant.
-     *  @return Un entier inferieur, egal ou superieur a zero suivant le cas.
+     * @param autre NomPersonne qui est compare a l'objet courant.
+     * @return Un entier inferieur, egal ou superieur a zero suivant le cas.
      */
     @Override
     public int compareTo(NomPersonne autre) {
@@ -48,9 +47,8 @@ public class NomPersonne implements Comparable<NomPersonne>{
 
     /**
      * Retourne un nom affichable.
-     * <p>
-     * S'il y a une mention telle que (Jr.) qui dans la base est dans la colonne du prenom, elle est reportee a la fin.
-     *  @return La combinaison du prenom et du nom, dans cet ordre.
+     * <p>S'il y a une mention telle que (Jr.) qui dans la base est dans la colonne du prenom, elle est reportee a la fin.
+     * @return La combinaison du prenom et du nom, dans cet ordre.
      */
     @Override
     public String toString() {
