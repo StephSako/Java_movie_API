@@ -103,6 +103,54 @@ public class RechercheFilm {
 
     private String convertToSQL(Map<String, ArrayList<String>> map) {
         //TODO Sakovitch
+        StringBuilder reqSQL = new StringBuilder();
+        reqSQL.append("SELECT titre, nom, prenom, pays, annee FROM films"); // Requête SQl générale
+
+        StringBuilder AVEC_SQL = new StringBuilder(); // Parties de la requête selon les champs saisis
+        String TITRE_SQL = "";
+        String DE_SQL = "";
+
+        if (map.containsKey("AVEC")){
+            reqSQL.append(" NATURAL JOIN (personnes NATURAL JOIN generique)");
+            ArrayList<String> personnes_array = map.get("AVEC");
+
+            String nom;
+            // Ajout de la condition pour les noms
+            for (int i = 0; i < personnes_array.size(); i++) {
+                String[] parts = personnes_array.get(i).split(" ");
+
+                nom = parts[0];
+
+                if (i == 0){
+                    AVEC_SQL.append(" WHERE nom IN ('").append(nom).append("'");
+                }
+                else AVEC_SQL.append(" ,'").append(nom).append("'");
+
+                AVEC_SQL.append(")");
+            }
+
+            String prenom;
+            // Ajout de la condition pour les prenoms
+            for (int i = 0; i < personnes_array.size(); i++) {
+                String[] parts = personnes_array.get(i).split(" ");
+
+                prenom = parts[1];
+
+                if (i == 0){
+                    AVEC_SQL.append(" WHERE prenom IN ('").append(prenom).append("'");
+                }
+                else AVEC_SQL.append(" ,'").append(prenom).append("'");
+
+                AVEC_SQL.append(")");
+            }
+        }
+
+        if (map.containsKey("TITRE")){
+            TITRE_SQL = " AND titre = '" + map.get("TITRE") + "'";
+        }
+
+        reqSQL.append(AVEC_SQL + TITRE_SQL);
+        return reqSQL.toString();
     }
 
     private ArrayList<InfoFilm> getInfoFilmArray(ResultSet set) {
@@ -125,7 +173,6 @@ public class RechercheFilm {
         RechercheFilm r = new RechercheFilm("bdd/bdfilm.sqlite");
         r.retrouve("TITRE blues, AVEC John Belushi");
         System.out.println(r.bdd.requete("SELECT * FROM films").toString());
-        HashMap<String, String>
     }
 
 }
