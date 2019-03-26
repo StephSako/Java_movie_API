@@ -30,13 +30,30 @@ public class BDDManager {
     }
 
     /**
+     * Retourne le resultat d'une requete SQL.
+     * @param reqSQL Requete SQL sous forme de String.
+     * @return ResultSet de la reponse a la requete.
+     */
+    public ResultSet requete(String reqSQL) {
+
+        try (ResultSet rs = co.createStatement().executeQuery(reqSQL)) {
+            return rs;
+        }
+        catch (Exception err) {
+            System.err.println(err.getMessage());
+            return null;
+            //TODO handle exception
+        }
+    }
+
+    /**
      * Retourne le resultat d'une requete SQL sous forme d'un tableau 2D de String.
      * @param reqSQL Requete SQL sous forme de String.
      * @return Tableau 2D de String.<br>
      * La premiere ligne contient le nom des colonnes.<br>
      * Les autres lignes contiennent les valeurs.
      */
-    public ArrayList<ArrayList<String>> requete(String reqSQL) {
+    public ArrayList<ArrayList<String>> requeteArray(String reqSQL) {
 
         try (ResultSet rs = co.createStatement().executeQuery(reqSQL)) {
 
@@ -60,10 +77,9 @@ public class BDDManager {
                 result.add(new ArrayList<>(tmp));
                 tmp.clear();
             }
-
             return result;
-
-        } catch (Exception err) {
+        }
+        catch (Exception err) {
             System.err.println(err.getMessage());
             return null;
             //TODO handle exception
