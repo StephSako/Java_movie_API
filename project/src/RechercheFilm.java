@@ -111,52 +111,66 @@ public class RechercheFilm {
         StringBuilder APRES_SQL = new StringBuilder();
         StringBuilder EN_SQL = new StringBuilder();
 
+        // Chaîne du FROM  qui pourraît être modifié par la recherche d'acteurs ou réalisateurs
+        StringBuilder FROM_WITH_JOIN = new StringBuilder();
+
+        boolean where_created = false;
+
         reqSQL.append("SELECT titre, nom, prenom, pays, annee FROM films"); // Requête SQl générale
 
         if (map.containsKey("AVEC")){ // TODO Refaire nom / prenom SQL
             reqSQL.append(" NATURAL JOIN (personnes NATURAL JOIN generique)");
             ArrayList<String> personnes_array = map.get("AVEC");
 
-            String nom;
-            // Ajout de la condition pour les noms
+            String nom, prenom;
+            // Ajout de la condition pour les noms et prenoms
             for (int i = 0; i < personnes_array.size(); i++) {
-                String[] parts = personnes_array.get(i).split(" ");
 
+                // On ajoute un table avec jointure car il s'agit d'un nouvel acteur
+                FROM_WITH_JOIN.append(" LEFT JOIN (personnes NATURAL JOIN generique) A").append(i).append(" ON films.id_film = A").append(i).append(".id_film");
+
+                String[] parts = personnes_array.get(i).split(" "); // On sépare nom et prénom de la personne
                 nom = parts[0];
+                prenom = parts[0];
 
-                if (i == 0) AVEC_SQL.append(" WHERE nom IN ('").append(nom).append("'");
-                else AVEC_SQL.append(" ,'").append(nom).append("'");
+                if (i == 0) {
+                    AVEC_SQL.append(" WHERE");
+                    where_created = true;
+                }
+                else AVEC_SQL.append(" AND");
 
-                AVEC_SQL.append(")");
-            }
-
-            String prenom;
-            // Ajout de la condition pour les prenoms
-            for (int i = 0; i < personnes_array.size(); i++) {
-                String[] parts = personnes_array.get(i).split(" ");
-
-                prenom = parts[1];
-
-                if (i == 0) AVEC_SQL.append(" WHERE prenom IN ('").append(prenom).append("'");
-                else AVEC_SQL.append(" ,'").append(prenom).append("'");
-
-                AVEC_SQL.append(")");
+                AVEC_SQL.append(" A").append(i).append(".nom = '").append(nom).append("' AND A").append(i).append(".prenom = '").append(prenom).append("' AND A").append(i).append(".role = 'A'");
             }
         }
 
         // Ajout de la condition liée au titre du film
-        if (map.containsKey("TITRE")) TITRE_SQL.append(" AND titre LIKE '%").append(map.get("TITRE")).append("%'");
+        if (map.containsKey("TITRE")){
+            if (where_created) TITRE_SQL.append(" AND titre LIKE '%").append(map.get("TITRE")).append("%'");
+            else TITRE_SQL.append(" WHERE titre LIKE '%").append(map.get("TITRE")).append("%'");
+        }
 
         // Ajout de la condition liée aux années passées
-        if (map.containsKey("AVANT")) AVANT_SQL.append(" AND annee < " + map.get("AVANT"));
+        if (map.containsKey("AVANT")){
+            if (where_created) AVANT_SQL.append(" AND annee < ").append(map.get("AVANT"));
+            else AVANT_SQL.append(" WHERE annee < ").append(map.get("AVANT"));
+        }
 
         // Ajout de la condition liée aux années futures
-        if (map.containsKey("APRES")) APRES_SQL.append(" AND annee > ").append(map.get("APRES"));
-        else if (map.containsKey("APRÈS")) APRES_SQL.append(" AND annee > ").append(map.get("APRÈS"));
+        if (map.containsKey("APRES")){
+            if (where_created) APRES_SQL.append(" AND annee > ").append(map.get("APRES"));
+            else APRES_SQL.append(" WHERE annee > ").append(map.get("APRES"));
+        }
+        else if (map.containsKey("APRÈS")){
+            if (where_created) APRES_SQL.append(" AND annee > ").append(map.get("APRÈS"));
+            else  APRES_SQL.append(" WHERE annee > ").append(map.get("APRÈS"));
+        }
 
-        if (map.containsKey("EN")) EN_SQL.append(" AND annee = ").append(map.get("EN"));
+        if (map.containsKey("EN")){
+            if (where_created) EN_SQL.append(" AND annee = ").append(map.get("EN"));
+            else EN_SQL.append(" WHERE annee = ").append(map.get("EN"));
+        }
 
-        //reqSQL.append(); // Ajout de chaque clause du WHERE
+        //reqSQL.append(); // Ajout de la clause FROM  et de chaque clause du WHERE
         return reqSQL.toString();
     }
 
