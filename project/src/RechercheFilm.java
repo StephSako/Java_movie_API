@@ -104,13 +104,16 @@ public class RechercheFilm {
     private String convertToSQL(Map<String, ArrayList<String>> map) {
         //TODO Sakovitch
         StringBuilder reqSQL = new StringBuilder();
+        StringBuilder AVEC_SQL = new StringBuilder();
+        StringBuilder TITRE_SQL = new StringBuilder();
+        StringBuilder DE_SQL = new StringBuilder(); //TODO DE_SQL
+        StringBuilder AVANT_SQL = new StringBuilder();
+        StringBuilder APRES_SQL = new StringBuilder();
+        StringBuilder EN_SQL = new StringBuilder();
+
         reqSQL.append("SELECT titre, nom, prenom, pays, annee FROM films"); // Requête SQl générale
 
-        StringBuilder AVEC_SQL = new StringBuilder(); // Parties de la requête selon les champs saisis
-        String TITRE_SQL = "";
-        String DE_SQL = "";
-
-        if (map.containsKey("AVEC")){
+        if (map.containsKey("AVEC")){ // TODO Refaire nom / prenom SQL
             reqSQL.append(" NATURAL JOIN (personnes NATURAL JOIN generique)");
             ArrayList<String> personnes_array = map.get("AVEC");
 
@@ -121,9 +124,7 @@ public class RechercheFilm {
 
                 nom = parts[0];
 
-                if (i == 0){
-                    AVEC_SQL.append(" WHERE nom IN ('").append(nom).append("'");
-                }
+                if (i == 0) AVEC_SQL.append(" WHERE nom IN ('").append(nom).append("'");
                 else AVEC_SQL.append(" ,'").append(nom).append("'");
 
                 AVEC_SQL.append(")");
@@ -136,20 +137,26 @@ public class RechercheFilm {
 
                 prenom = parts[1];
 
-                if (i == 0){
-                    AVEC_SQL.append(" WHERE prenom IN ('").append(prenom).append("'");
-                }
+                if (i == 0) AVEC_SQL.append(" WHERE prenom IN ('").append(prenom).append("'");
                 else AVEC_SQL.append(" ,'").append(prenom).append("'");
 
                 AVEC_SQL.append(")");
             }
         }
 
-        if (map.containsKey("TITRE")){
-            TITRE_SQL = " AND titre = '" + map.get("TITRE") + "'";
-        }
+        // Ajout de la condition liée au titre du film
+        if (map.containsKey("TITRE")) TITRE_SQL.append(" AND titre LIKE '%").append(map.get("TITRE")).append("%'");
 
-        reqSQL.append(AVEC_SQL + TITRE_SQL);
+        // Ajout de la condition liée aux années passées
+        if (map.containsKey("AVANT")) AVANT_SQL.append(" AND annee < " + map.get("AVANT"));
+
+        // Ajout de la condition liée aux années futures
+        if (map.containsKey("APRES")) APRES_SQL.append(" AND annee > ").append(map.get("APRES"));
+        else if (map.containsKey("APRÈS")) APRES_SQL.append(" AND annee > ").append(map.get("APRÈS"));
+
+        if (map.containsKey("EN")) EN_SQL.append(" AND annee = ").append(map.get("EN"));
+
+        //reqSQL.append(); // Ajout de chaque clause du WHERE
         return reqSQL.toString();
     }
 
