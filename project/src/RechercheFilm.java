@@ -1,5 +1,6 @@
 import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
 
+import java.sql.Array;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,12 +13,13 @@ import java.util.Arrays;
  */
 public class RechercheFilm {
 
+    //TODO Isn't MoviePseudoRequest better as Enum ?
     private class MoviePseudoRequest {
         public ArrayList<String> TITRE = new ArrayList<>();
         public ArrayList<ArrayList<String>> DE = new ArrayList<>();
         public ArrayList<ArrayList<String>> AVEC = new ArrayList<>();
-        public String PAYS = "";
-        public String EN = "";
+        public ArrayList<String> PAYS = new ArrayList<>();
+        public ArrayList<String> EN = new ArrayList<>();
         public String AVANT = "";
         public String APRES = "";
     }
@@ -65,52 +67,102 @@ public class RechercheFilm {
 
     private MoviePseudoRequest formatRequest(String requete) {
 
-        MoviePseudoRequest moviePseudoRequest = new MoviePseudoRequest();
+        MoviePseudoRequest infos = new MoviePseudoRequest();
 
-        String term = "", value = "";
-        boolean isTerm = true;
+        String field="", value="";
+        ArrayList<String> tmpStorage = new ArrayList<>();
+        boolean newField = true;
         String[] possibleTerms = {"TITRE", "DE", "AVEC", "PAYS", "EN", "AVANT", "APRES"};
 
-        for (int i=0; i<requete.length(); i++) {
-            char c = requete.charAt(i);
-
-            if (isTerm) //si on s'occupe du terme
+        String[] list = requete.split(" |((?<=,)|(?=,))");
+        for (int i=0; i<list.length; i++) //pour chaque mot de la recherche
+        {
+            String str = list[i];
+            if (newField) //si on commence un nouveau champ
             {
-                if (c != ' ') //si le char actuel n'est pas un espace
+                field = "";
+                if (Arrays.asList(possibleTerms).contains(str)) //si le champ fait parti des champs valides
                 {
-                    term += Character.toUpperCase(c);
+                    field = str;
+                    newField = false;
                 }
-                else //si le char actuel est un espace = la fin du terme
+                else //si le champ n'est pas reconnu
                 {
-                    if (Arrays.asList(possibleTerms).contains(term)) //si le terme est valide
+                    throw new SyntaxException("Invalid field name: "+str);
+                }
+            }
+            else //si on regarde la valeur d'un champ
+            {
+                if (str.equals("OU"))
+                {
+
+                }
+                else if (str.equals(","))
+                {
+                    if (field.equals("TITRE"))
                     {
-                        isTerm = false; // TODO ENREGISTRER LES NOMS / PRENOMS SANS LES ACCENTS (ILS SERONT CEPENDANT RETOURNER AVEC)
+                        if (tmpStorage.isEmpty())
+                        {
+
+                        }
+                        else
+                        {
+
+                        }
+                        newField = Arrays.asList(possibleTerms).contains(list[i+1]);
                     }
-                    else //si le terme est invalide
+                    else if (field.equals("DE"))
                     {
-                        throw new SyntaxException("Invalid term: "+term);
+
                     }
+                    else if (field.equals("AVEC"))
+                    {
+
+                    }
+                    else if (field.equals("PAYS"))
+                    {
+
+                    }
+                    else if (field.equals("EN"))
+                    {
+
+                    }
+                    else if (field.equals("AVANT"))
+                    {
+
+                    }
+                    else if (field.equals("APRES"))
+                    {
+
+                    }
+                }
+                else
+                {
+                    value += str+" ";
                 }
             }
 
-            else //s'il s'agit de la valeur
-            {
-                if (c==',') //si on tombe sur une virgule
-                {
-
-                }
-                else if (c=='O' && requete.charAt(i+1)=='U') //si on tombe sur un OU
-                {
-
-                }
-                else //si on tombe sur un char quelconque
-                {
-                    value += c;
-                }
-            }
         }
 
-        return moviePseudoRequest;
+        return infos;
+
+        /*** //stockage
+        if (field.equals("TITRE")) {
+
+        } else if (field.equals("DE")) {
+
+        } else if (field.equals("AVEC")) {
+
+        } else if (field.equals("PAYS")) {
+
+        } else if (field.equals("EN")) {
+
+        } else if (field.equals("AVANT")) {
+
+        } else if (field.equals("APRES")) {
+
+        }
+        /***/
     }
 
     private String convertToSQL(MoviePseudoRequest moviePseudoRequestmap) {
