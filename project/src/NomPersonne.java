@@ -5,7 +5,7 @@
 public class NomPersonne implements Comparable<NomPersonne>{
     private String _nom;
     private String _prenom;
-    private int    _debutComp;
+    private int _debutComp;
 
     /**
      * Creation d'un nouveau NomPersonne, le prenom est passe en deuxieme.
@@ -19,9 +19,7 @@ public class NomPersonne implements Comparable<NomPersonne>{
         // On regarde quel est le premier caractère en majuscules pour trier.
         // 'von Stroheim' avec les S, 'de la Huerta' avec les H et 'de Funès' avec les F.
         // 'De Niro' sera en revanche à D.
-        while ((_debutComp < _nom.length())
-                && (_nom.charAt(_debutComp)
-                == Character.toLowerCase(_nom.charAt(_debutComp)))) {
+        while ((_debutComp < _nom.length()) && (_nom.charAt(_debutComp) == Character.toLowerCase(_nom.charAt(_debutComp)))) {
             _debutComp++;
         }
     }

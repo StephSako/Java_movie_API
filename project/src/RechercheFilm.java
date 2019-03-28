@@ -19,10 +19,10 @@ public class RechercheFilm {
         public ArrayList<String> TITRE = new ArrayList<>();
         public ArrayList<ArrayList<String>> DE = new ArrayList<>();
         public ArrayList<ArrayList<String>> AVEC = new ArrayList<>();
-        public ArrayList<String> PAYS = new ArrayList<>();
-        public ArrayList<String> EN = new ArrayList<>();
-        public String AVANT = new String();
-        public String APRES = new String();
+        public String PAYS = "";
+        public String EN = "";
+        public String AVANT = "";
+        public String APRES = "";
     }
 
     //TODO change bdd to private
@@ -58,15 +58,15 @@ public class RechercheFilm {
      * @return Reponse de la recherche au format JSON.
      */
     public String retrouve(String requete) throws SyntaxException {
-        Map map = formatRequest(requete); //TODO en cours
-        String sql = convertToSQL(map); //TODO
+        MoviePseudoRequest moviePseudoRequest = formatRequest(requete); //TODO en cours
+        String sql = convertToSQL(moviePseudoRequest); //TODO
         ResultSet set = bdd.requete(sql); //DONE
         ArrayList<InfoFilm> list = getInfoFilmArray(set); //TODO
         String json = convertToJSON(list); //DONE
         return json;
     }
 
-    private Map<String, ArrayList<String>> formatRequest(String requete) {
+    private MoviePseudoRequest formatRequest(String requete) {
         String term = "", value = "";
         boolean isTerm = true;
         String[] possibleTerms = {"TITRE", "DE", "AVEC", "PAYS", "EN", "AVANT", "APRES"};
@@ -84,7 +84,7 @@ public class RechercheFilm {
                 {
                     if (Arrays.asList(possibleTerms).contains(term)) //si le terme est valide
                     {
-                        isTerm = false;
+                        isTerm = false; // TODO ENREGISTRER LES NOMS / PRENOMS SANS LES ACCENTS (ILS SERONT CEPENDANT RETOURNER AVEC)
                     }
                     else //si le terme est invalide
                     {
@@ -111,76 +111,83 @@ public class RechercheFilm {
         }
     }
 
-    private String convertToSQL(Map<String, ArrayList<String>> map) {
+    private String convertToSQL(MoviePseudoRequest moviePseudoRequestmap) {
         //TODO Sakovitch
         StringBuilder reqSQL = new StringBuilder();
+        reqSQL.append("SELECT titre, nom, prenom, pays, annee"); // Chaine du SELECT  de la requête SQL générale
+
         StringBuilder AVEC_SQL = new StringBuilder();
+        StringBuilder PAYS_SQL = new StringBuilder();
         StringBuilder TITRE_SQL = new StringBuilder();
         StringBuilder DE_SQL = new StringBuilder(); //TODO DE_SQL
         StringBuilder AVANT_SQL = new StringBuilder();
         StringBuilder APRES_SQL = new StringBuilder();
         StringBuilder EN_SQL = new StringBuilder();
 
-        // Chaîne du FROM  qui pourraît être modifié par la recherche d'acteurs ou réalisateurs
-        StringBuilder FROM_WITH_JOIN = new StringBuilder();
+        // Chaîne du FROM
+        StringBuilder FROM = new StringBuilder();
+        FROM.append(" FROM films f NATURAL JOIN generique g NATURAL JOIN personnes p LEFT JOIN pays py ON f.pays = py.code");
 
+        // Permet de savoir si le mot clef WHERE a déjà été ajouté à la requête (avant le(s) 'AND')
         boolean where_created = false;
 
-        reqSQL.append("SELECT titre, nom, prenom, pays, annee FROM films"); // Requête SQl générale
-
-        if (map.containsKey("AVEC")){ // TODO Refaire nom / prenom SQL
-            reqSQL.append(" NATURAL JOIN (personnes NATURAL JOIN generique)");
-            ArrayList<String> personnes_array = map.get("AVEC");
+        if (!moviePseudoRequestmap.AVEC.isEmpty()){
+            ArrayList<ArrayList<String>> personnes_array = moviePseudoRequestmap.AVEC;
 
             String nom, prenom;
             // Ajout de la condition pour les noms et prenoms
             for (int i = 0; i < personnes_array.size(); i++) {
+                for (int j = 0; j < personnes_array.get(i).size(); j++) {
 
-                // On ajoute un table avec jointure car il s'agit d'un nouvel acteur
-                FROM_WITH_JOIN.append(" LEFT JOIN (personnes NATURAL JOIN generique) A").append(i).append(" ON films.id_film = A").append(i).append(".id_film");
+                    String[] parts = personnes_array.get(i).get(j).split(" "); // On sépare nom et prénom
+                    nom = parts[0];
+                    prenom = parts[0];
 
-                String[] parts = personnes_array.get(i).split(" "); // On sépare nom et prénom de la personne
-                nom = parts[0];
-                prenom = parts[0];
+                    if (where_created = (i == 0 && j == 0)) AVEC_SQL.append(" WHERE");
+                    else AVEC_SQL.append(" AND");
 
-                if (i == 0) {
-                    AVEC_SQL.append(" WHERE");
-                    where_created = true;
+                    AVEC_SQL.append(" id_film IN (select id_film from personnes natural join generique where nom = '").append(nom).append("' and prenom = '").append(prenom).append("' and role = 'A')");
                 }
-                else AVEC_SQL.append(" AND");
-
-                AVEC_SQL.append(" A").append(i).append(".nom = '").append(nom).append("' AND A").append(i).append(".prenom = '").append(prenom).append("' AND A").append(i).append(".role = 'A'");
+                // TODO GESTION DU 'OU'
             }
         }
 
         // Ajout de la condition liée au titre du film
-        if (map.containsKey("TITRE")){
-            if (where_created) TITRE_SQL.append(" AND titre LIKE '%").append(map.get("TITRE")).append("%'");
-            else TITRE_SQL.append(" WHERE titre LIKE '%").append(map.get("TITRE")).append("%'");
+        if (!moviePseudoRequestmap.TITRE.isEmpty()){
+            if (where_created) TITRE_SQL.append(" AND titre LIKE '%").append(moviePseudoRequestmap.TITRE.get(0)).append("%'");
+            else TITRE_SQL.append(" WHERE titre LIKE '%").append(moviePseudoRequestmap.TITRE.get(0)).append("%'");
         }
 
-        // Ajout de la condition liée aux années passées
-        if (map.containsKey("AVANT")){
-            if (where_created) AVANT_SQL.append(" AND annee < ").append(map.get("AVANT"));
-            else AVANT_SQL.append(" WHERE annee < ").append(map.get("AVANT"));
+        // Conditions liées aux années
+        if (!moviePseudoRequestmap.EN.isEmpty()){
+            if (where_created) EN_SQL.append(" AND annee = ").append(moviePseudoRequestmap.EN);
+            else EN_SQL.append(" WHERE annee = ").append(moviePseudoRequestmap.EN);
+        }
+        else {
+            // ENCADREMENT
+            if (!moviePseudoRequestmap.AVANT.isEmpty() && !moviePseudoRequestmap.APRES.isEmpty()){
+                if (where_created) AVANT_SQL.append(" AND annee < ").append(moviePseudoRequestmap.AVANT);
+                else AVANT_SQL.append(" WHERE annee BETWEEN ").append(moviePseudoRequestmap.AVANT).append(" AND ").append(moviePseudoRequestmap.APRES);
+            }
+            else{
+                if (!moviePseudoRequestmap.AVANT.isEmpty()){
+                    if (where_created) AVANT_SQL.append(" AND annee < ").append(moviePseudoRequestmap.AVANT);
+                    else AVANT_SQL.append(" WHERE annee < ").append(moviePseudoRequestmap.AVANT);
+                }
+                else if (!moviePseudoRequestmap.APRES.isEmpty()){
+                    if (where_created) APRES_SQL.append(" AND annee > ").append(moviePseudoRequestmap.APRES);
+                    else APRES_SQL.append(" WHERE annee > ").append(moviePseudoRequestmap.APRES);
+                }
+            }
         }
 
-        // Ajout de la condition liée aux années futures
-        if (map.containsKey("APRES")){
-            if (where_created) APRES_SQL.append(" AND annee > ").append(map.get("APRES"));
-            else APRES_SQL.append(" WHERE annee > ").append(map.get("APRES"));
-        }
-        else if (map.containsKey("APRÈS")){
-            if (where_created) APRES_SQL.append(" AND annee > ").append(map.get("APRÈS"));
-            else  APRES_SQL.append(" WHERE annee > ").append(map.get("APRÈS"));
+        // Pays d'origine du film
+        if (!moviePseudoRequestmap.PAYS.isEmpty()){
+            if (where_created) AVANT_SQL.append(" AND f.pays = '").append(moviePseudoRequestmap.PAYS).append("'");
+            else AVANT_SQL.append(" WHERE f.pays = '").append(moviePseudoRequestmap.PAYS).append("'");
         }
 
-        if (map.containsKey("EN")){
-            if (where_created) EN_SQL.append(" AND annee = ").append(map.get("EN"));
-            else EN_SQL.append(" WHERE annee = ").append(map.get("EN"));
-        }
-
-        //reqSQL.append(); // Ajout de la clause FROM  et de chaque clause du WHERE
+        //reqSQL.append(); // Ajout de chaque clause FROM WHERE AND
         return reqSQL.toString();
     }
 
