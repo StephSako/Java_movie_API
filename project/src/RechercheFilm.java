@@ -15,6 +15,16 @@ import java.util.Map;
  */
 public class RechercheFilm {
 
+    private class MoviePseudoRequest {
+        public ArrayList<String> TITRE = new ArrayList<>();
+        public ArrayList<ArrayList<String>> DE = new ArrayList<>();
+        public ArrayList<ArrayList<String>> AVEC = new ArrayList<>();
+        public ArrayList<String> PAYS = new ArrayList<>();
+        public ArrayList<String> EN = new ArrayList<>();
+        public String AVANT = new String();
+        public String APRES = new String();
+    }
+
     //TODO change bdd to private
     public BDDManager bdd;
 
@@ -87,7 +97,7 @@ public class RechercheFilm {
             {
                 if (c==',') //si on tombe sur une virgule
                 {
-                    term
+
                 }
                 else if (c=='O' && requete.charAt(i+1)=='U') //si on tombe sur un OU
                 {
