@@ -1,11 +1,8 @@
-import com.sun.xml.internal.ws.api.message.ExceptionHasMessage;
 import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
 
-import java.sql.*;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Classe de recherche simplifiée sur la BDD IMDB.
@@ -67,6 +64,9 @@ public class RechercheFilm {
     }
 
     private MoviePseudoRequest formatRequest(String requete) {
+
+        MoviePseudoRequest moviePseudoRequest = new MoviePseudoRequest();
+
         String term = "", value = "";
         boolean isTerm = true;
         String[] possibleTerms = {"TITRE", "DE", "AVEC", "PAYS", "EN", "AVANT", "APRES"};
@@ -109,6 +109,8 @@ public class RechercheFilm {
                 }
             }
         }
+
+        return moviePseudoRequest;
     }
 
     private String convertToSQL(MoviePseudoRequest moviePseudoRequestmap) {
@@ -193,6 +195,8 @@ public class RechercheFilm {
 
     private ArrayList<InfoFilm> getInfoFilmArray(ResultSet set) {
         //TODO
+        ArrayList<InfoFilm> FilmsList = new ArrayList<>();
+        return FilmsList;
     }
 
     private String convertToJSON(ArrayList<InfoFilm> list) {
@@ -209,7 +213,7 @@ public class RechercheFilm {
 
         // testing
         RechercheFilm r = new RechercheFilm("bdd/bdfilm.sqlite");
-        r.retrouve("TITRE blues, AVEC John Belushi");
+        //r.retrouve("TITRE blues, AVEC John Belushi");
         System.out.println(r.bdd.requete("SELECT * FROM films").toString());
     }
 

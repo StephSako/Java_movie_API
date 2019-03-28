@@ -2,15 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c203bad0-6597-4e90-81e6-42c9ec4fa239" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bdd/SQL_Steph/several_actors.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/GenieLogicielProjet/BDDManager.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/GenieLogicielProjet/InfoFilm.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/GenieLogicielProjet/META-INF/GenieLogicielProjet.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/GenieLogicielProjet/NomPersonne.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/GenieLogicielProjet/RechercheFilm.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/GenieLogicielProjet/StringHelper.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/NomPersonne.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/NomPersonne.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RechercheFilm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RechercheFilm.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -25,8 +18,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/RechercheFilm.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="390">
-              <caret line="129" lean-forward="true" selection-start-line="129" selection-end-line="129" />
+            <state relative-caret-position="165">
+              <caret line="215" column="10" selection-start-line="215" selection-start-column="10" selection-end-line="215" selection-end-column="10" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -50,7 +43,7 @@
         <entry file="file://$PROJECT_DIR$/src/NomPersonne.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-295">
-              <caret line="23" column="9" lean-forward="true" selection-start-line="23" selection-start-column="9" selection-end-line="23" selection-end-column="9" />
+              <caret line="23" column="9" selection-start-line="23" selection-start-column="9" selection-end-line="23" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -133,7 +126,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1553804188121" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1553804999678" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/bdd/sqlite-jdbc-3.27.2.jar!/" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -184,7 +177,14 @@
       <option name="project" value="LOCAL" />
       <updated>1553770674519</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Refonte méthode convertToSQL(MoviePseudoRequest moviePseudoRequestmap)">
+      <created>1553804210481</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1553804210481</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TodoView">
@@ -209,7 +209,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32937366" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32804233" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -217,7 +217,7 @@
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info active="true" anchor="bottom" id="Messages" order="10" visible="true" weight="0.32804233" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.32804233" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -230,7 +230,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Create MoviePseudoRequest" />
-    <option name="LAST_COMMIT_MESSAGE" value="Create MoviePseudoRequest" />
+    <MESSAGE value="Refonte méthode convertToSQL(MoviePseudoRequest moviePseudoRequestmap)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refonte méthode convertToSQL(MoviePseudoRequest moviePseudoRequestmap)" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/.idea/vcs.xml">
@@ -282,14 +283,14 @@
     <entry file="file://$PROJECT_DIR$/src/NomPersonne.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-295">
-          <caret line="23" column="9" lean-forward="true" selection-start-line="23" selection-start-column="9" selection-end-line="23" selection-end-column="9" />
+          <caret line="23" column="9" selection-start-line="23" selection-start-column="9" selection-end-line="23" selection-end-column="9" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/RechercheFilm.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="129" lean-forward="true" selection-start-line="129" selection-end-line="129" />
+        <state relative-caret-position="165">
+          <caret line="215" column="10" selection-start-line="215" selection-start-column="10" selection-end-line="215" selection-end-column="10" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
