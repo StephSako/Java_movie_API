@@ -53,8 +53,7 @@ public class InfoFilm implements Comparable<InfoFilm> {
         }
         int cmp = this._titre.compareTo(autre._titre);
         if (cmp == 0) {
-            cmp = (this._annee < autre._annee ? -1
-                    : (this._annee == autre._annee ? 0 : 1));
+            cmp = (Integer.compare(this._annee, autre._annee));
             if (cmp == 0) {
                 cmp = this._pays.compareTo(autre._pays);
             }
@@ -71,7 +70,7 @@ public class InfoFilm implements Comparable<InfoFilm> {
     public String toString() {
         boolean debut = true;
         StringBuilder sb = new StringBuilder();
-        sb.append("{\"titre\":\"" + _titre.replace("\"", "\\\"") + "\",");
+        sb.append("{\"titre\":\"").append(_titre.replace("\"", "\\\"")).append("\",");
         sb.append("\"realisateurs\":[");
         for (NomPersonne nom: _realisateurs) {
             if (debut) {
@@ -79,7 +78,7 @@ public class InfoFilm implements Comparable<InfoFilm> {
             } else {
                 sb.append(',');
             }
-            sb.append("\""+ nom.toString().replace("\"", "\\\"") + "\"");
+            sb.append("\"").append(nom.toString().replace("\"", "\\\"")).append("\"");
         }
         sb.append("],\"acteurs\":[");
         debut = true;
@@ -89,7 +88,7 @@ public class InfoFilm implements Comparable<InfoFilm> {
             } else {
                 sb.append(',');
             }
-            sb.append("\""+ nom.toString().replace("\"", "\\\"") + "\"");
+            sb.append("\"").append(nom.toString().replace("\"", "\\\"")).append("\"");
         }
         sb.append("],\"pays\":\"");
         sb.append(_pays.replace("\"", "\\\""));
@@ -99,10 +98,10 @@ public class InfoFilm implements Comparable<InfoFilm> {
         if (_duree > 0) {
             sb.append('"');
             int h = _duree / 60;
-            sb.append(Integer.toString(h) + "h");
+            sb.append(h).append("h");
             int mn = _duree % 60;
             if (mn > 0) {
-                sb.append(Integer.toString(mn) + "mn");
+                sb.append(mn).append("mn");
             }
             sb.append('"');
         } else {
@@ -116,7 +115,7 @@ public class InfoFilm implements Comparable<InfoFilm> {
             } else {
                 sb.append(',');
             }
-            sb.append("\""+ titre.replace("\"", "\\\"") + "\"");
+            sb.append("\"").append(titre.replace("\"", "\\\"")).append("\"");
         }
         sb.append("]}");
         return sb.toString();

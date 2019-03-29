@@ -47,7 +47,7 @@ public class BDDManager {
     }
 
     /**
-     * Retourne le resultat d'une requete SQL sous forme d'un tableau 2D de String.
+     * Retourne le resultSet d'une requete SQL sous forme d'un tableau 2D de String.
      * @param reqSQL Requete SQL sous forme de String.
      * @return Tableau 2D de String.<br>
      * La premiere ligne contient le nom des colonnes.<br>
@@ -58,8 +58,8 @@ public class BDDManager {
         try (ResultSet rs = co.createStatement().executeQuery(reqSQL)) {
 
             //variables
-            ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
-            ArrayList<String> tmp = new ArrayList<String>();
+            ArrayList<ArrayList<String>> result = new ArrayList<>();
+            ArrayList<String> tmp = new ArrayList<>();
             int size = rs.getMetaData().getColumnCount();
 
             //1ere ligne: nom colonnes

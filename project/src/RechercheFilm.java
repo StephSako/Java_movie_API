@@ -1,6 +1,5 @@
 import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
 
-import java.sql.Array;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -166,14 +165,14 @@ public class RechercheFilm {
     }
 
     private String convertToSQL(MoviePseudoRequest moviePseudoRequestmap) {
-        //TODO Sakovitch
         StringBuilder reqSQL = new StringBuilder();
-        reqSQL.append("SELECT titre, nom, prenom, pays, annee"); // Chaine du SELECT  de la requête SQL générale
+        StringBuilder SELECT = new StringBuilder();
+        SELECT.append("SELECT f.id_film, prenom, p.nom, titre, duree, annee, titre, py.nom"); // Chaine du SELECT  de la requête SQL générale
 
         StringBuilder AVEC_SQL = new StringBuilder();
         StringBuilder PAYS_SQL = new StringBuilder();
         StringBuilder TITRE_SQL = new StringBuilder();
-        StringBuilder DE_SQL = new StringBuilder(); //TODO DE_SQL
+        StringBuilder DE_SQL = new StringBuilder();
         StringBuilder AVANT_SQL = new StringBuilder();
         StringBuilder APRES_SQL = new StringBuilder();
         StringBuilder EN_SQL = new StringBuilder();
@@ -185,15 +184,16 @@ public class RechercheFilm {
         // Permet de savoir si le mot clef WHERE a déjà été ajouté à la requête (avant le(s) 'AND')
         boolean where_created = false;
 
+        // ACTEURS
         if (!moviePseudoRequestmap.AVEC.isEmpty()){
-            ArrayList<ArrayList<String>> personnes_array = moviePseudoRequestmap.AVEC;
+            ArrayList<ArrayList<String>> acteurs_array = moviePseudoRequestmap.AVEC;
 
             String nom, prenom;
             // Ajout de la condition pour les noms et prenoms
-            for (int i = 0; i < personnes_array.size(); i++) {
-                for (int j = 0; j < personnes_array.get(i).size(); j++) {
+            for (int i = 0; i < acteurs_array.size(); i++) {
+                for (int j = 0; j < acteurs_array.get(i).size(); j++) {
 
-                    String[] parts = personnes_array.get(i).get(j).split(" "); // On sépare nom et prénom
+                    String[] parts = acteurs_array.get(i).get(j).split(" "); // On sépare nom et prénom
                     nom = parts[0];
                     prenom = parts[0];
 
@@ -206,19 +206,41 @@ public class RechercheFilm {
             }
         }
 
-        // Ajout de la condition liée au titre du film
+        // DE
+        if (!moviePseudoRequestmap.DE.isEmpty()){
+            ArrayList<ArrayList<String>> realisateurs_array = moviePseudoRequestmap.DE;
+
+            String nom, prenom;
+            // Ajout de la condition pour les noms et prenoms
+            for (int i = 0; i < realisateurs_array.size(); i++) {
+                for (int j = 0; j < realisateurs_array.get(i).size(); j++) {
+
+                    String[] parts = realisateurs_array.get(i).get(j).split(" "); // On sépare nom et prénom
+                    nom = parts[0];
+                    prenom = parts[0];
+
+                    if (where_created = (i == 0 && j == 0)) AVEC_SQL.append(" WHERE");
+                    else AVEC_SQL.append(" AND");
+
+                    AVEC_SQL.append(" id_film IN (select id_film from personnes natural join generique where nom = '").append(nom).append("' and prenom = '").append(prenom).append("' and role = 'R')");
+                }
+                // TODO GESTION DU 'OU'
+            }
+        }
+
+        // TITRE
         if (!moviePseudoRequestmap.TITRE.isEmpty()){
             if (where_created) TITRE_SQL.append(" AND titre LIKE '%").append(moviePseudoRequestmap.TITRE.get(0)).append("%'");
             else TITRE_SQL.append(" WHERE titre LIKE '%").append(moviePseudoRequestmap.TITRE.get(0)).append("%'");
         }
 
-        // Conditions liées aux années
+        // EN AVANT APRES
         if (!moviePseudoRequestmap.EN.isEmpty()){
             if (where_created) EN_SQL.append(" AND annee = ").append(moviePseudoRequestmap.EN);
             else EN_SQL.append(" WHERE annee = ").append(moviePseudoRequestmap.EN);
         }
         else {
-            // ENCADREMENT
+            // Encadrement
             if (!moviePseudoRequestmap.AVANT.isEmpty() && !moviePseudoRequestmap.APRES.isEmpty()){
                 if (where_created) AVANT_SQL.append(" AND annee < ").append(moviePseudoRequestmap.AVANT);
                 else AVANT_SQL.append(" WHERE annee BETWEEN ").append(moviePseudoRequestmap.AVANT).append(" AND ").append(moviePseudoRequestmap.APRES);
@@ -235,19 +257,22 @@ public class RechercheFilm {
             }
         }
 
-        // Pays d'origine du film
+        // PAYS
         if (!moviePseudoRequestmap.PAYS.isEmpty()){
             if (where_created) AVANT_SQL.append(" AND f.pays = '").append(moviePseudoRequestmap.PAYS).append("'");
             else AVANT_SQL.append(" WHERE f.pays = '").append(moviePseudoRequestmap.PAYS).append("'");
         }
 
-        //reqSQL.append(); // Ajout de chaque clause FROM WHERE AND
+        reqSQL.append(SELECT).append(FROM).append(AVEC_SQL).append(DE_SQL).append(TITRE_SQL).append(EN_SQL).append(APRES_SQL).append(AVANT_SQL).append(PAYS_SQL); // Ajout de chaque clause FROM WHERE AND
         return reqSQL.toString();
     }
 
     private ArrayList<InfoFilm> getInfoFilmArray(ResultSet set) {
         //TODO
         ArrayList<InfoFilm> FilmsList = new ArrayList<>();
+
+
+
         return FilmsList;
     }
 
@@ -266,7 +291,20 @@ public class RechercheFilm {
         // testing
         RechercheFilm r = new RechercheFilm("bdd/bdfilm.sqlite");
         //r.retrouve("TITRE blues, AVEC John Belushi");
-        System.out.println(r.bdd.requete("SELECT * FROM films").toString());
+        ArrayList<ArrayList<String>> resultSetRequest = r.bdd.requeteArray("select f.id_film, prenom, p.nom, titre, duree, annee, titre, py.nom\n" +
+                "from films f natural join generique g natural join personnes p left join pays py on f.pays = py.code\n" +
+                "where id_film IN (select id_film from personnes natural join generique where nom = 'Schreiber' and prenom = 'Pablo' and role = 'A')\n" +
+                "and id_film IN (select id_film from personnes natural join generique where nom = 'Stephens' and prenom = 'Toby' and role = 'A')\n" +
+                "and id_film IN (select id_film from personnes natural join generique where nom = 'Beahan' and prenom = 'Kate' and role = 'R')\n" +
+                "and f.pays = 'us'\n" +
+                "and annee BETWEEN 2014 and 2016\n" +
+                "and titre = '13 Hours'");
+
+        System.out.println("\n");
+        for (int i = 0; i < resultSetRequest.size(); i++){
+            System.out.println(resultSetRequest.get(i).toString());
+            if (i == 0) System.out.println("-------------------------------------------------------------------");
+        }
     }
 
 }
