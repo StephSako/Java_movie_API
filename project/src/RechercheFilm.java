@@ -20,8 +20,8 @@ public class RechercheFilm {
         public ArrayList<ArrayList<String>> AVEC = new ArrayList<>();
         public ArrayList<String> PAYS = new ArrayList<>();
         public ArrayList<String> EN = new ArrayList<>();
-        public String AVANT = "";
-        public String APRES = "";
+        public ArrayList<String> AVANT = new ArrayList<>();
+        public ArrayList<String> APRES = new ArrayList<>();
     }
 
     //TODO change bdd to private
@@ -39,7 +39,7 @@ public class RechercheFilm {
      * Ferme la BDD.
      */
     public void fermeBase() {
-        //TODO
+        //TODO Close connection
     }
 
     /**
@@ -229,36 +229,36 @@ public class RechercheFilm {
             }
         }
 
-        // TITRE
+        // TITRE //TODO Steph verifier pour une liste pour plusieurs 'OU'
         if (!moviePseudoRequestmap.TITRE.isEmpty()){
             if (where_created) TITRE_SQL.append(" AND titre LIKE '%").append(moviePseudoRequestmap.TITRE.get(0)).append("%'");
             else TITRE_SQL.append(" WHERE titre LIKE '%").append(moviePseudoRequestmap.TITRE.get(0)).append("%'");
         }
 
         // EN AVANT APRES
+        // EN //TODO Steph verifier pour une liste pour plusieurs 'OU'
         if (!moviePseudoRequestmap.EN.isEmpty()){
             if (where_created) EN_SQL.append(" AND annee = ").append(moviePseudoRequestmap.EN);
             else EN_SQL.append(" WHERE annee = ").append(moviePseudoRequestmap.EN);
         }
         else {
-            // Encadrement
-            if (!moviePseudoRequestmap.AVANT.isEmpty() && !moviePseudoRequestmap.APRES.isEmpty()){
+
+            // AVANT //TODO Steph verifier pour une liste pour plusieurs 'OU'
+            //TODO Prendre le plus GRAND
+            if (!moviePseudoRequestmap.AVANT.isEmpty()){
                 if (where_created) AVANT_SQL.append(" AND annee < ").append(moviePseudoRequestmap.AVANT);
-                else AVANT_SQL.append(" WHERE annee BETWEEN ").append(moviePseudoRequestmap.AVANT).append(" AND ").append(moviePseudoRequestmap.APRES);
+                else AVANT_SQL.append(" WHERE annee < ").append(moviePseudoRequestmap.AVANT);
             }
-            else{
-                if (!moviePseudoRequestmap.AVANT.isEmpty()){
-                    if (where_created) AVANT_SQL.append(" AND annee < ").append(moviePseudoRequestmap.AVANT);
-                    else AVANT_SQL.append(" WHERE annee < ").append(moviePseudoRequestmap.AVANT);
-                }
-                else if (!moviePseudoRequestmap.APRES.isEmpty()){
-                    if (where_created) APRES_SQL.append(" AND annee > ").append(moviePseudoRequestmap.APRES);
-                    else APRES_SQL.append(" WHERE annee > ").append(moviePseudoRequestmap.APRES);
-                }
+
+            // APRES //TODO Steph verifier pour une liste pour plusieurs 'OU'
+            //TODO Prendre le plus PETIT
+            else if (!moviePseudoRequestmap.APRES.isEmpty()){
+                if (where_created) APRES_SQL.append(" AND annee > ").append(moviePseudoRequestmap.APRES);
+                else APRES_SQL.append(" WHERE annee > ").append(moviePseudoRequestmap.APRES);
             }
         }
 
-        // PAYS
+        // PAYS //TODO Steph verifier pour une liste pour plusieurs 'OU'
         if (!moviePseudoRequestmap.PAYS.isEmpty()){
             if (where_created) AVANT_SQL.append(" AND f.pays = '").append(moviePseudoRequestmap.PAYS).append("'");
             else AVANT_SQL.append(" WHERE f.pays = '").append(moviePseudoRequestmap.PAYS).append("'");
@@ -273,7 +273,7 @@ public class RechercheFilm {
      * [1] f.id_film (ID du film)
      * [2] prenom [3] p.nom (prénom/nom d'une personne)
      * [4] titre (titre du film)
-     * [5] duree (duree du film)
+     * [5] duree (duree du film en minutes)
      * [6] annee (annee de sortie du film)
      * [7] py.nom (nom du pays en entier)
      * [8] role (role de la personne => 'A' : acteur, 'R' : réalisateur)
@@ -331,28 +331,6 @@ public class RechercheFilm {
             result.append("\n");
         }
         return result.toString();
-    }
-
-    //TODO to remove when a proper testing class is created
-    public static void main(String[] args) {
-
-        // testing
-        RechercheFilm r = new RechercheFilm("bdd/bdfilm.sqlite");
-        //r.retrouve("TITRE blues, AVEC John Belushi");
-        ArrayList<ArrayList<String>> resultSetRequest = r.bdd.requeteArray("select f.id_film, prenom, p.nom, titre, duree, annee, titre, py.nom\n" +
-                "from films f natural join generique g natural join personnes p left join pays py on f.pays = py.code\n" +
-                "where id_film IN (select id_film from personnes natural join generique where nom = 'Schreiber' and prenom = 'Pablo' and role = 'A')\n" +
-                "and id_film IN (select id_film from personnes natural join generique where nom = 'Stephens' and prenom = 'Toby' and role = 'A')\n" +
-                "and id_film IN (select id_film from personnes natural join generique where nom = 'Beahan' and prenom = 'Kate' and role = 'R')\n" +
-                "and f.pays = 'us'\n" +
-                "and annee BETWEEN 2014 and 2016\n" +
-                "and titre = '13 Hours'");
-
-        System.out.println("\n");
-        for (int i = 0; i < resultSetRequest.size(); i++){
-            System.out.println(resultSetRequest.get(i).toString());
-            if (i == 0) System.out.println("-------------------------------------------------------------------");
-        }
     }
 
 }
