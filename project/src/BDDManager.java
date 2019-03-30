@@ -1,12 +1,12 @@
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Classe de gestion BDD via JDBC
- * @author Machon
- * @author Sakovitch
+ * @author Théo Machon 32
+ * @author Stephen Sakovitch 32
  * @version 1.0
  */
 public class BDDManager {

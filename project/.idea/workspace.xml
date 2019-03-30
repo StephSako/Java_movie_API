@@ -3,11 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="c203bad0-6597-4e90-81e6-42c9ec4fa239" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/GenieLogicielProjet/InfoFilm.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/GenieLogicielProjet/InfoFilm.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/GenieLogicielProjet/RechercheFilm$MoviePseudoRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/GenieLogicielProjet/RechercheFilm$MoviePseudoRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bdd/SQL_Steph/two_actors.sql" beforeDir="false" afterPath="$PROJECT_DIR$/bdd/SQL_Steph/two_actors.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/GenieLogicielProjet/RechercheFilm.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/GenieLogicielProjet/RechercheFilm.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/BDDManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BDDManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/InfoFilm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/InfoFilm.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RechercheFilm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RechercheFilm.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -19,11 +17,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/RechercheFilm.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3390">
-              <caret line="273" selection-start-line="273" selection-end-line="273" />
+            <state relative-caret-position="126">
+              <caret line="282" column="65" selection-start-line="282" selection-start-column="65" selection-end-line="282" selection-end-column="65" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -31,11 +29,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/BDDManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-120">
-              <caret line="50" column="40" selection-start-line="50" selection-start-column="40" selection-end-line="50" selection-end-column="40" />
+            <state relative-caret-position="365">
+              <caret line="74" column="45" selection-start-line="74" selection-start-column="28" selection-end-line="74" selection-end-column="45" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -46,8 +44,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/NomPersonne.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="705">
-              <caret line="47" column="10" selection-start-line="47" selection-start-column="10" selection-end-line="47" selection-end-column="10" />
+            <state relative-caret-position="225">
+              <caret line="15" column="31" lean-forward="true" selection-start-line="15" selection-start-column="31" selection-end-line="15" selection-end-column="31" />
             </state>
           </provider>
         </entry>
@@ -55,8 +53,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/InfoFilm.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-480">
-              <caret line="13" column="50" lean-forward="true" selection-start-line="13" selection-start-column="50" selection-end-line="13" selection-end-column="50" />
+            <state relative-caret-position="420">
+              <caret line="31" column="51" lean-forward="true" selection-start-line="25" selection-start-column="20" selection-end-line="31" selection-end-column="51" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -87,8 +85,8 @@
         <option value="$PROJECT_DIR$/src/StringHelper.java" />
         <option value="$PROJECT_DIR$/src/BDDRow.java" />
         <option value="$PROJECT_DIR$/src/NomPersonne.java" />
-        <option value="$PROJECT_DIR$/src/InfoFilm.java" />
         <option value="$PROJECT_DIR$/src/BDDManager.java" />
+        <option value="$PROJECT_DIR$/src/InfoFilm.java" />
         <option value="$PROJECT_DIR$/src/RechercheFilm.java" />
       </list>
     </option>
@@ -105,6 +103,7 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -121,11 +120,10 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1553812049620" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1553965211487" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/bdd/sqlite-jdbc-3.27.2.jar!/" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -199,7 +197,7 @@
     <frame x="0" y="25" width="1366" height="696" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2189394" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22651514" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -208,7 +206,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info active="true" anchor="bottom" id="Find" order="1" visible="true" weight="0.11463845" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.2786596" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.52204585" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -259,17 +257,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/BDDManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="365">
+          <caret line="74" column="45" selection-start-line="74" selection-start-column="28" selection-end-line="74" selection-end-column="45" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/NomPersonne.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="705">
-          <caret line="47" column="10" selection-start-line="47" selection-start-column="10" selection-end-line="47" selection-end-column="10" />
+        <state relative-caret-position="225">
+          <caret line="15" column="31" lean-forward="true" selection-start-line="15" selection-start-column="31" selection-end-line="15" selection-end-column="31" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/InfoFilm.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-480">
-          <caret line="13" column="50" lean-forward="true" selection-start-line="13" selection-start-column="50" selection-end-line="13" selection-end-column="50" />
+        <state relative-caret-position="420">
+          <caret line="31" column="51" lean-forward="true" selection-start-line="25" selection-start-column="20" selection-end-line="31" selection-end-column="51" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -278,18 +286,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/RechercheFilm.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3390">
-          <caret line="273" selection-start-line="273" selection-end-line="273" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/BDDManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-120">
-          <caret line="50" column="40" selection-start-line="50" selection-start-column="40" selection-end-line="50" selection-end-column="40" />
+        <state relative-caret-position="126">
+          <caret line="282" column="65" selection-start-line="282" selection-start-column="65" selection-end-line="282" selection-end-column="65" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

@@ -1,13 +1,14 @@
 import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
  * Classe de recherche simplifiée sur la BDD IMDB.
- * @author Machon
- * @author Sakovitch
+ * @author Théo Machon 32
+ * @author Stephen Sakovitch 32
  * @version 0.1
  */
 public class RechercheFilm {
@@ -58,9 +59,9 @@ public class RechercheFilm {
     public String retrouve(String requete) throws SyntaxException {
         MoviePseudoRequest moviePseudoRequest = formatRequest(requete); //TODO en cours
         String sql = convertToSQL(moviePseudoRequest); //TODO
-        ResultSet set = bdd.requete(sql); //DONE
+        ResultSet set = bdd.requete(sql);
         ArrayList<InfoFilm> list = getInfoFilmArray(set); //TODO
-        String json = convertToJSON(list); //DONE
+        String json = convertToJSON(list);
         return json;
     }
 
@@ -167,7 +168,7 @@ public class RechercheFilm {
     private String convertToSQL(MoviePseudoRequest moviePseudoRequestmap) {
         StringBuilder reqSQL = new StringBuilder();
         StringBuilder SELECT = new StringBuilder();
-        SELECT.append("SELECT f.id_film, prenom, p.nom, titre, duree, annee, titre, py.nom"); // Chaine du SELECT  de la requête SQL générale
+        SELECT.append("SELECT f.id_film, prenom, p.nom, titre, duree, annee, py.nom, role"); // Chaine du SELECT  de la requête SQL générale
 
         StringBuilder AVEC_SQL = new StringBuilder();
         StringBuilder PAYS_SQL = new StringBuilder();
@@ -267,22 +268,69 @@ public class RechercheFilm {
         return reqSQL.toString();
     }
 
+    /**
+     * Ordre des colonnes dans le resultSet passé en paramètre :
+     * [1] f.id_film (ID du film)
+     * [2] prenom [3] p.nom (prénom/nom d'une personne)
+     * [4] titre (titre du film)
+     * [5] duree (duree du film)
+     * [6] annee (annee de sortie du film)
+     * [7] py.nom (nom du pays en entier)
+     * [8] role (role de la personne => 'A' : acteur, 'R' : réalisateur)
+     * @param set resultSet de la requête SQL construite à partir du pseudo-langage
+     * @return ArrayList<InfoFilm> liste des films
+     */
     private ArrayList<InfoFilm> getInfoFilmArray(ResultSet set) {
-        //TODO
-        ArrayList<InfoFilm> FilmsList = new ArrayList<>();
+        ArrayList<InfoFilm> filmsList = new ArrayList<>();
 
+        try {
+            int size = set.getMetaData().getColumnCount();
 
+            // Champs de la classe InfoFilm
+            int id_film = -1;
+            ArrayList<NomPersonne> realisateurs = new ArrayList<>();
+            ArrayList<NomPersonne> acteurs = new ArrayList<>();
+            ArrayList<String> autres_titres = new ArrayList<>(); // A faire dans une deuxième requête
 
-        return FilmsList;
+            while (set.next()) { // Lecture des lignes
+                for (int i = 1; i <= size; i++) { // Lecture des colonnes
+
+                    // On remplit chaque champ
+                    if (set.getString(8).equals("A")) acteurs.add(new NomPersonne(set.getString(2), set.getString(3)));
+                    else if (set.getString(8).equals("R")) realisateurs.add(new NomPersonne(set.getString(2), set.getString(3)));
+
+                    String titre = set.getString(4);
+                    int duree = set.getInt(5);
+                    int annee = set.getInt(6);
+                    String pays = set.getString(7);
+
+                    // Nouveau film lu : on créé et ajoute une instance d'InfoFilm dans l'ArrayList
+                    if (set.getInt(1) != id_film){
+                        filmsList.add(new InfoFilm(titre, realisateurs, acteurs, pays, annee, duree, autres_titres));
+
+                        // On vide les tableaux pour passer au film suivant
+                        realisateurs.clear();
+                        acteurs.clear();
+                        autres_titres.clear();
+                    }
+
+                    id_film = set.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return filmsList;
     }
 
     private String convertToJSON(ArrayList<InfoFilm> list) {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (InfoFilm movie : list) {
-            result += movie.toString();
-            result += "\n";
+            result.append(movie.toString());
+            result.append("\n");
         }
-        return result;
+        return result.toString();
     }
 
     //TODO to remove when a proper testing class is created
