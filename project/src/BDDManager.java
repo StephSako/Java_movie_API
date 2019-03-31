@@ -1,6 +1,7 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -13,6 +14,17 @@ public class BDDManager {
 
     private String url="jdbc:sqlite:";
     private Connection co;
+
+    /**
+     * Ferme la BDD.
+     */
+    public void fermeBase() {
+        try {
+            this.co.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Constructeur.

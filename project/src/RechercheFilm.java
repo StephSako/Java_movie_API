@@ -14,7 +14,6 @@ import java.util.Collections;
  */
 public class RechercheFilm {
 
-    //TODO Isn't MoviePseudoRequest better as Enum ?
     private class MoviePseudoRequest {
         public ArrayList<String> TITRE = new ArrayList<>();
         public ArrayList<ArrayList<String>> DE = new ArrayList<>(); // LIGNES = ET, COLONNES = OU
@@ -48,13 +47,6 @@ public class RechercheFilm {
     }
 
     /**
-     * Ferme la BDD.
-     */
-    public void fermeBase() {
-        //TODO Close connection
-    }
-
-    /**
      * Effectue une recherche dans la BDD.
      * @param requete Langage de recherce simplifee:<br>
      * TITRE suivi d'un titre de film;<br>
@@ -70,9 +62,9 @@ public class RechercheFilm {
      */
     public String retrouve(String requete) throws SyntaxException {
         MoviePseudoRequest moviePseudoRequest = formatRequest(requete); //TODO en cours
-        String sql = convertToSQL(moviePseudoRequest); //TODO
+        String sql = convertToSQL(moviePseudoRequest); //TODO en cours
         ResultSet set = bdd.requete(sql);
-        ArrayList<InfoFilm> list = getInfoFilmArray(set); //TODO
+        ArrayList<InfoFilm> list = getInfoFilmArray(set); //TODO en cours
         String json = convertToJSON(list);
         return json;
     }
@@ -191,6 +183,7 @@ public class RechercheFilm {
         StringBuilder AVANT_SQL = new StringBuilder();
         StringBuilder APRES_SQL = new StringBuilder();
         StringBuilder EN_SQL = new StringBuilder();
+        String ORDER_BY_SQL = "ORDER BY annee DESC, titre";
 
         // Chaîne du FROM
         StringBuilder FROM = new StringBuilder();
@@ -199,23 +192,22 @@ public class RechercheFilm {
         // Permet de savoir si le mot clef WHERE a déjà été ajouté à la requête (avant le(s) 'AND')
         boolean where_created = false;
 
-        // ACTEURS
+        // AVEC (acteur(s))
         if (!moviePseudoRequestmap.AVEC.isEmpty()){
-            ArrayList<ArrayList<String>> acteurs_array = moviePseudoRequestmap.AVEC;
 
             String nom, prenom;
-            // Ajout de la condition pour les noms et prenoms
-            for (int i = 0; i < acteurs_array.size(); i++) {
+            // NOM PRENOM
+            for (int i = 0; i < moviePseudoRequestmap.AVEC.size(); i++) {
                 if (where_created = (i == 0)) AVEC_SQL.append(" WHERE (");
                 else AVEC_SQL.append(" AND (");
 
-                for (int j = 0; j < acteurs_array.get(i).size(); j++) {
+                for (int j = 0; i < moviePseudoRequestmap.AVEC.get(i).size(); j++) {
 
-                    String[] parts = acteurs_array.get(i).get(j).split(" "); // On sépare nom et prénom
+                    String[] parts = moviePseudoRequestmap.AVEC.get(i).get(j).split(" "); // On sépare nom et prénom
                     nom = parts[0];
                     prenom = parts[0];
 
-                    if (j != 0) AVEC_SQL.append(" OR");
+                    if (j > 0) AVEC_SQL.append(" OR");
 
                     AVEC_SQL.append(" id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique WHERE nom = '").append(nom).append("' AND prenom = '").append(prenom).append("' AND role = 'A')");
                 }
@@ -223,24 +215,22 @@ public class RechercheFilm {
             }
         }
 
-        // DE
+        // DE (réalisateur(s))
         if (!moviePseudoRequestmap.DE.isEmpty()){
-            ArrayList<ArrayList<String>> realisateurs_array = moviePseudoRequestmap.DE;
 
             String nom, prenom;
             // NOM PRENOM
-            for (int i = 0; i < realisateurs_array.size(); i++) {
+            for (int i = 0; i < moviePseudoRequestmap.DE.size(); i++) {
                 if (where_created) DE_SQL.append(" WHERE (");
                 else DE_SQL.append(" AND (");
 
-                for (int j = 0; j < realisateurs_array.get(i).size(); j++) {
+                for (int j = 0; j < moviePseudoRequestmap.DE.get(i).size(); j++) {
 
-                    String[] parts = realisateurs_array.get(i).get(j).split(" "); // On sépare nom et prénom
+                    String[] parts = moviePseudoRequestmap.DE.get(i).get(j).split(" "); // On sépare nom et prénom
                     nom = parts[0];
                     prenom = parts[0];
 
-                    if (where_created = (i == 0 && j == 0)) DE_SQL.append(" WHERE");
-                    else if(j != 0) DE_SQL.append(" OR");
+                    if (j > 0) AVEC_SQL.append(" OR");
 
                     DE_SQL.append(" id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique WHERE nom = '").append(nom).append("' AND prenom = '").append(prenom).append("' AND role = 'R')");
                 }
@@ -248,42 +238,75 @@ public class RechercheFilm {
             }
         }
 
-        // TITRE //TODO Steph verifier pour une liste pour plusieurs 'OU'
+        // TITRE
         if (!moviePseudoRequestmap.TITRE.isEmpty()){
-            if (where_created) TITRE_SQL.append(" AND titre LIKE '%").append(moviePseudoRequestmap.TITRE.get(0)).append("%'");
-            else TITRE_SQL.append(" WHERE titre LIKE '%").append(moviePseudoRequestmap.TITRE.get(0)).append("%'");
+            if (where_created) TITRE_SQL.append(" AND (");
+            else TITRE_SQL.append(" WHERE (");
+
+            for (int i = 0; i < moviePseudoRequestmap.TITRE.size(); i++) {
+                if (i > 0) TITRE_SQL.append(" OR");
+                TITRE_SQL.append(" titre LIKE '%").append(moviePseudoRequestmap.TITRE.get(i)).append("%'");
+            }
+            TITRE_SQL.append(")");
         }
 
         // EN AVANT APRES
-        // EN //TODO Steph verifier pour une liste pour plusieurs 'OU'
+        // EN
         if (!moviePseudoRequestmap.EN.isEmpty()){
-            if (where_created) EN_SQL.append(" AND annee = ").append(moviePseudoRequestmap.EN);
-            else EN_SQL.append(" WHERE annee = ").append(moviePseudoRequestmap.EN);
+            if (where_created) EN_SQL.append(" AND (");
+            else EN_SQL.append(" WHERE (");
+
+            for (int i = 0; i < moviePseudoRequestmap.EN.size(); i++) {
+                if (i > 0) EN_SQL.append(" OR");
+                EN_SQL.append(" annee = ").append(moviePseudoRequestmap.EN);
+            }
+            EN_SQL.append(")");
         }
         else {
 
             // AVANT //TODO Steph verifier pour une liste pour plusieurs 'OU'
-            //TODO Prendre le plus GRAND
             if (!moviePseudoRequestmap.AVANT.isEmpty()){
                 if (where_created) AVANT_SQL.append(" AND annee < ").append(Collections.max(moviePseudoRequestmap.AVANT));
                 else AVANT_SQL.append(" WHERE annee < ").append(Collections.max(moviePseudoRequestmap.AVANT));
+
+                /*for (int i = 0; i < moviePseudoRequestmap.AVANT.size(); i++) {
+                    if (where_created = (i == 0)) AVEC_SQL.append(" WHERE (");
+                    else AVEC_SQL.append(" AND (");
+
+                    for (int j = 0; j < moviePseudoRequestmap.AVANT.get(i).size(); j++) {
+
+                        if (j > 0) AVEC_SQL.append(" OR");
+
+                        AVEC_SQL.append(" id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique WHERE nom = '").append(nom).append("' AND prenom = '").append(prenom).append("' AND role = 'A')");
+                    }
+                    AVEC_SQL.append(")");*/
             }
 
+
+
+
+
             // APRES //TODO Steph verifier pour une liste pour plusieurs 'OU'
-            //TODO Prendre le plus PETIT
             else if (!moviePseudoRequestmap.APRES.isEmpty()){
                 if (where_created) APRES_SQL.append(" AND annee > ").append(Collections.min(moviePseudoRequestmap.APRES));
                 else APRES_SQL.append(" WHERE annee > ").append(Collections.min(moviePseudoRequestmap.APRES));
             }
         }
 
-        // PAYS //TODO Steph verifier pour une liste pour plusieurs 'OU'
+        // PAYS
         if (!moviePseudoRequestmap.PAYS.isEmpty()){
-            if (where_created) AVANT_SQL.append(" AND f.pays = '").append(moviePseudoRequestmap.PAYS).append("'");
-            else AVANT_SQL.append(" WHERE f.pays = '").append(moviePseudoRequestmap.PAYS).append("'");
+            if (where_created) PAYS_SQL.append(" AND (").append(moviePseudoRequestmap.PAYS).append("'");
+            else PAYS_SQL.append(" WHERE (").append(moviePseudoRequestmap.PAYS).append("'");
+
+            for (int j = 0; j < moviePseudoRequestmap.PAYS.size(); j++) {
+                if (j > 0) PAYS_SQL.append(" OR");
+                PAYS_SQL.append(" f.pays = '").append(moviePseudoRequestmap.PAYS).append("'");
+            }
+            PAYS_SQL.append(")");
         }
 
-        reqSQL.append(SELECT).append(FROM).append(AVEC_SQL).append(DE_SQL).append(TITRE_SQL).append(EN_SQL).append(APRES_SQL).append(AVANT_SQL).append(PAYS_SQL); // Ajout de chaque clause FROM WHERE AND
+        // Ajout de chaque clause
+        reqSQL.append(SELECT).append(FROM).append(AVEC_SQL).append(DE_SQL).append(TITRE_SQL).append(EN_SQL).append(APRES_SQL).append(AVANT_SQL).append(PAYS_SQL).append(ORDER_BY_SQL);
         return reqSQL.toString();
     }
 
@@ -336,6 +359,7 @@ public class RechercheFilm {
                     id_film = set.getInt(1);
                 }
             }
+            set.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
