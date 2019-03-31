@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Classe de recherche simplifiée sur la BDD IMDB.
@@ -16,12 +17,23 @@ public class RechercheFilm {
     //TODO Isn't MoviePseudoRequest better as Enum ?
     private class MoviePseudoRequest {
         public ArrayList<String> TITRE = new ArrayList<>();
-        public ArrayList<ArrayList<String>> DE = new ArrayList<>();
-        public ArrayList<ArrayList<String>> AVEC = new ArrayList<>();
+        public ArrayList<ArrayList<String>> DE = new ArrayList<>(); // LIGNES = ET, COLONNES = OU
+        public ArrayList<ArrayList<String>> AVEC = new ArrayList<>(); // LIGNES = ET, COLONNES = OU
         public ArrayList<String> PAYS = new ArrayList<>();
-        public ArrayList<String> EN = new ArrayList<>();
-        public ArrayList<String> AVANT = new ArrayList<>();
-        public ArrayList<String> APRES = new ArrayList<>();
+        public ArrayList<Integer> EN = new ArrayList<>();
+        public ArrayList<Integer> AVANT = new ArrayList<>();
+        public ArrayList<Integer> APRES = new ArrayList<>();
+
+        /* ArrayList<ArrayList<String>> POUR AVANT/APRES EXEMPLE
+        APRES 1980 AVANT 1990 OU APRES 2000 AVANT 2010
+
+        where (
+            annee > 1980
+            and annee < 1990)
+        or
+            (annee  > 2000
+            and annee < 2010)
+         */
     }
 
     //TODO change bdd to private
@@ -111,10 +123,12 @@ public class RechercheFilm {
                         }
                         newField = Arrays.asList(possibleTerms).contains(list[i+1]);
                     }
+                    // LIGNES = ET, COLONNES = OU (en SQL, ce sont les OU qui sont imbriqués entre les () )
                     else if (field.equals("DE"))
                     {
 
                     }
+                    // LIGNES = ET, COLONNES = OU (en SQL, ce sont les OU qui sont imbriqués entre les () )
                     else if (field.equals("AVEC"))
                     {
 
@@ -123,15 +137,15 @@ public class RechercheFilm {
                     {
 
                     }
-                    else if (field.equals("EN"))
+                    else if (field.equals("EN")) // TODO Convertir valeurs de EN en int
                     {
 
                     }
-                    else if (field.equals("AVANT"))
+                    else if (field.equals("AVANT")) // TODO Convertir valeurs AVANT en int
                     {
 
                     }
-                    else if (field.equals("APRES"))
+                    else if (field.equals("APRES")) // TODO Convertir valeurs APRES en int
                     {
 
                     }
@@ -146,7 +160,7 @@ public class RechercheFilm {
 
         return infos;
 
-        /*** //stockage
+        /* //stockage
         if (field.equals("TITRE")) {
 
         } else if (field.equals("DE")) {
@@ -162,7 +176,7 @@ public class RechercheFilm {
         } else if (field.equals("APRES")) {
 
         }
-        /***/
+        */
     }
 
     private String convertToSQL(MoviePseudoRequest moviePseudoRequestmap) {
@@ -192,18 +206,20 @@ public class RechercheFilm {
             String nom, prenom;
             // Ajout de la condition pour les noms et prenoms
             for (int i = 0; i < acteurs_array.size(); i++) {
+                if (where_created = (i == 0)) AVEC_SQL.append(" WHERE (");
+                else AVEC_SQL.append(" AND (");
+
                 for (int j = 0; j < acteurs_array.get(i).size(); j++) {
 
                     String[] parts = acteurs_array.get(i).get(j).split(" "); // On sépare nom et prénom
                     nom = parts[0];
                     prenom = parts[0];
 
-                    if (where_created = (i == 0 && j == 0)) AVEC_SQL.append(" WHERE");
-                    else AVEC_SQL.append(" AND");
+                    if (j != 0) AVEC_SQL.append(" OR");
 
-                    AVEC_SQL.append(" id_film IN (select id_film from personnes natural join generique where nom = '").append(nom).append("' and prenom = '").append(prenom).append("' and role = 'A')");
+                    AVEC_SQL.append(" id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique WHERE nom = '").append(nom).append("' AND prenom = '").append(prenom).append("' AND role = 'A')");
                 }
-                // TODO GESTION DU 'OU'
+                AVEC_SQL.append(")");
             }
         }
 
@@ -212,20 +228,23 @@ public class RechercheFilm {
             ArrayList<ArrayList<String>> realisateurs_array = moviePseudoRequestmap.DE;
 
             String nom, prenom;
-            // Ajout de la condition pour les noms et prenoms
+            // NOM PRENOM
             for (int i = 0; i < realisateurs_array.size(); i++) {
+                if (where_created) DE_SQL.append(" WHERE (");
+                else DE_SQL.append(" AND (");
+
                 for (int j = 0; j < realisateurs_array.get(i).size(); j++) {
 
                     String[] parts = realisateurs_array.get(i).get(j).split(" "); // On sépare nom et prénom
                     nom = parts[0];
                     prenom = parts[0];
 
-                    if (where_created = (i == 0 && j == 0)) AVEC_SQL.append(" WHERE");
-                    else AVEC_SQL.append(" AND");
+                    if (where_created = (i == 0 && j == 0)) DE_SQL.append(" WHERE");
+                    else if(j != 0) DE_SQL.append(" OR");
 
-                    AVEC_SQL.append(" id_film IN (select id_film from personnes natural join generique where nom = '").append(nom).append("' and prenom = '").append(prenom).append("' and role = 'R')");
+                    DE_SQL.append(" id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique WHERE nom = '").append(nom).append("' AND prenom = '").append(prenom).append("' AND role = 'R')");
                 }
-                // TODO GESTION DU 'OU'
+                DE_SQL.append(")");
             }
         }
 
@@ -246,15 +265,15 @@ public class RechercheFilm {
             // AVANT //TODO Steph verifier pour une liste pour plusieurs 'OU'
             //TODO Prendre le plus GRAND
             if (!moviePseudoRequestmap.AVANT.isEmpty()){
-                if (where_created) AVANT_SQL.append(" AND annee < ").append(moviePseudoRequestmap.AVANT);
-                else AVANT_SQL.append(" WHERE annee < ").append(moviePseudoRequestmap.AVANT);
+                if (where_created) AVANT_SQL.append(" AND annee < ").append(Collections.max(moviePseudoRequestmap.AVANT));
+                else AVANT_SQL.append(" WHERE annee < ").append(Collections.max(moviePseudoRequestmap.AVANT));
             }
 
             // APRES //TODO Steph verifier pour une liste pour plusieurs 'OU'
             //TODO Prendre le plus PETIT
             else if (!moviePseudoRequestmap.APRES.isEmpty()){
-                if (where_created) APRES_SQL.append(" AND annee > ").append(moviePseudoRequestmap.APRES);
-                else APRES_SQL.append(" WHERE annee > ").append(moviePseudoRequestmap.APRES);
+                if (where_created) APRES_SQL.append(" AND annee > ").append(Collections.min(moviePseudoRequestmap.APRES));
+                else APRES_SQL.append(" WHERE annee > ").append(Collections.min(moviePseudoRequestmap.APRES));
             }
         }
 
