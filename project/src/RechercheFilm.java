@@ -62,7 +62,13 @@ public class RechercheFilm {
 
         ArrayList<String> tabDE = new ArrayList<>();
         tabDE.add("James Cameron");
+        tabDE.add("Peter Berg");
         moviePseudoRequestTest.DE.add(tabDE);
+
+        ArrayList<String> tabAVEC = new ArrayList<>();
+        tabAVEC.add("Sam Worthington");
+        tabAVEC.add("Jason Statham");
+        moviePseudoRequestTest.AVEC.add(tabAVEC);
 
 
         String sqlTest = convertToSQL(moviePseudoRequestTest);
@@ -124,12 +130,14 @@ public class RechercheFilm {
                     }
                     // LIGNES = ET, COLONNES = OU (en SQL, ce sont les OU qui sont imbriqués entre les () )
                     // NOMS ET PRENOMS EN MAJUSCULES
+                    // VERIRIER LES ESPACES DANS LES NOMS/PRENOMS
                     else if (field.equals("DE"))
                     {
 
                     }
                     // LIGNES = ET, COLONNES = OU (en SQL, ce sont les OU qui sont imbriqués entre les () )
                     // NOMS ET PRENOMS EN MAJUSCULES
+                    // VERIRIER LES ESPACES DANS LES NOMS/PRENOMS
                     else if (field.equals("AVEC"))
                     {
 
@@ -214,14 +222,12 @@ public class RechercheFilm {
                 }
                 else AVEC_SQL.append("\nAND (");
 
-                for (int j = 0; i < moviePseudoRequestmap.AVEC.get(i).size(); j++) {
-                    String[] parts = moviePseudoRequestmap.AVEC.get(i).get(j).split(" "); // On sépare nom et prénom
-                    nom = parts[1];
-                    prenom = parts[0];
+                for (int j = 0; j < moviePseudoRequestmap.AVEC.get(i).size(); j++) {
+                    String[] prenom_nom = moviePseudoRequestmap.AVEC.get(i).get(j).split(" "); // On sépare nom et prénom
 
                     if (j > 0) AVEC_SQL.append("\nOR");
 
-                    AVEC_SQL.append("\nid_film IN (SELECT id_film FROM personnes NATURAL JOIN generique WHERE UPPER(nom) LIKE UPPER('%").append(nom).append("%') AND UPPER(prenom) LIKE UPPER('%").append(prenom).append("%') AND role = 'A')");
+                    AVEC_SQL.append(" id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique WHERE UPPER(nom) LIKE UPPER('%").append(prenom_nom[1]).append("%') AND UPPER(prenom) LIKE UPPER('%").append(prenom_nom[0]).append("%') AND role = 'A')");
                 }
                 AVEC_SQL.append(")");
             }
@@ -241,13 +247,10 @@ public class RechercheFilm {
 
                 for (int j = 0; j < moviePseudoRequestmap.DE.get(i).size(); j++) {
 
-                    String[] parts = moviePseudoRequestmap.DE.get(i).get(j).split(" "); // On sépare nom et prénom
-                    nom = parts[1];
-                    prenom = parts[0];
+                    String[] prenom_nom = moviePseudoRequestmap.DE.get(i).get(j).split(" "); // On sépare nom et prénom
+                    if (j > 0) DE_SQL.append("\nOR");
 
-                    if (j > 0) AVEC_SQL.append("\nOR");
-
-                    DE_SQL.append(" id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique WHERE UPPER(nom) LIKE UPPER('%").append(nom).append("%') AND UPPER(prenom) LIKE UPPER('%").append(prenom).append("%') AND role = 'R')");
+                    DE_SQL.append(" id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique WHERE UPPER(nom) LIKE UPPER('%").append(prenom_nom[1]).append("%') AND UPPER(prenom) LIKE UPPER('%").append(prenom_nom[0]).append("%') AND role = 'R')");
                 }
                 DE_SQL.append(")");
             }

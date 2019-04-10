@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c203bad0-6597-4e90-81e6-42c9ec4fa239" name="Default Changelist" comment="">
+    <list default="true" id="c203bad0-6597-4e90-81e6-42c9ec4fa239" name="Default Changelist" comment="Fixing bugs for DE &amp; AND + détails TODO">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/GenieLogicielProjet/BDDManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/GenieLogicielProjet/BDDManager.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/GenieLogicielProjet/RechercheFilm$MoviePseudoRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/GenieLogicielProjet/RechercheFilm$MoviePseudoRequest.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/GenieLogicielProjet/RechercheFilm.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/GenieLogicielProjet/RechercheFilm.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RechercheFilm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RechercheFilm.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -34,8 +31,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/RechercheFilm.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="146">
-              <caret line="187" column="86" selection-start-line="187" selection-start-column="86" selection-end-line="187" selection-end-column="86" />
+            <state relative-caret-position="-2031">
+              <caret line="82" column="5" lean-forward="true" selection-start-line="82" selection-start-column="5" selection-end-line="82" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -227,7 +224,14 @@
       <option name="project" value="LOCAL" />
       <updated>1553991335304</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Création test dans recherche() + fix bugs partie Sako">
+      <created>1554910163890</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1554910163891</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TodoView">
@@ -241,7 +245,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="25" width="1366" height="696" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23787878" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -252,15 +255,15 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.11463845" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49621212" weight="0.27689594" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.4969697" visible="true" weight="0.37213403" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49545455" weight="0.27689594" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.49545455" visible="true" weight="0.16402116" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.052910052" />
       <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.49924242" weight="0.329806" />
-      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5030303" side_tool="true" visible="true" weight="0.37213403" />
+      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.50454545" side_tool="true" visible="true" weight="0.16402116" />
       <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.32804233" />
+      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.49848485" weight="0.32804233" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -277,14 +280,15 @@
     <MESSAGE value="Transformation resultSet en ArrayList&lt;InfoFilm&gt; DONE" />
     <MESSAGE value="Classe Main + TODO added + ArrayList for EN, TITRE, PAYS" />
     <MESSAGE value="Fixing bugs transforming pseudo-code to SQL : OU for AVEC and DE + type variables intern class" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixing bugs transforming pseudo-code to SQL : OU for AVEC and DE + type variables intern class" />
+    <MESSAGE value="Création test dans recherche() + fix bugs partie Sako" />
+    <option name="LAST_COMMIT_MESSAGE" value="Création test dans recherche() + fix bugs partie Sako" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/RechercheFilm.java</url>
-          <line>70</line>
+          <line>76</line>
           <properties />
           <option name="timeStamp" value="4" />
         </line-breakpoint>
@@ -354,8 +358,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/RechercheFilm.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="146">
-          <caret line="187" column="86" selection-start-line="187" selection-start-column="86" selection-end-line="187" selection-end-column="86" />
+        <state relative-caret-position="-2031">
+          <caret line="82" column="5" lean-forward="true" selection-start-line="82" selection-start-column="5" selection-end-line="82" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
