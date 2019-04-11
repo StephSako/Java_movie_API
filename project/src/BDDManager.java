@@ -1,8 +1,6 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 /**
  * Classe de gestion BDD via JDBC
@@ -14,6 +12,8 @@ public class BDDManager {
 
     private String url="jdbc:sqlite:";
     private Connection co;
+
+    public Connection getCo(){ return this.co; }
 
     /**
      * Ferme la BDD.
@@ -37,63 +37,6 @@ public class BDDManager {
             //System.out.println("Connection successful !");
         } catch(Exception err) {
             System.err.println(err.getMessage());
-            //TODO handle exception
-        }
-    }
-
-    /**
-     * Retourne le resultat d'une requete SQL.
-     * @param reqSQL Requete SQL sous forme de String.
-     * @return ResultSet de la reponse a la requete.
-     */
-    public ResultSet requete(String reqSQL) {
-
-        try (ResultSet rs = co.createStatement().executeQuery(reqSQL)) {
-            return rs;
-        }
-        catch (Exception err) {
-            System.err.println(err.getMessage());
-            return null;
-            //TODO handle exception
-        }
-    }
-
-    /**
-     * Retourne le resultSet d'une requete SQL sous forme d'un tableau 2D de String.
-     * @param reqSQL Requete SQL sous forme de String.
-     * @return Tableau 2D de String.<br>
-     * La premiere ligne contient le nom des colonnes.<br>
-     * Les autres lignes contiennent les valeurs.
-     */
-    public ArrayList<ArrayList<String>> requeteArray(String reqSQL) {
-
-        try (ResultSet rs = co.createStatement().executeQuery(reqSQL)) {
-
-            //variables
-            ArrayList<ArrayList<String>> result = new ArrayList<>();
-            ArrayList<String> tmp = new ArrayList<>();
-            int size = rs.getMetaData().getColumnCount();
-
-            //1ere ligne: nom colonnes
-            for (int i=0; i<size; i++) {
-                tmp.add(rs.getMetaData().getColumnName(i+1));
-            }
-            result.add(new ArrayList<>(tmp));
-            tmp.clear();
-
-            //autres colonnes: valeurs
-            while (rs.next()) {
-                for (int i=0; i<size; i++) {
-                    tmp.add(rs.getString(i+1));
-                }
-                result.add(new ArrayList<>(tmp));
-                tmp.clear();
-            }
-            return result;
-        }
-        catch (Exception err) {
-            System.err.println(err.getMessage());
-            return null;
             //TODO handle exception
         }
     }

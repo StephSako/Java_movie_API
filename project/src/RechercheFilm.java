@@ -1,10 +1,11 @@
 import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Classe de recherche simplifiée sur la BDD IMDB.
@@ -53,14 +54,15 @@ public class RechercheFilm {
 
         /* TEST */
         MoviePseudoRequest moviePseudoRequestTest = new MoviePseudoRequest();
-
         moviePseudoRequestTest.TITRE.add("Avatar");
-
-        moviePseudoRequestTest.EN.add(2009);
-
+        //moviePseudoRequestTest.EN.add(2009);
         moviePseudoRequestTest.PAYS.add("us");
-
-        moviePseudoRequestTest.AVANT.add(2008);
+        moviePseudoRequestTest.AVANT.add(2010);
+        moviePseudoRequestTest.AVANT.add(2011);
+        moviePseudoRequestTest.AVANT.add(2009);
+        moviePseudoRequestTest.APRES.add(2007);
+        moviePseudoRequestTest.APRES.add(2008);
+        moviePseudoRequestTest.APRES.add(2009);
 
         ArrayList<String> tabDE = new ArrayList<>();
         tabDE.add("James Cameron");
@@ -73,12 +75,12 @@ public class RechercheFilm {
         moviePseudoRequestTest.AVEC.add(tabAVEC);
 
         String sqlTest = convertToSQL(moviePseudoRequestTest);
-        System.out.println(sqlTest);
+        System.out.println(sqlTest +"\n\n");
 
-        MoviePseudoRequest moviePseudoRequest = formatRequest(requete); //TODO en cours
-        String sql = convertToSQL(moviePseudoRequest); //TODO en cours
-        ResultSet set = bdd.requete(sql);
-        ArrayList<InfoFilm> list = getInfoFilmArray(set); //TODO en cours
+        /*MoviePseudoRequest moviePseudoRequest = formatRequest(requete); //TODO en cours
+        String sql = convertToSQL(moviePseudoRequest);*/
+
+        ArrayList<InfoFilm> list = getInfoFilmArray(sqlTest);
         String json = convertToJSON(list);
         return json;
     }
@@ -152,14 +154,10 @@ public class RechercheFilm {
 
                     }
                     else if (field.equals("AVANT")) // TODO Convertir valeurs AVANT en int
-                        // Ne pas remplir si les années de AVANT sont supèrieures ou égales à celle de EN si elle existe
-                        // Sinon Erreur (probleme de logique entre les annees)
                     {
 
                     }
                     else if (field.equals("APRES")) // TODO Convertir valeurs APRES en int
-                    // Ne pas remplir si les années de AVANT sont infèrieures ou égales à celle de EN si elle existe
-                    // Sinon Erreur (probleme de logique entre les annees)
                     {
 
                     }
@@ -198,12 +196,12 @@ public class RechercheFilm {
         StringBuilder SELECT = new StringBuilder();
         SELECT.append("SELECT f.id_film, prenom, p.nom, titre, duree, annee, py.nom, role"); // Chaine du SELECT  de la requête SQL générale
 
-        StringBuilder AVEC_SQL = new StringBuilder(); //TODO Vérifier pour les accents
+        StringBuilder AVEC_SQL = new StringBuilder();
         StringBuilder PAYS_SQL = new StringBuilder();
         StringBuilder TITRE_SQL = new StringBuilder();
-        StringBuilder DE_SQL = new StringBuilder(); //TODO Vérifier pour les accents
-        StringBuilder AVANT_SQL = new StringBuilder(); //TODO
-        StringBuilder APRES_SQL = new StringBuilder(); //TODO
+        StringBuilder DE_SQL = new StringBuilder();
+        StringBuilder AVANT_SQL = new StringBuilder();
+        StringBuilder APRES_SQL = new StringBuilder();
         StringBuilder EN_SQL = new StringBuilder();
         String ORDER_BY_SQL = "\nORDER BY annee DESC, titre";
 
@@ -216,9 +214,6 @@ public class RechercheFilm {
 
         // AVEC (acteur(s))
         if (!moviePseudoRequestmap.AVEC.isEmpty()){
-
-            String nom, prenom;
-            // NOM PRENOM
             for (int i = 0; i < moviePseudoRequestmap.AVEC.size(); i++) {
 
                 if (i == 0){
@@ -245,9 +240,6 @@ public class RechercheFilm {
 
         // DE (réalisateur(s))
         if (!moviePseudoRequestmap.DE.isEmpty()){
-
-            String nom, prenom;
-            // NOM PRENOM
             for (int i = 0; i < moviePseudoRequestmap.DE.size(); i++) {
                 if (!where_created){
                     DE_SQL.append("\nWHERE (");
@@ -287,7 +279,6 @@ public class RechercheFilm {
             TITRE_SQL.append(")");
         }
 
-        // EN AVANT APRES
         // EN
         if (!moviePseudoRequestmap.EN.isEmpty()){
             if (!where_created){
@@ -302,37 +293,24 @@ public class RechercheFilm {
             }
             EN_SQL.append(")");
         }
-        /*else {
-
-            // AVANT //TODO Steph verifier pour une liste pour plusieurs 'OU'
+        else {
+            // AVANT
             if (!moviePseudoRequestmap.AVANT.isEmpty()){
                 if (where_created) AVANT_SQL.append("\nAND annee < ").append(Collections.max(moviePseudoRequestmap.AVANT));
-                else{
-                    AVANT_SQL.append("\nWHERE annee < ").append(Collections.max(moviePseudoRequestmap.AVANT));
+                else {
+                    APRES_SQL.append("\nWHERE annee < ").append(Collections.max(moviePseudoRequestmap.AVANT));
                     where_created = true;
                 }
-
-                for (int i = 0; i < moviePseudoRequestmap.AVANT.size(); i++) {
-                    if (where_created = (i == 0)) AVEC_SQL.append(" WHERE (");
-                    else AVEC_SQL.append(" AND (");
-
-                    for (int j = 0; j < moviePseudoRequestmap.AVANT.get(i).size(); j++) {
-
-                        if (j > 0) AVEC_SQL.append(" OR");
-
-                        AVEC_SQL.append(" id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique WHERE nom = '").append(nom).append("' AND prenom = '").append(prenom).append("' AND role = 'A')");
-                    }
-                    AVEC_SQL.append(")");
             }
-            // APRES TODO Steph verifier pour une liste pour plusieurs 'OU'
-            else if (!moviePseudoRequestmap.APRES.isEmpty()){
-                if (where_created) APRES_SQL.append(" annee > ").append(Collections.min(moviePseudoRequestmap.APRES));
-                else{
+            // APRES
+            if(!moviePseudoRequestmap.APRES.isEmpty()) {
+                if (where_created) APRES_SQL.append("\nAND annee > ").append(Collections.min(moviePseudoRequestmap.APRES));
+                else {
                     APRES_SQL.append("\nWHERE annee > ").append(Collections.min(moviePseudoRequestmap.APRES));
                     where_created = true;
                 }
             }
-        }*/
+        }
 
         // PAYS
         if (!moviePseudoRequestmap.PAYS.isEmpty()){
@@ -361,14 +339,15 @@ public class RechercheFilm {
      * [6] annee (annee de sortie du film)
      * [7] py.nom (nom du pays en entier)
      * [8] role (role de la personne => 'A' : acteur, 'R' : réalisateur)
-     * @param set resultSet de la requête SQL construite à partir du pseudo-langage
+     * @param sql resultSet de la requête SQL construite à partir du pseudo-langage
      * @return ArrayList<InfoFilm> liste des films
      */
-    private ArrayList<InfoFilm> getInfoFilmArray(ResultSet set) {
+    private ArrayList<InfoFilm> getInfoFilmArray(String sql) { //TODO bugs plusieurs real, acteurs ...
         ArrayList<InfoFilm> filmsList = new ArrayList<>();
 
-        try {
-            int size = set.getMetaData().getColumnCount();
+        try (ResultSet set = bdd.getCo().createStatement().executeQuery(sql)) {
+            ResultSetMetaData rsmd = set.getMetaData();
+            int size = rsmd.getColumnCount();
 
             // Champs de la classe InfoFilm
             int id_film = -1;
