@@ -2,9 +2,9 @@ import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * Classe de recherche simplifiée sur la BDD IMDB.
@@ -60,6 +60,8 @@ public class RechercheFilm {
 
         moviePseudoRequestTest.PAYS.add("us");
 
+        moviePseudoRequestTest.AVANT.add(2008);
+
         ArrayList<String> tabDE = new ArrayList<>();
         tabDE.add("James Cameron");
         tabDE.add("Peter Berg");
@@ -69,7 +71,6 @@ public class RechercheFilm {
         tabAVEC.add("Sam Worthington");
         tabAVEC.add("Jason Statham");
         moviePseudoRequestTest.AVEC.add(tabAVEC);
-
 
         String sqlTest = convertToSQL(moviePseudoRequestTest);
         System.out.println(sqlTest);
@@ -151,10 +152,14 @@ public class RechercheFilm {
 
                     }
                     else if (field.equals("AVANT")) // TODO Convertir valeurs AVANT en int
+                        // Ne pas remplir si les années de AVANT sont supèrieures ou égales à celle de EN si elle existe
+                        // Sinon Erreur (probleme de logique entre les annees)
                     {
 
                     }
                     else if (field.equals("APRES")) // TODO Convertir valeurs APRES en int
+                    // Ne pas remplir si les années de AVANT sont infèrieures ou égales à celle de EN si elle existe
+                    // Sinon Erreur (probleme de logique entre les annees)
                     {
 
                     }
@@ -227,7 +232,12 @@ public class RechercheFilm {
 
                     if (j > 0) AVEC_SQL.append("\nOR");
 
-                    AVEC_SQL.append(" id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique WHERE UPPER(nom) LIKE UPPER('%").append(prenom_nom[1]).append("%') AND UPPER(prenom) LIKE UPPER('%").append(prenom_nom[0]).append("%') AND role = 'A')");
+                    AVEC_SQL.append(" id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique");
+                    AVEC_SQL.append(" WHERE UPPER(nom) LIKE UPPER('%").append(prenom_nom[1]).append("%') AND UPPER(prenom) LIKE UPPER('%").append(prenom_nom[0]).append("%')");
+                    AVEC_SQL.append(" OR UPPER(nom) LIKE UPPER('%").append(prenom_nom[1]).append("%') AND UPPER(prenom_sans_accent) LIKE UPPER('%").append(prenom_nom[0]).append("%')");
+                    AVEC_SQL.append(" OR UPPER(nom_sans_accent) LIKE UPPER('%").append(prenom_nom[1]).append("%') AND UPPER(prenom) LIKE UPPER('%").append(prenom_nom[0]).append("%')");
+                    AVEC_SQL.append(" OR UPPER(nom_sans_accent) LIKE UPPER('%").append(prenom_nom[1]).append("%') AND UPPER(prenom_sans_accent) LIKE UPPER('%").append(prenom_nom[0]).append("%')");
+                    AVEC_SQL.append(" AND role = 'A')");
                 }
                 AVEC_SQL.append(")");
             }
@@ -250,7 +260,13 @@ public class RechercheFilm {
                     String[] prenom_nom = moviePseudoRequestmap.DE.get(i).get(j).split(" "); // On sépare nom et prénom
                     if (j > 0) DE_SQL.append("\nOR");
 
-                    DE_SQL.append(" id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique WHERE UPPER(nom) LIKE UPPER('%").append(prenom_nom[1]).append("%') AND UPPER(prenom) LIKE UPPER('%").append(prenom_nom[0]).append("%') AND role = 'R')");
+                    // 3 lignes supplémentaires au cas où l'utilisateur saisie des accent, un l'un et/ou à l'autre, ou pas du tout
+                    DE_SQL.append(" id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique");
+                    DE_SQL.append(" WHERE UPPER(nom) LIKE UPPER('%").append(prenom_nom[1]).append("%') AND UPPER(prenom) LIKE UPPER('%").append(prenom_nom[0]).append("%')");
+                    DE_SQL.append(" OR UPPER(nom) LIKE UPPER('%").append(prenom_nom[1]).append("%') AND UPPER(prenom_sans_accent) LIKE UPPER('%").append(prenom_nom[0]).append("%')");
+                    DE_SQL.append(" OR UPPER(nom_sans_accent) LIKE UPPER('%").append(prenom_nom[1]).append("%') AND UPPER(prenom) LIKE UPPER('%").append(prenom_nom[0]).append("%')");
+                    DE_SQL.append(" OR UPPER(nom_sans_accent) LIKE UPPER('%").append(prenom_nom[1]).append("%') AND UPPER(prenom_sans_accent) LIKE UPPER('%").append(prenom_nom[0]).append("%')");
+                    DE_SQL.append(" AND role = 'R')");
                 }
                 DE_SQL.append(")");
             }

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c203bad0-6597-4e90-81e6-42c9ec4fa239" name="Default Changelist" comment="Fixing bugs for DE &amp; AND + détails TODO">
+    <list default="true" id="c203bad0-6597-4e90-81e6-42c9ec4fa239" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/GenieLogicielProjet/RechercheFilm.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/GenieLogicielProjet/RechercheFilm.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RechercheFilm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RechercheFilm.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -31,8 +30,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/RechercheFilm.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2031">
-              <caret line="82" column="5" lean-forward="true" selection-start-line="82" selection-start-column="5" selection-end-line="82" selection-end-column="5" />
+            <state relative-caret-position="159">
+              <caret line="262" column="122" selection-start-line="262" selection-start-column="122" selection-end-line="262" selection-end-column="122" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -116,7 +115,6 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -133,6 +131,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -231,7 +230,14 @@
       <option name="project" value="LOCAL" />
       <updated>1554910163891</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Fixing bugs for DE &amp; AND + détails TODO">
+      <created>1554912082001</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1554912082001</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TodoView">
@@ -246,7 +252,7 @@
   <component name="ToolWindowManager">
     <frame x="0" y="25" width="1366" height="696" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23787878" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24166666" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -255,13 +261,13 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.11463845" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49545455" weight="0.27689594" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.49545455" visible="true" weight="0.16402116" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49469697" weight="0.20811288" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.4939394" visible="true" weight="0.47266313" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.052910052" />
       <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.49924242" weight="0.329806" />
-      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.50454545" side_tool="true" visible="true" weight="0.16402116" />
+      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5060606" side_tool="true" visible="true" weight="0.47266313" />
       <window_info anchor="bottom" id="Version Control" order="9" />
       <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.49848485" weight="0.32804233" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -281,16 +287,17 @@
     <MESSAGE value="Classe Main + TODO added + ArrayList for EN, TITRE, PAYS" />
     <MESSAGE value="Fixing bugs transforming pseudo-code to SQL : OU for AVEC and DE + type variables intern class" />
     <MESSAGE value="Création test dans recherche() + fix bugs partie Sako" />
-    <option name="LAST_COMMIT_MESSAGE" value="Création test dans recherche() + fix bugs partie Sako" />
+    <MESSAGE value="Fixing bugs for DE &amp; AND + détails TODO" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixing bugs for DE &amp; AND + détails TODO" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/RechercheFilm.java</url>
-          <line>76</line>
+          <line>77</line>
           <properties />
-          <option name="timeStamp" value="4" />
+          <option name="timeStamp" value="7" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -358,8 +365,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/RechercheFilm.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2031">
-          <caret line="82" column="5" lean-forward="true" selection-start-line="82" selection-start-column="5" selection-end-line="82" selection-end-column="5" />
+        <state relative-caret-position="159">
+          <caret line="262" column="122" selection-start-line="262" selection-start-column="122" selection-end-line="262" selection-end-column="122" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
