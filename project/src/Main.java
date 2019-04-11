@@ -4,7 +4,7 @@ public class Main {
 
         // testing
         RechercheFilm r = new RechercheFilm("bdd/bdfilm.sqlite");
-        System.out.println(r.retrouve("TITRE Avatar"));
+        System.out.println(r.retrouve(""));
     }
 
 }

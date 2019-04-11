@@ -191,10 +191,16 @@ public class RechercheFilm {
         */
     }
 
-    private String convertToSQL(MoviePseudoRequest moviePseudoRequestmap) {
+    private String convertToSQL(MoviePseudoRequest moviePseudoRequestmap) { // TODO autres titres
         StringBuilder reqSQL = new StringBuilder();
         StringBuilder SELECT = new StringBuilder();
-        SELECT.append("SELECT f.id_film, prenom, p.nom, titre, duree, annee, py.nom, role"); // Chaine du SELECT  de la requête SQL générale
+
+        // Chaîne du FROM
+        StringBuilder FROM = new StringBuilder();
+        FROM.append("\nFROM films f NATURAL JOIN generique g NATURAL JOIN personnes p LEFT JOIN pays py ON f.pays = py.code");
+
+        SELECT.append("SELECT f.id_film, prenom, p.nom, f.titre, duree, annee, py.nom, role, (select group_concat(a_t.titre) from autres_titres a_t where a_t.id_film=f.id_film)"); // Chaine du SELECT  de la requête SQL générale
+        String ORDER_BY_SQL = "\nORDER BY annee DESC, f.titre";
 
         StringBuilder AVEC_SQL = new StringBuilder();
         StringBuilder PAYS_SQL = new StringBuilder();
@@ -203,11 +209,6 @@ public class RechercheFilm {
         StringBuilder AVANT_SQL = new StringBuilder();
         StringBuilder APRES_SQL = new StringBuilder();
         StringBuilder EN_SQL = new StringBuilder();
-        String ORDER_BY_SQL = "\nORDER BY annee DESC, titre";
-
-        // Chaîne du FROM
-        StringBuilder FROM = new StringBuilder();
-        FROM.append("\nFROM films f NATURAL JOIN generique g NATURAL JOIN personnes p LEFT JOIN pays py ON f.pays = py.code");
 
         // Permet de savoir si le mot clef WHERE a déjà été ajouté à la requête (avant le(s) 'AND')
         boolean where_created = false;
@@ -227,7 +228,7 @@ public class RechercheFilm {
 
                     if (j > 0) AVEC_SQL.append("\nOR");
 
-                    AVEC_SQL.append(" id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique");
+                    AVEC_SQL.append(" f.id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique");
                     AVEC_SQL.append(" WHERE UPPER(nom) LIKE UPPER('%").append(prenom_nom[1]).append("%') AND UPPER(prenom) LIKE UPPER('%").append(prenom_nom[0]).append("%')");
                     AVEC_SQL.append(" OR UPPER(nom) LIKE UPPER('%").append(prenom_nom[1]).append("%') AND UPPER(prenom_sans_accent) LIKE UPPER('%").append(prenom_nom[0]).append("%')");
                     AVEC_SQL.append(" OR UPPER(nom_sans_accent) LIKE UPPER('%").append(prenom_nom[1]).append("%') AND UPPER(prenom) LIKE UPPER('%").append(prenom_nom[0]).append("%')");
@@ -253,7 +254,7 @@ public class RechercheFilm {
                     if (j > 0) DE_SQL.append("\nOR");
 
                     // 3 lignes supplémentaires au cas où l'utilisateur saisie des accent, un l'un et/ou à l'autre, ou pas du tout
-                    DE_SQL.append(" id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique");
+                    DE_SQL.append(" f.id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique");
                     DE_SQL.append(" WHERE UPPER(nom) LIKE UPPER('%").append(prenom_nom[1]).append("%') AND UPPER(prenom) LIKE UPPER('%").append(prenom_nom[0]).append("%')");
                     DE_SQL.append(" OR UPPER(nom) LIKE UPPER('%").append(prenom_nom[1]).append("%') AND UPPER(prenom_sans_accent) LIKE UPPER('%").append(prenom_nom[0]).append("%')");
                     DE_SQL.append(" OR UPPER(nom_sans_accent) LIKE UPPER('%").append(prenom_nom[1]).append("%') AND UPPER(prenom) LIKE UPPER('%").append(prenom_nom[0]).append("%')");
@@ -274,7 +275,7 @@ public class RechercheFilm {
 
             for (int i = 0; i < moviePseudoRequestmap.TITRE.size(); i++) {
                 if (i > 0) TITRE_SQL.append(" OR");
-                TITRE_SQL.append(" UPPER(titre) LIKE UPPER('%").append(moviePseudoRequestmap.TITRE.get(i)).append("%')");
+                TITRE_SQL.append(" UPPER(f.titre) LIKE UPPER('%").append(moviePseudoRequestmap.TITRE.get(i)).append("%')");
             }
             TITRE_SQL.append(")");
         }
@@ -330,6 +331,46 @@ public class RechercheFilm {
         return reqSQL.toString();
     }
 
+    private ArrayList<InfoFilm> getListAutresTitres(String sql) { //TODO bugs plusieurs real, acteurs ...
+        ArrayList<InfoFilm> filmsList = new ArrayList<>();
+
+        try (ResultSet set = bdd.getCo().createStatement().executeQuery(sql)) {
+            // Champs de la classe InfoFilm
+            int id_film = -1;
+            ArrayList<NomPersonne> realisateurs = new ArrayList<>();
+            ArrayList<NomPersonne> acteurs = new ArrayList<>();
+            ArrayList<String> autres_titres = new ArrayList<>(); // A faire dans une deuxième requête
+
+            while (set.next()) { // Lecture des lignes
+                // On remplit chaque champ
+                if (set.getString(8).equals("A")) acteurs.add(new NomPersonne(set.getString(2), set.getString(3)));
+                else if (set.getString(8).equals("R")) realisateurs.add(new NomPersonne(set.getString(2), set.getString(3)));
+
+                String titre = set.getString(4);
+                int duree = set.getInt(5);
+                int annee = set.getInt(6);
+                String pays = set.getString(7);
+
+                // Nouveau film lu : on créé et ajoute une instance d'InfoFilm dans l'ArrayList
+                if (set.getInt(1) != id_film){
+                    filmsList.add(new InfoFilm(titre, realisateurs, acteurs, pays, annee, duree, autres_titres));
+
+                    // On vide les tableaux pour passer au film suivant
+                    realisateurs.clear();
+                    acteurs.clear();
+                    autres_titres.clear();
+                }
+
+                id_film = set.getInt(1);
+            }
+            set.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return filmsList;
+    }
+
     /**
      * Ordre des colonnes dans le resultSet passé en paramètre :
      * [1] f.id_film (ID du film)
@@ -346,9 +387,6 @@ public class RechercheFilm {
         ArrayList<InfoFilm> filmsList = new ArrayList<>();
 
         try (ResultSet set = bdd.getCo().createStatement().executeQuery(sql)) {
-            ResultSetMetaData rsmd = set.getMetaData();
-            int size = rsmd.getColumnCount();
-
             // Champs de la classe InfoFilm
             int id_film = -1;
             ArrayList<NomPersonne> realisateurs = new ArrayList<>();
@@ -356,29 +394,26 @@ public class RechercheFilm {
             ArrayList<String> autres_titres = new ArrayList<>(); // A faire dans une deuxième requête
 
             while (set.next()) { // Lecture des lignes
-                for (int i = 1; i <= size; i++) { // Lecture des colonnes
+                // On remplit chaque champ
+                if (set.getString(8).equals("A")) acteurs.add(new NomPersonne(set.getString(2), set.getString(3)));
+                else if (set.getString(8).equals("R")) realisateurs.add(new NomPersonne(set.getString(2), set.getString(3)));
 
-                    // On remplit chaque champ
-                    if (set.getString(8).equals("A")) acteurs.add(new NomPersonne(set.getString(2), set.getString(3)));
-                    else if (set.getString(8).equals("R")) realisateurs.add(new NomPersonne(set.getString(2), set.getString(3)));
+                String titre = set.getString(4);
+                int duree = set.getInt(5);
+                int annee = set.getInt(6);
+                String pays = set.getString(7);
 
-                    String titre = set.getString(4);
-                    int duree = set.getInt(5);
-                    int annee = set.getInt(6);
-                    String pays = set.getString(7);
+                // Nouveau film lu : on créé et ajoute une instance d'InfoFilm dans l'ArrayList
+                if (set.getInt(1) != id_film){
+                    filmsList.add(new InfoFilm(titre, realisateurs, acteurs, pays, annee, duree, autres_titres));
 
-                    // Nouveau film lu : on créé et ajoute une instance d'InfoFilm dans l'ArrayList
-                    if (set.getInt(1) != id_film){
-                        filmsList.add(new InfoFilm(titre, realisateurs, acteurs, pays, annee, duree, autres_titres));
-
-                        // On vide les tableaux pour passer au film suivant
-                        realisateurs.clear();
-                        acteurs.clear();
-                        autres_titres.clear();
-                    }
-
-                    id_film = set.getInt(1);
+                    // On vide les tableaux pour passer au film suivant
+                    realisateurs.clear();
+                    acteurs.clear();
+                    autres_titres.clear();
                 }
+
+                id_film = set.getInt(1);
             }
             set.close();
         } catch (SQLException e) {
