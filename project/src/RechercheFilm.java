@@ -54,7 +54,7 @@ public class RechercheFilm {
 
         /* TEST */
         MoviePseudoRequest moviePseudoRequestTest = new MoviePseudoRequest();
-        moviePseudoRequestTest.TITRE.add("Avatar");
+        moviePseudoRequestTest.TITRE.add("aVaTAr");
         //moviePseudoRequestTest.EN.add(2009);
         moviePseudoRequestTest.PAYS.add("us");
         moviePseudoRequestTest.AVANT.add(2010);
@@ -229,10 +229,10 @@ public class RechercheFilm {
                     if (j > 0) AVEC_SQL.append("\nOR");
 
                     AVEC_SQL.append(" f.id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique");
-                    AVEC_SQL.append(" WHERE UPPER(nom) LIKE UPPER('%").append(prenom_nom[1]).append("%') AND UPPER(prenom) LIKE UPPER('%").append(prenom_nom[0]).append("%')");
-                    AVEC_SQL.append(" OR UPPER(nom) LIKE UPPER('%").append(prenom_nom[1]).append("%') AND UPPER(prenom_sans_accent) LIKE UPPER('%").append(prenom_nom[0]).append("%')");
-                    AVEC_SQL.append(" OR UPPER(nom_sans_accent) LIKE UPPER('%").append(prenom_nom[1]).append("%') AND UPPER(prenom) LIKE UPPER('%").append(prenom_nom[0]).append("%')");
-                    AVEC_SQL.append(" OR UPPER(nom_sans_accent) LIKE UPPER('%").append(prenom_nom[1]).append("%') AND UPPER(prenom_sans_accent) LIKE UPPER('%").append(prenom_nom[0]).append("%')");
+                    AVEC_SQL.append(" WHERE nom LIKE '%").append(prenom_nom[1]).append("%' AND prenom LIKE '%").append(prenom_nom[0]).append("%'");
+                    AVEC_SQL.append(" OR nom LIKE '%").append(prenom_nom[1]).append("%' AND prenom_sans_accent LIKE '%").append(prenom_nom[0]).append("%'");
+                    AVEC_SQL.append(" OR nom_sans_accent LIKE '%").append(prenom_nom[1]).append("%' AND prenom LIKE '%").append(prenom_nom[0]).append("%'");
+                    AVEC_SQL.append(" OR nom_sans_accent LIKE '%").append(prenom_nom[1]).append("%' AND prenom_sans_accent LIKE '%").append(prenom_nom[0]).append("%'");
                     AVEC_SQL.append(" AND role = 'A')");
                 }
                 AVEC_SQL.append(")");
@@ -255,10 +255,10 @@ public class RechercheFilm {
 
                     // 3 lignes supplémentaires au cas où l'utilisateur saisie des accent, un l'un et/ou à l'autre, ou pas du tout
                     DE_SQL.append(" f.id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique");
-                    DE_SQL.append(" WHERE UPPER(nom) LIKE UPPER('%").append(prenom_nom[1]).append("%') AND UPPER(prenom) LIKE UPPER('%").append(prenom_nom[0]).append("%')");
-                    DE_SQL.append(" OR UPPER(nom) LIKE UPPER('%").append(prenom_nom[1]).append("%') AND UPPER(prenom_sans_accent) LIKE UPPER('%").append(prenom_nom[0]).append("%')");
-                    DE_SQL.append(" OR UPPER(nom_sans_accent) LIKE UPPER('%").append(prenom_nom[1]).append("%') AND UPPER(prenom) LIKE UPPER('%").append(prenom_nom[0]).append("%')");
-                    DE_SQL.append(" OR UPPER(nom_sans_accent) LIKE UPPER('%").append(prenom_nom[1]).append("%') AND UPPER(prenom_sans_accent) LIKE UPPER('%").append(prenom_nom[0]).append("%')");
+                    DE_SQL.append(" WHERE nom LIKE '%").append(prenom_nom[1]).append("%' AND prenom LIKE '%").append(prenom_nom[0]).append("%'");
+                    DE_SQL.append(" OR nom LIKE '%").append(prenom_nom[1]).append("%' AND prenom_sans_accent LIKE '%").append(prenom_nom[0]).append("%'");
+                    DE_SQL.append(" OR nom_sans_accent LIKE '%").append(prenom_nom[1]).append("%' AND prenom LIKE '%").append(prenom_nom[0]).append("%'");
+                    DE_SQL.append(" OR nom_sans_accent LIKE '%").append(prenom_nom[1]).append("%' AND prenom_sans_accent LIKE '%").append(prenom_nom[0]).append("%'");
                     DE_SQL.append(" AND role = 'R')");
                 }
                 DE_SQL.append(")");
@@ -275,7 +275,7 @@ public class RechercheFilm {
 
             for (int i = 0; i < moviePseudoRequestmap.TITRE.size(); i++) {
                 if (i > 0) TITRE_SQL.append(" OR");
-                TITRE_SQL.append(" UPPER(f.titre) LIKE UPPER('%").append(moviePseudoRequestmap.TITRE.get(i)).append("%')");
+                TITRE_SQL.append(" f.titre LIKE '%").append(moviePseudoRequestmap.TITRE.get(i)).append("%'");
             }
             TITRE_SQL.append(")");
         }
@@ -331,46 +331,6 @@ public class RechercheFilm {
         return reqSQL.toString();
     }
 
-    private ArrayList<InfoFilm> getListAutresTitres(String sql) { //TODO bugs plusieurs real, acteurs ...
-        ArrayList<InfoFilm> filmsList = new ArrayList<>();
-
-        try (ResultSet set = bdd.getCo().createStatement().executeQuery(sql)) {
-            // Champs de la classe InfoFilm
-            int id_film = -1;
-            ArrayList<NomPersonne> realisateurs = new ArrayList<>();
-            ArrayList<NomPersonne> acteurs = new ArrayList<>();
-            ArrayList<String> autres_titres = new ArrayList<>(); // A faire dans une deuxième requête
-
-            while (set.next()) { // Lecture des lignes
-                // On remplit chaque champ
-                if (set.getString(8).equals("A")) acteurs.add(new NomPersonne(set.getString(2), set.getString(3)));
-                else if (set.getString(8).equals("R")) realisateurs.add(new NomPersonne(set.getString(2), set.getString(3)));
-
-                String titre = set.getString(4);
-                int duree = set.getInt(5);
-                int annee = set.getInt(6);
-                String pays = set.getString(7);
-
-                // Nouveau film lu : on créé et ajoute une instance d'InfoFilm dans l'ArrayList
-                if (set.getInt(1) != id_film){
-                    filmsList.add(new InfoFilm(titre, realisateurs, acteurs, pays, annee, duree, autres_titres));
-
-                    // On vide les tableaux pour passer au film suivant
-                    realisateurs.clear();
-                    acteurs.clear();
-                    autres_titres.clear();
-                }
-
-                id_film = set.getInt(1);
-            }
-            set.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return filmsList;
-    }
-
     /**
      * Ordre des colonnes dans le resultSet passé en paramètre :
      * [1] f.id_film (ID du film)
@@ -380,6 +340,7 @@ public class RechercheFilm {
      * [6] annee (annee de sortie du film)
      * [7] py.nom (nom du pays en entier)
      * [8] role (role de la personne => 'A' : acteur, 'R' : réalisateur)
+     * [9] liste des autres titres sur une ligne
      * @param sql resultSet de la requête SQL construite à partir du pseudo-langage
      * @return ArrayList<InfoFilm> liste des films
      */
@@ -393,15 +354,21 @@ public class RechercheFilm {
             ArrayList<NomPersonne> acteurs = new ArrayList<>();
             ArrayList<String> autres_titres = new ArrayList<>(); // A faire dans une deuxième requête
 
-            while (set.next()) { // Lecture des lignes
+            while (set.next()) {
                 // On remplit chaque champ
                 if (set.getString(8).equals("A")) acteurs.add(new NomPersonne(set.getString(2), set.getString(3)));
                 else if (set.getString(8).equals("R")) realisateurs.add(new NomPersonne(set.getString(2), set.getString(3)));
+                // TODO Bugs first line
 
                 String titre = set.getString(4);
                 int duree = set.getInt(5);
                 int annee = set.getInt(6);
                 String pays = set.getString(7);
+
+                if (set.getString(9) != null && autres_titres.isEmpty()){
+                    String[] autres_titres_list_splited = set.getString(9).split(",");
+                    Collections.addAll(autres_titres, autres_titres_list_splited);
+                }
 
                 // Nouveau film lu : on créé et ajoute une instance d'InfoFilm dans l'ArrayList
                 if (set.getInt(1) != id_film){
