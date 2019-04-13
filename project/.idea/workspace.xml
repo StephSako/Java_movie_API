@@ -30,8 +30,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/RechercheFilm.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="298">
-              <caret line="367" column="73" selection-start-line="367" selection-start-column="73" selection-end-line="367" selection-end-column="73" />
+            <state relative-caret-position="210">
+              <caret line="349" column="31" selection-start-line="349" selection-start-column="31" selection-end-line="349" selection-end-column="31" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -63,8 +63,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/InfoFilm.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-76">
-              <caret line="32" column="23" lean-forward="true" selection-start-line="32" selection-start-column="23" selection-end-line="32" selection-end-column="23" />
+            <state relative-caret-position="375">
+              <caret line="26" column="41" selection-start-line="26" selection-start-column="30" selection-end-line="26" selection-end-column="41" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -88,6 +88,9 @@
       <find>id_film</find>
       <find>titre</find>
       <find>upp</find>
+      <find>next</find>
+      <find>split</find>
+      <find>TYPE_FORWARD_ONLY</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -117,7 +120,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -135,6 +137,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -261,7 +264,14 @@
       <option name="project" value="LOCAL" />
       <updated>1555020920375</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Autres titres DONE + TODO Bug first line not read (real + acteurs)">
+      <created>1555061559010</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1555061559016</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TodoView">
@@ -277,7 +287,7 @@
     <frame x="0" y="25" width="1366" height="696" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24924242" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1689394" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -286,15 +296,15 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.11463845" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.71666664" visible="true" weight="0.1446208" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49166667" weight="0.3015873" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.7143939" visible="true" weight="0.20987654" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4909091" weight="0.43209878" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.052910052" />
       <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.49924242" weight="0.329806" />
-      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.28333333" side_tool="true" visible="true" weight="0.1446208" />
+      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.28560606" side_tool="true" weight="0.2627866" />
       <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.49848485" weight="0.32804233" />
+      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.49772727" weight="0.32804233" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -316,7 +326,8 @@
     <MESSAGE value="Accents véririfes pour DE &amp; AVEC (noms et prénoms)" />
     <MESSAGE value="AVANT &amp; APRES, ResultSet bug fixing, cleaning useless functions" />
     <MESSAGE value="Autres titres générés dans le SQL (TODO in the ArrayList&lt;&gt;)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Autres titres générés dans le SQL (TODO in the ArrayList&lt;&gt;)" />
+    <MESSAGE value="Autres titres DONE + TODO Bug first line not read (real + acteurs)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Autres titres DONE + TODO Bug first line not read (real + acteurs)" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/.idea/vcs.xml">
@@ -324,13 +335,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/JavaDoc/index.html" />
     <entry file="file://$PROJECT_DIR$/src/BDDRow.java" />
-    <entry file="jar://$PROJECT_DIR$/bdd/sqlite-jdbc-3.27.2.jar!/org/sqlite/jdbc3/JDBC3ResultSet.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2">
-          <caret line="465" selection-start-line="465" selection-end-line="465" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$PROJECT_DIR$/bdd/sqlite-jdbc-3.27.2.jar!/org/sqlite/core/CoreResultSet.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="197">
@@ -345,10 +349,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://$PROJECT_DIR$/bdd/sqlite-jdbc-3.27.2.jar!/org/sqlite/jdbc3/JDBC3ResultSet.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="122" selection-start-line="122" selection-end-line="122" />
+        </state>
+      </provider>
+    </entry>
     <entry file="jrt:///usr/lib/jvm/java-1.11.0-openjdk-amd64!/java.sql/java/sql/ResultSet.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="261">
-          <caret line="28" column="9" selection-start-line="28" selection-start-column="9" selection-end-line="28" selection-end-column="9" />
+        <state relative-caret-position="-904">
+          <caret line="140" column="12" selection-start-line="140" selection-start-column="12" selection-end-line="140" selection-end-column="12" />
         </state>
       </provider>
     </entry>
@@ -378,8 +389,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/InfoFilm.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-76">
-          <caret line="32" column="23" lean-forward="true" selection-start-line="32" selection-start-column="23" selection-end-line="32" selection-end-column="23" />
+        <state relative-caret-position="375">
+          <caret line="26" column="41" selection-start-line="26" selection-start-column="30" selection-end-line="26" selection-end-column="41" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -388,8 +399,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/RechercheFilm.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="298">
-          <caret line="367" column="73" selection-start-line="367" selection-start-column="73" selection-end-line="367" selection-end-column="73" />
+        <state relative-caret-position="210">
+          <caret line="349" column="31" selection-start-line="349" selection-start-column="31" selection-end-line="349" selection-end-column="31" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
