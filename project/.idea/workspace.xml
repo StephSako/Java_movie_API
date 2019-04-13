@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c203bad0-6597-4e90-81e6-42c9ec4fa239" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/GenieLogicielProjet/RechercheFilm$MoviePseudoRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/GenieLogicielProjet/RechercheFilm$MoviePseudoRequest.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/GenieLogicielProjet/RechercheFilm.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/GenieLogicielProjet/RechercheFilm.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RechercheFilm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RechercheFilm.java" afterDir="false" />
     </list>
@@ -30,8 +31,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/RechercheFilm.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="349" column="31" selection-start-line="349" selection-start-column="31" selection-end-line="349" selection-end-column="31" />
+            <state relative-caret-position="946">
+              <caret line="350" column="33" lean-forward="true" selection-start-line="350" selection-start-column="33" selection-end-line="350" selection-end-column="33" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -42,8 +43,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/BDDManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="5" column="33" selection-start-line="5" selection-start-column="33" selection-end-line="5" selection-end-column="33" />
+            <state relative-caret-position="144">
+              <caret line="20" column="27" selection-start-line="20" selection-start-column="16" selection-end-line="20" selection-end-column="27" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -91,6 +92,8 @@
       <find>next</find>
       <find>split</find>
       <find>TYPE_FORWARD_ONLY</find>
+      <find>set.get</find>
+      <find>system</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -271,7 +274,14 @@
       <option name="project" value="LOCAL" />
       <updated>1555061559016</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Fixing bug ArrayList dynamic allocation + TODO bug algo add InfoFilm">
+      <created>1555172090753</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1555172090754</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TodoView">
@@ -285,9 +295,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="25" width="1366" height="696" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1689394" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17121212" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -296,11 +305,11 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.11463845" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.7143939" visible="true" weight="0.20987654" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4909091" weight="0.43209878" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.7143939" visible="true" weight="0.3121693" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4909091" weight="0.42857143" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.052910052" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.29805997" />
       <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.49924242" weight="0.329806" />
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.28560606" side_tool="true" weight="0.2627866" />
       <window_info anchor="bottom" id="Version Control" order="9" />
@@ -327,7 +336,8 @@
     <MESSAGE value="AVANT &amp; APRES, ResultSet bug fixing, cleaning useless functions" />
     <MESSAGE value="Autres titres générés dans le SQL (TODO in the ArrayList&lt;&gt;)" />
     <MESSAGE value="Autres titres DONE + TODO Bug first line not read (real + acteurs)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Autres titres DONE + TODO Bug first line not read (real + acteurs)" />
+    <MESSAGE value="Fixing bug ArrayList dynamic allocation + TODO bug algo add InfoFilm" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixing bug ArrayList dynamic allocation + TODO bug algo add InfoFilm" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/.idea/vcs.xml">
@@ -363,23 +373,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="39" selection-start-line="6" selection-start-column="39" selection-end-line="6" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/BDDManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="5" column="33" selection-start-line="5" selection-start-column="33" selection-end-line="5" selection-end-column="33" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/NomPersonne.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
@@ -397,10 +390,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="39" selection-start-line="6" selection-start-column="39" selection-end-line="6" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/BDDManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="20" column="27" selection-start-line="20" selection-start-column="16" selection-end-line="20" selection-end-column="27" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/RechercheFilm.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="349" column="31" selection-start-line="349" selection-start-column="31" selection-end-line="349" selection-end-column="31" />
+        <state relative-caret-position="946">
+          <caret line="350" column="33" lean-forward="true" selection-start-line="350" selection-start-column="33" selection-end-line="350" selection-end-column="33" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

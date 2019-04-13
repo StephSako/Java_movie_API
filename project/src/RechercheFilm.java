@@ -74,7 +74,6 @@ public class RechercheFilm {
         moviePseudoRequestTest.AVEC.add(tabAVEC);*/
 
         String sqlTest = convertToSQL(moviePseudoRequestTest);
-        System.out.println(sqlTest +"\n");
 
         /*MoviePseudoRequest moviePseudoRequest = formatRequest(requete); //TODO en cours
         String sql = convertToSQL(moviePseudoRequest);*/
@@ -190,7 +189,7 @@ public class RechercheFilm {
         */
     }
 
-    private String convertToSQL(MoviePseudoRequest moviePseudoRequestmap) { // TODO autres titres
+    private String convertToSQL(MoviePseudoRequest moviePseudoRequestmap) {
         StringBuilder reqSQL = new StringBuilder();
         StringBuilder SELECT = new StringBuilder();
 
@@ -198,7 +197,7 @@ public class RechercheFilm {
         StringBuilder FROM = new StringBuilder();
         FROM.append("\nFROM films f NATURAL JOIN generique g NATURAL JOIN personnes p LEFT JOIN pays py ON f.pays = py.code");
 
-        SELECT.append("SELECT f.id_film, prenom, p.nom, f.titre, duree, annee, py.nom, role, (select group_concat(a_t.titre, '€€') from autres_titres a_t where a_t.id_film=f.id_film)"); // Chaine du SELECT  de la requête SQL générale
+        SELECT.append("SELECT f.id_film as id_film_f, prenom, p.nom as nom_p, f.titre as titre_f, duree, annee, py.nom as nom_py, role, (select group_concat(a_t.titre, '€€') from autres_titres a_t where a_t.id_film=f.id_film) as liste_autres_titres"); // Chaine du SELECT  de la requête SQL générale
         String ORDER_BY_SQL = "\nORDER BY annee DESC, f.titre";
 
         StringBuilder AVEC_SQL = new StringBuilder();
@@ -325,7 +324,7 @@ public class RechercheFilm {
     }
 
     /**
-     * Ordre des colonnes dans le resultSet passé en paramètre :
+     * Ordre des colonnes dans le resultSet (-1 pour l'ArrayList) :
      * [1] f.id_film (ID du film)
      * [2] prenom [3] p.nom (prénom/nom d'une personne)
      * [4] titre (titre du film)
@@ -342,65 +341,72 @@ public class RechercheFilm {
 
         try (ResultSet set = bdd.getCo().createStatement().executeQuery(sql)) {
 
-            // Champs de la classe InfoFilm
-            int id_film = -1;
-            ArrayList<NomPersonne> realisateurs = new ArrayList<>();
-            ArrayList<NomPersonne> acteurs = new ArrayList<>();
-            ArrayList<String> autres_titres = new ArrayList<>();
-            int duree, annee;
-            String pays, titre;
+            if (set.next()) { // Verifie si le ResultSet contient au moins un résultat
+                ArrayList<ArrayList<String>> liste = convertRStoAL(set);
 
-            if (set.next()) { // Verifier si le ResultSet contient au moins un résultat
-                while (set.next()) {
+                // Champs de la classe InfoFilm
+                ArrayList<NomPersonne> realisateurs = new ArrayList<>();
+                ArrayList<NomPersonne> acteurs = new ArrayList<>();
+                ArrayList<String> autres_titres = new ArrayList<>();
+                int duree, annee;
+                String pays, titre;
 
-                    if (set.getString(8).equals("A")) {
+                for( int i = 0; i < liste.size(); i++) {
+
+                    if (liste.get(i).get(7).equals("A")) {
                         String prenom_act = "";
-                        if (set.getString(2) != null) prenom_act = set.getString(2);
-                        acteurs.add(new NomPersonne(prenom_act, set.getString(3)));
-                    } else if (set.getString(8).equals("R")) {
+                        if (liste.get(i).get(1) != null) prenom_act = liste.get(i).get(1);
+                        acteurs.add(new NomPersonne(prenom_act, liste.get(i).get(2)));
+                    } else if (liste.get(i).get(7).equals("R")) {
                         String prenom_real = "";
-                        if (set.getString(2) != null) prenom_real = set.getString(2);
-                        realisateurs.add(new NomPersonne(prenom_real, set.getString(3)));
+                        if (liste.get(i).get(1) != null) prenom_real = liste.get(i).get(1);
+                        realisateurs.add(new NomPersonne(prenom_real, liste.get(i).get(2)));
                     }
-                    // TODO Bugs first line ignored
 
-                    titre = set.getString(4);
-                    duree = set.getInt(5);
-                    annee = set.getInt(6);
-                    pays = set.getString(7);
+                    titre = liste.get(i).get(3);
+                    duree = Integer.valueOf(liste.get(i).get(4));
+                    annee = Integer.valueOf(liste.get(i).get(5));
+                    pays = liste.get(i).get(6);
 
-                    if (set.getString(9) != null && autres_titres.isEmpty()) {
-                        String[] autres_titres_list_splited = set.getString(9).split("€€");
+                    if (liste.get(i).get(8) != null && autres_titres.isEmpty()) {
+                        String[] autres_titres_list_splited = liste.get(i).get(8).split("€€");
                         Collections.addAll(autres_titres, autres_titres_list_splited);
                     }
 
-                    // Nouveau film lu : on créé et ajoute une nouvelle instance d'InfoFilm dans l'ArrayList
-                    if (set.getInt(1) != id_film) {
+                    // Nouveau film lu ou fin de la liste : on créé et ajoute une nouvelle instance d'InfoFilm dans l'ArrayList
+                    if (i == (liste.size()-1) || !Integer.valueOf(liste.get(i).get(0)).equals(Integer.valueOf(liste.get(i + 1).get(0)))) {
                         filmsList.add(new InfoFilm(titre, realisateurs, acteurs, pays, annee, duree, autres_titres));
 
-                        // On vide les champs pour passer au film suivant
+                        // On vide les tableaux pour passer au film suivant
                         acteurs = new ArrayList<>();
                         realisateurs = new ArrayList<>();
                         autres_titres = new ArrayList<>();
                     }
-
-                    id_film = set.getInt(1);
                 }
+            } else System.out.println("ResultSet vide"); //TODO Créer un InfoFilm avec une erreur
 
-                // Il n'a pas d'implémentation de isLast() pour SQLite : le dernier film doit être ajouté from scratch
-                //filmsList.add(new InfoFilm(titre, realisateurs, acteurs, pays, annee, duree, autres_titres));
-            }
-            else{
-                System.out.println("ResultSet vide");
-                //TODO Créer un InfoFilm avec une erreur
-            }
-
-            set.close(); // TODO Close connection
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        bdd.fermeBase();
 
         return filmsList;
+    }
+
+    // Le driver JDBC SQLite ne supporte pas la fonction isLast() et ne permet pas de connaître les valeurs de set.next()
+    // en étant à la ligne "actuelle" ;nous convertissons alors le ResultSet retourné en ArrayList<ArrayList<String>>
+    // pour un traitement plus facile d'un point de vue algorithmique
+    public ArrayList<ArrayList<String>> convertRStoAL(ResultSet set) throws SQLException {
+        ArrayList<ArrayList<String>> set_to_at = new ArrayList<>();
+
+        do {
+            ArrayList<String> liste_simple = new ArrayList<>();
+            for (int i = 1; i <= 9; i++) liste_simple.add(set.getString(i));
+            set_to_at.add(liste_simple);
+        } while (set.next());
+
+        set.close();
+        return set_to_at;
     }
 
     private String convertToJSON(ArrayList<InfoFilm> list) {
@@ -411,5 +417,4 @@ public class RechercheFilm {
         }
         return result.toString();
     }
-
 }
