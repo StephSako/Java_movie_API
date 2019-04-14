@@ -1,7 +1,5 @@
 package java_project;
 
-import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -51,7 +49,7 @@ class RechercheFilm {
      * On peut omettre le mot-clef apres une virgule ou OU, dans ce cas c'est implicitement le meme type de critere que precedemment qui s'applique.
      * @return Reponse de la recherche au format JSON.
      */
-    String retrouve(String requete) throws SyntaxException {
+    String retrouve(String requete) {
 
         /* TEST */
         MoviePseudoRequest moviePseudoRequestTest = new MoviePseudoRequest();
@@ -105,10 +103,6 @@ class RechercheFilm {
                 {
                     field = str;
                     newField = false;
-                }
-                else //si le champ n'est pas reconnu
-                {
-                    throw new SyntaxException("Invalid field name: "+str);
                 }
             }
             else //si on regarde la valeur d'un champ
