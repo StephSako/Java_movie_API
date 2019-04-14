@@ -53,7 +53,7 @@ class RechercheFilm {
 
         /* TEST */
         MoviePseudoRequest moviePseudoRequestTest = new MoviePseudoRequest();
-        moviePseudoRequestTest.TITRE.add("ocean");
+        moviePseudoRequestTest.TITRE.add("the virgin spring");
         //moviePseudoRequestTest.EN.add(2009);
         /*moviePseudoRequestTest.PAYS.add("us");
         moviePseudoRequestTest.AVANT.add(2010);
@@ -126,14 +126,12 @@ class RechercheFilm {
                         newField = Arrays.asList(possibleTerms).contains(list[i+1]);
                     }
                     // LIGNES = ET, COLONNES = OU (en SQL, ce sont les OU qui sont imbriqués entre les () )
-                    // NOMS ET PRENOMS EN MAJUSCULES
                     // VERIRIER LES ESPACES DANS LES NOMS/PRENOMS
                     else if (field.equals("DE"))
                     {
 
                     }
                     // LIGNES = ET, COLONNES = OU (en SQL, ce sont les OU qui sont imbriqués entre les () )
-                    // NOMS ET PRENOMS EN MAJUSCULES
                     // VERIRIER LES ESPACES DANS LES NOMS/PRENOMS
                     else if (field.equals("AVEC"))
                     {
@@ -261,7 +259,8 @@ class RechercheFilm {
 
             for (int i = 0; i < moviePseudoRequestmap.TITRE.size(); i++) {
                 if (i > 0) TITRE_SQL.append(" OR");
-                TITRE_SQL.append(" f.titre LIKE '%").append(moviePseudoRequestmap.TITRE.get(i)).append("%'");
+                TITRE_SQL.append(" f.id_film IN (SELECT id_film FROM autres_titres at WHERE f.id_film=at.id_film AND (f.titre LIKE '%").append(moviePseudoRequestmap.TITRE.get(i)).append("%' OR at.titre LIKE '%").append(moviePseudoRequestmap.TITRE.get(i)).append("%'))");
+                TITRE_SQL.append(" OR f.titre LIKE '%").append(moviePseudoRequestmap.TITRE.get(i)).append("%'");
             }
             TITRE_SQL.append(")");
         }
