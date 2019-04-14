@@ -1,3 +1,5 @@
+package java_project;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -8,17 +10,16 @@ import java.sql.SQLException;
  * @author Stephen Sakovitch 32
  * @version 1.0
  */
-public class BDDManager {
+class BDDManager {
 
-    private String url="jdbc:sqlite:";
     private Connection co;
 
-    public Connection getCo(){ return this.co; }
+    Connection getCo(){ return this.co; }
 
     /**
      * Ferme la BDD.
      */
-    public void fermeBase() {
+    void fermeBase() {
         try {
             this.co.close();
         } catch (SQLException e) {
@@ -30,7 +31,8 @@ public class BDDManager {
      * Constructeur.
      *  @param file Chemin d'acces au fichier BDD.
      */
-    public BDDManager(String file) {
+    BDDManager(String file) {
+        String url = "jdbc:sqlite:";
         url += file;
         try {
             co = DriverManager.getConnection(url);

@@ -1,3 +1,5 @@
+package java_project;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -23,13 +25,13 @@ public class InfoFilm implements Comparable<InfoFilm> {
      * @param duree Duree en minutes; 0 ou valeur negative si l'information n'est pas connue.
      * @param autres_titres Liste des titres alternatifs (peut etre vide), type titre original ou titre anglais a l'international.
      */
-    public InfoFilm(String titre,
-                    ArrayList<NomPersonne> realisateurs,
-                    ArrayList<NomPersonne> acteurs,
-                    String pays,
-                    int annee,
-                    int duree,
-                    ArrayList<String> autres_titres) {
+    InfoFilm(String titre,
+             ArrayList<NomPersonne> realisateurs,
+             ArrayList<NomPersonne> acteurs,
+             String pays,
+             int annee,
+             int duree,
+             ArrayList<String> autres_titres) {
         _titre = titre;
         _realisateurs = realisateurs;
         Collections.sort(_realisateurs);
@@ -93,7 +95,7 @@ public class InfoFilm implements Comparable<InfoFilm> {
         sb.append("],\"pays\":\"");
         sb.append(_pays.replace("\"", "\\\""));
         sb.append("\",\"annee\":");
-        sb.append(Integer.toString(_annee));
+        sb.append(_annee);
         sb.append(",\"duree\":");
         if (_duree > 0) {
             sb.append('"');

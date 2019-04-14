@@ -1,6 +1,8 @@
+package java_project;
+
 /**
  * Gestion des noms (noms de famille + prenom) des personnes.
- * <p>La classe NomPersonne permet de gerer les noms et tient en particulier compte des prefixes des noms ('de', 'von', 'van') dans le tri.
+ * <p>La classe java_project.NomPersonne permet de gerer les noms et tient en particulier compte des prefixes des noms ('de', 'von', 'van') dans le tri.
  */
 public class NomPersonne implements Comparable<NomPersonne>{
     private String _nom;
@@ -8,13 +10,13 @@ public class NomPersonne implements Comparable<NomPersonne>{
     private int _debutComp;
 
     /**
-     * Creation d'un nouveau NomPersonne, le prenom est passe en deuxieme.
+     * Creation d'un nouveau java_project.NomPersonne, le prenom est passe en deuxieme.
      * @param nom Nom de famille ou nom d'artiste.
      * @param prenom Prenom (peut etre "null").
      */
-    public NomPersonne(String nom, String prenom) {
-        _nom = new String(nom);
-        _prenom = new String(prenom);
+    NomPersonne(String nom, String prenom) {
+        _nom = nom;
+        _prenom = prenom;
         _debutComp = 0;
         // On regarde quel est le premier caractère en majuscules pour trier.
         // 'von Stroheim' avec les S, 'de la Huerta' avec les H et 'de Funès' avec les F.
@@ -26,7 +28,7 @@ public class NomPersonne implements Comparable<NomPersonne>{
 
     /**
      * Comparateur qui tient compte des prefixes de noms.
-     * @param autre NomPersonne qui est compare a l'objet courant.
+     * @param autre java_project.NomPersonne qui est compare a l'objet courant.
      * @return Un entier inferieur, egal ou superieur a zero suivant le cas.
      */
     @Override

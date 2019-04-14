@@ -1,3 +1,5 @@
+package java_project;
+
 import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
 
 import java.sql.ResultSet;
@@ -12,26 +14,26 @@ import java.util.Collections;
  * @author Stephen Sakovitch 32
  * @version 0.1
  */
-public class RechercheFilm {
+class RechercheFilm {
 
     private class MoviePseudoRequest {
-        public ArrayList<String> TITRE = new ArrayList<>();
-        public ArrayList<ArrayList<String>> DE = new ArrayList<>(); // LIGNES = ET, COLONNES = OU
-        public ArrayList<ArrayList<String>> AVEC = new ArrayList<>(); // LIGNES = ET, COLONNES = OU
-        public ArrayList<String> PAYS = new ArrayList<>();
-        public ArrayList<Integer> EN = new ArrayList<>();
-        public ArrayList<Integer> AVANT = new ArrayList<>();
-        public ArrayList<Integer> APRES = new ArrayList<>();
+        ArrayList<String> TITRE = new ArrayList<>();
+        ArrayList<ArrayList<String>> DE = new ArrayList<>(); // LIGNES = ET, COLONNES = OU
+        ArrayList<ArrayList<String>> AVEC = new ArrayList<>(); // LIGNES = ET, COLONNES = OU
+        ArrayList<String> PAYS = new ArrayList<>();
+        ArrayList<Integer> EN = new ArrayList<>();
+        ArrayList<Integer> AVANT = new ArrayList<>();
+        ArrayList<Integer> APRES = new ArrayList<>();
     }
 
     //TODO change bdd to private
-    public BDDManager bdd;
+    private BDDManager bdd;
 
     /**
      * Constructeur, ouvre la BDD.
      * @param nomFichierSQLite Nom du ficher BDD.
      */
-    public RechercheFilm(String nomFichierSQLite) {
+    RechercheFilm(String nomFichierSQLite) {
         bdd = new BDDManager(nomFichierSQLite);
     }
 
@@ -49,7 +51,7 @@ public class RechercheFilm {
      * On peut omettre le mot-clef apres une virgule ou OU, dans ce cas c'est implicitement le meme type de critere que precedemment qui s'applique.
      * @return Reponse de la recherche au format JSON.
      */
-    public String retrouve(String requete) throws SyntaxException {
+    String retrouve(String requete) throws SyntaxException {
 
         /* TEST */
         MoviePseudoRequest moviePseudoRequestTest = new MoviePseudoRequest();
@@ -79,15 +81,15 @@ public class RechercheFilm {
         String sql = convertToSQL(moviePseudoRequest);*/
 
         ArrayList<InfoFilm> list = getInfoFilmArray(sqlTest);
-        String json = convertToJSON(list);
-        return json;
+        return convertToJSON(list);
     }
 
     private MoviePseudoRequest formatRequest(String requete) {
 
         MoviePseudoRequest infos = new MoviePseudoRequest();
 
-        String field="", value="";
+        String field="";
+        StringBuilder value= new StringBuilder();
         ArrayList<String> tmpStorage = new ArrayList<>();
         boolean newField = true;
         String[] possibleTerms = {"TITRE", "DE", "AVEC", "PAYS", "EN", "AVANT", "APRES"};
@@ -162,7 +164,7 @@ public class RechercheFilm {
                 }
                 else
                 {
-                    value += str+" ";
+                    value.append(str).append(" ");
                 }
             }
 
@@ -191,13 +193,11 @@ public class RechercheFilm {
 
     private String convertToSQL(MoviePseudoRequest moviePseudoRequestmap) {
         StringBuilder reqSQL = new StringBuilder();
-        StringBuilder SELECT = new StringBuilder();
+        String SELECT = "SELECT f.id_film as id_film_f, prenom, p.nom as nom_p, f.titre as titre_f, duree, annee, py.nom as nom_py, role, (select group_concat(a_t.titre, '€€') from autres_titres a_t where a_t.id_film=f.id_film) as liste_autres_titres";
 
         // Chaîne du FROM
-        StringBuilder FROM = new StringBuilder();
-        FROM.append("\nFROM films f NATURAL JOIN generique g NATURAL JOIN personnes p LEFT JOIN pays py ON f.pays = py.code");
+        String FROM = "\nFROM films f NATURAL JOIN generique g NATURAL JOIN personnes p LEFT JOIN pays py ON f.pays = py.code";
 
-        SELECT.append("SELECT f.id_film as id_film_f, prenom, p.nom as nom_p, f.titre as titre_f, duree, annee, py.nom as nom_py, role, (select group_concat(a_t.titre, '€€') from autres_titres a_t where a_t.id_film=f.id_film) as liste_autres_titres"); // Chaine du SELECT  de la requête SQL générale
         String ORDER_BY_SQL = "\nORDER BY annee DESC, f.titre";
 
         StringBuilder AVEC_SQL = new StringBuilder();
@@ -334,7 +334,7 @@ public class RechercheFilm {
      * [8] role (role de la personne => 'A' : acteur, 'R' : réalisateur)
      * [9] liste des autres titres sur une ligne
      * @param sql resultSet de la requête SQL construite à partir du pseudo-langage
-     * @return ArrayList<InfoFilm> liste des films
+     * @return ArrayList<java_project.InfoFilm> liste des films
      */
     private ArrayList<InfoFilm> getInfoFilmArray(String sql) {
         ArrayList<InfoFilm> filmsList = new ArrayList<>();
@@ -344,7 +344,7 @@ public class RechercheFilm {
             if (set.next()) { // Verifie si le ResultSet contient au moins un résultat
                 ArrayList<ArrayList<String>> liste = convertRStoAL(set);
 
-                // Champs de la classe InfoFilm
+                // Champs de la classe java_project.InfoFilm
                 ArrayList<NomPersonne> realisateurs = new ArrayList<>();
                 ArrayList<NomPersonne> acteurs = new ArrayList<>();
                 ArrayList<String> autres_titres = new ArrayList<>();
@@ -373,7 +373,7 @@ public class RechercheFilm {
                         Collections.addAll(autres_titres, autres_titres_list_splited);
                     }
 
-                    // Nouveau film lu ou fin de la liste : on créé et ajoute une nouvelle instance d'InfoFilm dans l'ArrayList
+                    // Nouveau film lu ou fin de la liste : on créé et ajoute une nouvelle instance d'java_project.InfoFilm dans l'ArrayList
                     if (i == (liste.size()-1) || !Integer.valueOf(liste.get(i).get(0)).equals(Integer.valueOf(liste.get(i + 1).get(0)))) {
                         filmsList.add(new InfoFilm(titre, realisateurs, acteurs, pays, annee, duree, autres_titres));
 
@@ -383,7 +383,7 @@ public class RechercheFilm {
                         autres_titres = new ArrayList<>();
                     }
                 }
-            } else System.out.println("ResultSet vide"); //TODO Créer un InfoFilm avec une erreur
+            } else System.out.println("ResultSet vide"); //TODO Créer un java_project.InfoFilm avec une erreur
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -396,7 +396,7 @@ public class RechercheFilm {
     // Le driver JDBC SQLite ne supporte pas la fonction isLast() et ne permet pas de connaître les valeurs de set.next()
     // en étant à la ligne "actuelle" ;nous convertissons alors le ResultSet retourné en ArrayList<ArrayList<String>>
     // pour un traitement plus facile d'un point de vue algorithmique
-    public ArrayList<ArrayList<String>> convertRStoAL(ResultSet set) throws SQLException {
+    private ArrayList<ArrayList<String>> convertRStoAL(ResultSet set) throws SQLException {
         ArrayList<ArrayList<String>> set_to_at = new ArrayList<>();
 
         do {
@@ -411,10 +411,12 @@ public class RechercheFilm {
 
     private String convertToJSON(ArrayList<InfoFilm> list) {
         StringBuilder result = new StringBuilder();
-        for (InfoFilm movie : list) {
-            result.append(movie.toString());
-            result.append("\n");
+        result.append("{\"films\":[ ");
+        for (int i = 0; i < list.size(); i++) {
+            if (i > 0) result.append(",\n");
+            result.append(list.get(i).toString());
         }
+        result.append("]}");
         return result.toString();
     }
 }
