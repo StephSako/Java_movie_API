@@ -53,7 +53,7 @@ class RechercheFilm {
 
         /* TEST */
         MoviePseudoRequest moviePseudoRequestTest = new MoviePseudoRequest();
-        //moviePseudoRequestTest.TITRE.add("avatar");
+        moviePseudoRequestTest.TITRE.add("Dr. No");
         /*moviePseudoRequestTest.EN.add(2009);
         moviePseudoRequestTest.PAYS.add("us");
 
@@ -66,14 +66,14 @@ class RechercheFilm {
         moviePseudoRequestTest.APRES.add(2009);
 
         ArrayList<String> tabDE = new ArrayList<>();
-        tabDE.add("cAmeROn");
+        tabDE.add("jamescAmeROn");
         tabDE.add("PeterBerg");
-        moviePseudoRequestTest.DE.add(tabDE);*/
+        moviePseudoRequestTest.DE.add(tabDE);
 
         ArrayList<String> tabAVEC = new ArrayList<>();
-        tabAVEC.add("bourvil");
-        //tabAVEC.add("JasonStatham");
-        moviePseudoRequestTest.AVEC.add(tabAVEC);
+        tabAVEC.add("WorthingtonSam");
+        tabAVEC.add("JasonStatham");
+        moviePseudoRequestTest.AVEC.add(tabAVEC);*/
 
         String sqlTest = convertToSQL(moviePseudoRequestTest);
         System.out.println(sqlTest);
@@ -262,7 +262,7 @@ class RechercheFilm {
 
             for (int i = 0; i < moviePseudoRequestmap.TITRE.size(); i++) {
                 if (i > 0) TITRE_SQL.append(" OR");
-                TITRE_SQL.append(" f.id_film IN (SELECT id_film FROM autres_titres at WHERE f.id_film=at.id_film AND (f.titre LIKE '%").append(moviePseudoRequestmap.TITRE.get(i)).append("%' OR at.titre LIKE '%").append(moviePseudoRequestmap.TITRE.get(i)).append("%'))");
+                TITRE_SQL.append(" f.id_film IN (SELECT id_film FROM recherche_titre rt WHERE rt.titre LIKE '%").append(moviePseudoRequestmap.TITRE.get(i)).append("%')");
                 TITRE_SQL.append(" OR f.titre LIKE '%").append(moviePseudoRequestmap.TITRE.get(i)).append("%'");
             }
             TITRE_SQL.append(")");
