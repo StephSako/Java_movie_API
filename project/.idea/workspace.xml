@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c203bad0-6597-4e90-81e6-42c9ec4fa239" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java_project/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java_project/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/java_project/RechercheFilm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java_project/RechercheFilm.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -20,8 +21,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/java_project/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="6" column="45" selection-start-line="6" selection-start-column="45" selection-end-line="6" selection-end-column="45" />
+            <state relative-caret-position="135">
+              <caret line="9" column="1" lean-forward="true" selection-start-line="9" selection-start-column="1" selection-end-line="9" selection-end-column="1" />
             </state>
           </provider>
         </entry>
@@ -29,8 +30,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/java_project/RechercheFilm.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="131">
-              <caret line="247" column="377" selection-start-line="247" selection-start-column="377" selection-end-line="247" selection-end-column="377" />
+            <state relative-caret-position="195">
+              <caret line="247" column="68" lean-forward="true" selection-start-line="247" selection-start-column="68" selection-end-line="247" selection-end-column="68" />
             </state>
           </provider>
         </entry>
@@ -302,7 +303,21 @@
       <option name="project" value="LOCAL" />
       <updated>1555334375370</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Fixing bugs AVEC + DE with many terms in names (adding REPLACE())">
+      <created>1555335306302</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1555335306302</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Optimize title search with recherche_titre (considering that a film has many titles)">
+      <created>1555336229010</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1555336229010</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TodoView">
@@ -327,7 +342,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.31040564" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.7143939" visible="true" weight="0.26984128" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.7143939" visible="true" weight="0.30511463" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4909091" weight="0.34391534" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -361,7 +376,9 @@
     <MESSAGE value="Fixing bug ArrayList dynamic allocation + TODO bug algo add InfoFilm" />
     <MESSAGE value="Package created + warnings fixed + JSON formatted to implement a list of films" />
     <MESSAGE value="Fixing AVEC + DE with many terms in names" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixing AVEC + DE with many terms in names" />
+    <MESSAGE value="Fixing bugs AVEC + DE with many terms in names (adding REPLACE())" />
+    <MESSAGE value="Optimize title search with recherche_titre (considering that a film has many titles)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Optimize title search with recherche_titre (considering that a film has many titles)" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/.idea/vcs.xml">
@@ -426,15 +443,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/java_project/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="45" selection-start-line="6" selection-start-column="45" selection-end-line="6" selection-end-column="45" />
+        <state relative-caret-position="135">
+          <caret line="9" column="1" lean-forward="true" selection-start-line="9" selection-start-column="1" selection-end-line="9" selection-end-column="1" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/java_project/RechercheFilm.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="131">
-          <caret line="247" column="377" selection-start-line="247" selection-start-column="377" selection-end-line="247" selection-end-column="377" />
+        <state relative-caret-position="195">
+          <caret line="247" column="68" lean-forward="true" selection-start-line="247" selection-start-column="68" selection-end-line="247" selection-end-column="68" />
         </state>
       </provider>
     </entry>
