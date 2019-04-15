@@ -53,27 +53,30 @@ class RechercheFilm {
 
         /* TEST */
         MoviePseudoRequest moviePseudoRequestTest = new MoviePseudoRequest();
-        moviePseudoRequestTest.TITRE.add("the virgin spring");
-        //moviePseudoRequestTest.EN.add(2009);
-        /*moviePseudoRequestTest.PAYS.add("us");
+        //moviePseudoRequestTest.TITRE.add("avatar");
+        moviePseudoRequestTest.EN.add(2009);
+        moviePseudoRequestTest.PAYS.add("us");
+
         moviePseudoRequestTest.AVANT.add(2010);
         moviePseudoRequestTest.AVANT.add(2011);
         moviePseudoRequestTest.AVANT.add(2009);
+
         moviePseudoRequestTest.APRES.add(2007);
         moviePseudoRequestTest.APRES.add(2008);
         moviePseudoRequestTest.APRES.add(2009);
 
         ArrayList<String> tabDE = new ArrayList<>();
-        tabDE.add("James Cameron");
-        tabDE.add("Peter Berg");
+        tabDE.add("cAmeROn");
+        tabDE.add("PeterBerg");
         moviePseudoRequestTest.DE.add(tabDE);
 
         ArrayList<String> tabAVEC = new ArrayList<>();
-        tabAVEC.add("Sam Worthington");
-        tabAVEC.add("Jason Statham");
-        moviePseudoRequestTest.AVEC.add(tabAVEC);*/
+        tabAVEC.add("WorthingtonSam");
+        tabAVEC.add("JasonStatham");
+        moviePseudoRequestTest.AVEC.add(tabAVEC);
 
         String sqlTest = convertToSQL(moviePseudoRequestTest);
+        System.out.println(sqlTest);
 
         /*MoviePseudoRequest moviePseudoRequest = formatRequest(requete); //TODO en cours
         String sql = convertToSQL(moviePseudoRequest);*/
@@ -126,13 +129,15 @@ class RechercheFilm {
                         newField = Arrays.asList(possibleTerms).contains(list[i+1]);
                     }
                     // LIGNES = ET, COLONNES = OU (en SQL, ce sont les OU qui sont imbriqués entre les () )
-                    // VERIRIER LES ESPACES DANS LES NOMS/PRENOMS
+                    // PEUT IMPORTE 1, 2 OU PLUS DE 3 MOTS POUR LE NOM !!
+                    // NE PAS INSERER D'ESPACE DANS LE NOM COMPLET : TOUT COLLER !!
                     else if (field.equals("DE"))
                     {
 
                     }
                     // LIGNES = ET, COLONNES = OU (en SQL, ce sont les OU qui sont imbriqués entre les () )
-                    // VERIRIER LES ESPACES DANS LES NOMS/PRENOMS
+                    // PEUT IMPORTE 1, 2 OU PLUS DE 3 MOTS POUR LE NOM !!
+                    // NE PAS INSERER D'ESPACE DANS LE NOM COMPLET : TOUT COLLER !!
                     else if (field.equals("AVEC"))
                     {
 
@@ -214,12 +219,11 @@ class RechercheFilm {
                 else AVEC_SQL.append("\nAND (");
 
                 for (int j = 0; j < moviePseudoRequestmap.AVEC.get(i).size(); j++) {
-                    String[] prenom_nom = moviePseudoRequestmap.AVEC.get(i).get(j).split(" "); // On sépare nom et prénom
 
                     if (j > 0) AVEC_SQL.append("\nOR");
 
                     AVEC_SQL.append(" f.id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique");
-                    AVEC_SQL.append(" WHERE nom_sans_accent LIKE '%").append(prenom_nom[1]).append("%' AND prenom_sans_accent LIKE '%").append(prenom_nom[0]).append("%'");
+                    AVEC_SQL.append(" WHERE (prenom_sans_accent || nom_sans_accent) LIKE '%").append(moviePseudoRequestmap.AVEC.get(i).get(j)).append("%' OR (nom_sans_accent || prenom_sans_accent) LIKE '%").append(moviePseudoRequestmap.AVEC.get(i).get(j)).append("%' OR nom_sans_accent LIKE '%").append(moviePseudoRequestmap.AVEC.get(i).get(j)).append("%'");
                     AVEC_SQL.append(" AND role = 'A')");
                 }
                 AVEC_SQL.append(")");
@@ -237,12 +241,11 @@ class RechercheFilm {
 
                 for (int j = 0; j < moviePseudoRequestmap.DE.get(i).size(); j++) {
 
-                    String[] prenom_nom = moviePseudoRequestmap.DE.get(i).get(j).split(" "); // On sépare nom et prénom
                     if (j > 0) DE_SQL.append("\nOR");
 
                     // 3 lignes supplémentaires au cas où l'utilisateur saisie des accent, un l'un et/ou à l'autre, ou pas du tout
                     DE_SQL.append(" f.id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique");
-                    DE_SQL.append(" WHERE nom_sans_accent LIKE '%").append(prenom_nom[1]).append("%' AND prenom_sans_accent LIKE '%").append(prenom_nom[0]).append("%'");
+                    DE_SQL.append(" WHERE (prenom_sans_accent || nom_sans_accent) LIKE '%").append(moviePseudoRequestmap.DE.get(i).get(j)).append("%' OR (nom_sans_accent || prenom_sans_accent) LIKE '%").append(moviePseudoRequestmap.DE.get(i).get(j)).append("%' OR nom_sans_accent LIKE '%").append(moviePseudoRequestmap.DE.get(i).get(j)).append("%'");
                     DE_SQL.append(" AND role = 'R')");
                 }
                 DE_SQL.append(")");
