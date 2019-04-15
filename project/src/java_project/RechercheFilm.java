@@ -53,25 +53,25 @@ class RechercheFilm {
 
         /* TEST */
         MoviePseudoRequest moviePseudoRequestTest = new MoviePseudoRequest();
-        //moviePseudoRequestTest.TITRE.add("Havoc in Heaven");
-        moviePseudoRequestTest.EN.add(2009);
-        moviePseudoRequestTest.PAYS.add("us");
+        //moviePseudoRequestTest.TITRE.add("intouchables");
+        //moviePseudoRequestTest.EN.add(2009);
+        moviePseudoRequestTest.PAYS.add("fraNce");
 
-        moviePseudoRequestTest.AVANT.add(2010);
-        moviePseudoRequestTest.AVANT.add(2011);
-        moviePseudoRequestTest.AVANT.add(2009);
+        moviePseudoRequestTest.AVANT.add(2015);
+        moviePseudoRequestTest.AVANT.add(2012);
+        moviePseudoRequestTest.AVANT.add(2025);
 
         moviePseudoRequestTest.APRES.add(2007);
         moviePseudoRequestTest.APRES.add(2008);
         moviePseudoRequestTest.APRES.add(2009);
 
         ArrayList<String> tabDE = new ArrayList<>();
-        tabDE.add("jamescAmeROn");
+        tabDE.add("oliVierNAKAchE");
         tabDE.add("PeterBerg");
         moviePseudoRequestTest.DE.add(tabDE);
 
         ArrayList<String> tabAVEC = new ArrayList<>();
-        tabAVEC.add("WorthingtonSam");
+        tabAVEC.add("syomar");
         tabAVEC.add("JasonStatham");
         moviePseudoRequestTest.AVEC.add(tabAVEC);
 
@@ -128,15 +128,15 @@ class RechercheFilm {
                         }
                         newField = Arrays.asList(possibleTerms).contains(list[i+1]);
                     }
-                    // LIGNES = ET, COLONNES = OU (en SQL, ce sont les OU qui sont imbriqués entre les () )
-                    // PEUT IMPORTE 1, 2 OU PLUS DE 3 MOTS POUR LE NOM !!
+                    // LIGNES = ET, COLONNES = OU
+                    // PEUT IMPORTE 1, 2 OU PLUS DE 3 MOTS POUR LE NOM ET PRENOM : SQL FAIT TOUT
                     // NE PAS INSERER D'ESPACE DANS LE NOM COMPLET : TOUT COLLER !!
                     else if (field.equals("DE"))
                     {
 
                     }
-                    // LIGNES = ET, COLONNES = OU (en SQL, ce sont les OU qui sont imbriqués entre les () )
-                    // PEUT IMPORTE 1, 2 OU PLUS DE 3 MOTS POUR LE NOM !!
+                    // LIGNES = ET, COLONNES = OU
+                    // PEUT IMPORTE 1, 2 OU PLUS DE 3 MOTS POUR LE NOM ET PRENOM : SQL FAIT TOUT
                     // NE PAS INSERER D'ESPACE DANS LE NOM COMPLET : TOUT COLLER !!
                     else if (field.equals("AVEC"))
                     {
@@ -223,6 +223,7 @@ class RechercheFilm {
                     if (j > 0) AVEC_SQL.append("\nOR");
 
                     AVEC_SQL.append(" f.id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique");
+                    // Permet de ne pas s'embêter avec l'ordre du nom et prénoms, et si la personne n'a que son nom de renseigné
                     AVEC_SQL.append(" WHERE REPLACE(prenom_sans_accent || nom_sans_accent,' ','') LIKE '%").append(moviePseudoRequestmap.AVEC.get(i).get(j)).append("%' OR REPLACE(nom_sans_accent || prenom_sans_accent,' ','') LIKE '%").append(moviePseudoRequestmap.AVEC.get(i).get(j)).append("%' OR REPLACE(nom_sans_accent,' ','') LIKE '%").append(moviePseudoRequestmap.AVEC.get(i).get(j)).append("%'");
                     AVEC_SQL.append(" AND role = 'A')");
                 }
@@ -262,6 +263,7 @@ class RechercheFilm {
 
             for (int i = 0; i < moviePseudoRequestmap.TITRE.size(); i++) {
                 if (i > 0) TITRE_SQL.append(" OR");
+                // Permet une recherche sur les autres titres
                 TITRE_SQL.append(" f.id_film IN (SELECT id_film FROM recherche_titre rt WHERE rt.titre LIKE '%").append(moviePseudoRequestmap.TITRE.get(i)).append("%')");
                 TITRE_SQL.append(" OR f.titre LIKE '%").append(moviePseudoRequestmap.TITRE.get(i)).append("%'");
             }
@@ -379,7 +381,8 @@ class RechercheFilm {
                         autres_titres = new ArrayList<>();
                     }
                 }
-            } else System.out.println("ResultSet vide"); //TODO Créer un java_project.InfoFilm avec une erreur
+            }
+            //TODO Créer un java_project.InfoFilm avec une erreur
 
         } catch (SQLException e) {
             e.printStackTrace();
