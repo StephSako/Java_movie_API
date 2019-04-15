@@ -54,8 +54,8 @@ class RechercheFilm {
         /* TEST */
         MoviePseudoRequest moviePseudoRequestTest = new MoviePseudoRequest();
         //moviePseudoRequestTest.TITRE.add("intouchables");
-        //moviePseudoRequestTest.EN.add(2009);
-        moviePseudoRequestTest.PAYS.add("fraNce");
+        moviePseudoRequestTest.EN.add(2009);
+        /*moviePseudoRequestTest.PAYS.add("fraNce");
 
         moviePseudoRequestTest.AVANT.add(2015);
         moviePseudoRequestTest.AVANT.add(2012);
@@ -73,7 +73,7 @@ class RechercheFilm {
         ArrayList<String> tabAVEC = new ArrayList<>();
         tabAVEC.add("syomar");
         tabAVEC.add("JasonStatham");
-        moviePseudoRequestTest.AVEC.add(tabAVEC);
+        moviePseudoRequestTest.AVEC.add(tabAVEC);*/
 
         String sqlTest = convertToSQL(moviePseudoRequestTest);
         //System.out.println(sqlTest);
@@ -362,9 +362,10 @@ class RechercheFilm {
                     }
 
                     titre = liste.get(i).get(3);
-                    duree = Integer.valueOf(liste.get(i).get(4));
-                    annee = Integer.valueOf(liste.get(i).get(5));
-                    pays = liste.get(i).get(6);
+
+                    duree = (liste.get(i).get(4) != null) ? Integer.valueOf(liste.get(i).get(4)) : 0;
+                    annee = (liste.get(i).get(5) != null) ? Integer.valueOf(liste.get(i).get(5)) : 0;
+                    pays = (liste.get(i).get(5) != null) ? liste.get(i).get(6) : "";
 
                     if (liste.get(i).get(8) != null && autres_titres.isEmpty()) {
                         String[] autres_titres_list_splited = liste.get(i).get(8).split("€€");
@@ -410,8 +411,18 @@ class RechercheFilm {
 
     private String convertToJSON(ArrayList<InfoFilm> list) {
         StringBuilder result = new StringBuilder();
-        result.append("{\"films\":[ ");
-        for (int i = 0; i < list.size(); i++) {
+
+        int n;
+        if (list.size() >= 100){
+            n = 100;
+            result.append("{\"info\":\"Résultat limité à 100 films\", \"resultat\":[ ");
+        }
+        else{
+            n = list.size();
+            result.append("{\"resultat\":[ ");
+        }
+
+        for (int i = 0; i < n; i++) {
             if (i > 0) result.append(",\n");
             result.append(list.get(i).toString());
         }
