@@ -165,6 +165,8 @@ class RechercheFilm {
                 }
             }
 
+            // TODO En cas d'erreur de syntaxe, renvoyer    {"erreur":"...."}   avec un message associé à l'erreur
+
         }
 
         return infos;
@@ -190,7 +192,7 @@ class RechercheFilm {
 
     private String convertToSQL(MoviePseudoRequest moviePseudoRequestmap) {
         StringBuilder reqSQL = new StringBuilder();
-        String SELECT = "SELECT f.id_film as id_film_f, prenom, p.nom as nom_p, f.titre as titre_f, duree, annee, py.nom as nom_py, role, (select group_concat(a_t.titre, '€€') from autres_titres a_t where a_t.id_film=f.id_film) as liste_autres_titres";
+        String SELECT = "SELECT f.id_film as id_film_f, prenom, p.nom as nom_p, f.titre as titre_f, duree, annee, py.nom as nom_py, role, (select group_concat(a_t.titre, '#') from autres_titres a_t where a_t.id_film=f.id_film) as liste_autres_titres";
 
         // Chaîne du FROM
         String FROM = "\nFROM films f NATURAL JOIN generique g NATURAL JOIN personnes p LEFT JOIN pays py ON f.pays = py.code";
@@ -368,7 +370,7 @@ class RechercheFilm {
                     pays = (liste.get(i).get(5) != null) ? liste.get(i).get(6) : "";
 
                     if (liste.get(i).get(8) != null && autres_titres.isEmpty()) {
-                        String[] autres_titres_list_splited = liste.get(i).get(8).split("€€");
+                        String[] autres_titres_list_splited = liste.get(i).get(8).split("#");
                         Collections.addAll(autres_titres, autres_titres_list_splited);
                     }
 
