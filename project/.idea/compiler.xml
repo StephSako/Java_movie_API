@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_STRING" value="--add-modules &quot;java.xml.ws&quot;" />
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="GenieLogicielProjet" options="--add-exports=jdk.scripting.nashorn/jdk.nashorn.internal.runtime.regexp.joni.exception=ALL-UNNAMED --add-modules=java.xml.ws --add-exports=java.xml.ws/com.sun.xml.internal.ws.api.message=ALL-UNNAMED" />
+      <module name="GenieLogicielProjet" options="--add-exports=jdk.scripting.nashorn/jdk.nashorn.internal.runtime.regexp.joni.exception=ALL-UNNAMED" />
     </option>
   </component>
 </project>

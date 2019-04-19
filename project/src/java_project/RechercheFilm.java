@@ -22,6 +22,9 @@ class RechercheFilm {
         ArrayList<Integer> EN = new ArrayList<>();
         ArrayList<Integer> AVANT = new ArrayList<>();
         ArrayList<Integer> APRES = new ArrayList<>();
+
+        boolean erreur = false;
+        String message_erreur = "";
     }
 
     //TODO change bdd to private
@@ -54,7 +57,7 @@ class RechercheFilm {
         /* TEST */
         MoviePseudoRequest moviePseudoRequestTest = new MoviePseudoRequest();
         //moviePseudoRequestTest.TITRE.add("intouchables");
-        moviePseudoRequestTest.EN.add(2009);
+        //moviePseudoRequestTest.EN.add(2009);
         /*moviePseudoRequestTest.PAYS.add("fraNce");
 
         moviePseudoRequestTest.AVANT.add(2015);
@@ -68,24 +71,31 @@ class RechercheFilm {
         ArrayList<String> tabDE = new ArrayList<>();
         tabDE.add("oliVierNAKAchE");
         tabDE.add("PeterBerg");
-        moviePseudoRequestTest.DE.add(tabDE);
+        moviePseudoRequestTest.DE.add(tabDE);*/
 
         ArrayList<String> tabAVEC = new ArrayList<>();
-        tabAVEC.add("syomar");
-        tabAVEC.add("JasonStatham");
-        moviePseudoRequestTest.AVEC.add(tabAVEC);*/
+        tabAVEC.add("omarsy");
+        moviePseudoRequestTest.AVEC.add(tabAVEC);
+        ArrayList<String> tabAVEC2 = new ArrayList<>();
+        tabAVEC2.add("francoiscluzet");
+        tabAVEC2.add("benfoster");
+        moviePseudoRequestTest.AVEC.add(tabAVEC2);
 
         String sqlTest = convertToSQL(moviePseudoRequestTest);
         //System.out.println(sqlTest);
 
         /*MoviePseudoRequest moviePseudoRequest = formatRequest(requete); //TODO en cours
-        String sql = convertToSQL(moviePseudoRequest);*/
 
-        ArrayList<InfoFilm> list = getInfoFilmArray(sqlTest);
-        return convertToJSON(list);
+        if (!moviePseudoRequest.erreur){
+            String sql = convertToSQL(moviePseudoRequest);*/
+
+            ArrayList<InfoFilm> list = getInfoFilmArray(sqlTest);
+            return convertToJSON(list);
+        //} else return "{\"erreur\":\"" + moviePseudoRequest.message_erreur + "\"}"; // Envoi de l'erreur
+
     }
 
-    private MoviePseudoRequest formatRequest(String requete) {
+    private MoviePseudoRequest formatRequest(String requete) { // TODO En cours
 
         MoviePseudoRequest infos = new MoviePseudoRequest();
 
@@ -166,6 +176,8 @@ class RechercheFilm {
             }
 
             // TODO En cas d'erreur de syntaxe, renvoyer    {"erreur":"...."}   avec un message associé à l'erreur
+            // TODO et mettre le champ 'erreur' de la classe MoviePseudoRequest à true et mettre le message d'erreur associé
+            // TODO dans le champ 'message_erreur' de cette même classe
 
         }
 
@@ -385,7 +397,6 @@ class RechercheFilm {
                     }
                 }
             }
-            //TODO Créer un java_project.InfoFilm avec une erreur
 
         } catch (SQLException e) {
             e.printStackTrace();
