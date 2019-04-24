@@ -25,9 +25,23 @@ class RechercheFilm {
 
         boolean erreur = false;
         String message_erreur = "";
+
+        @Override
+        public String toString() {
+            String str = "";
+            str+="TITRE "+TITRE.toString()+"\n";
+            str+="DE "+DE.toString()+"\n";
+
+            str+="AVEC "+AVEC.toString()+"\n";
+
+            str+="PAYS "+PAYS.toString()+"\n";
+            str+="EN "+EN.toString()+"\n";
+            str+="AVANT "+AVANT.toString()+"\n";
+            str+="APRES "+APRES.toString()+"\n";
+            return str;
+        }
     }
 
-    //TODO change bdd to private
     private BDDManager bdd;
 
     /**
@@ -53,54 +67,28 @@ class RechercheFilm {
      * @return Reponse de la recherche au format JSON.
      */
     String retrouve(String requete) {
-
-        /* TEST */
-        MoviePseudoRequest moviePseudoRequestTest = new MoviePseudoRequest();
-        //moviePseudoRequestTest.TITRE.add("intouchables");
-        //moviePseudoRequestTest.EN.add(2009);
-        /*moviePseudoRequestTest.PAYS.add("fraNce");
-
-        moviePseudoRequestTest.AVANT.add(2015);
-        moviePseudoRequestTest.AVANT.add(2012);
-        moviePseudoRequestTest.AVANT.add(2025);
-
-        moviePseudoRequestTest.APRES.add(2007);
-        moviePseudoRequestTest.APRES.add(2008);
-        moviePseudoRequestTest.APRES.add(2009);
-
-        ArrayList<String> tabDE = new ArrayList<>();
-        tabDE.add("oliVierNAKAchE");
-        tabDE.add("PeterBerg");
-        moviePseudoRequestTest.DE.add(tabDE);*/
-
-        ArrayList<String> tabAVEC = new ArrayList<>();
-        tabAVEC.add("omarsy");
-        moviePseudoRequestTest.AVEC.add(tabAVEC);
-        ArrayList<String> tabAVEC2 = new ArrayList<>();
-        tabAVEC2.add("francoiscluzet");
-        tabAVEC2.add("benfoster");
-        moviePseudoRequestTest.AVEC.add(tabAVEC2);
-
+        /**
+        MoviePseudoRequest moviePseudoRequestTest = formatRequest("TITRE intouchables, DE moi, AVEC Audrey Hepburn OU Marilyn Monroe, Kirk Douglas, ladydi, PAYS ukraine, EN 1950, AVANT 1960, APRES 1720");
         String sqlTest = convertToSQL(moviePseudoRequestTest);
-        //System.out.println(sqlTest);
+        /**/
 
-        /*MoviePseudoRequest moviePseudoRequest = formatRequest(requete); //TODO en cours
-
+        MoviePseudoRequest moviePseudoRequest = formatRequest(requete);
         if (!moviePseudoRequest.erreur){
-            String sql = convertToSQL(moviePseudoRequest);*/
+            String sql = convertToSQL(moviePseudoRequest);
 
-            ArrayList<InfoFilm> list = getInfoFilmArray(sqlTest);
+            ArrayList<InfoFilm> list = getInfoFilmArray(sql);
             return convertToJSON(list);
-        //} else return "{\"erreur\":\"" + moviePseudoRequest.message_erreur + "\"}"; // Envoi de l'erreur
+        } else return "{\"erreur\":\"" + moviePseudoRequest.message_erreur + "\"}"; // Envoi de l'erreur
 
     }
 
     private MoviePseudoRequest formatRequest(String requete) { // TODO En cours
 
         MoviePseudoRequest infos = new MoviePseudoRequest();
+        requete += ",END";
 
         String field="";
-        StringBuilder value= new StringBuilder();
+        String value="";
         ArrayList<String> tmpStorage = new ArrayList<>();
         boolean newField = true;
         String[] possibleTerms = {"TITRE", "DE", "AVEC", "PAYS", "EN", "AVANT", "APRES"};
@@ -109,97 +97,121 @@ class RechercheFilm {
         for (int i=0; i<list.length; i++) //pour chaque mot de la recherche
         {
             String str = list[i];
-            if (newField) //si on commence un nouveau champ
+            if (newField) //si oregarde un mot-clef
             {
-                field = "";
-                if (Arrays.asList(possibleTerms).contains(str)) //si le champ fait parti des champs valides
+                if (Arrays.asList(possibleTerms).contains(str)) //si le mot-clef fait partie des mots-clefs valables
                 {
-                    field = str;
-                    newField = false;
+                    //s'il s'agit d'un champ qui ne peut pas prendre de ET, et que le champ est deja pris
+                    if (str.equals("TITRE") && !infos.TITRE.isEmpty()) {
+                        infos.erreur = true;
+                        infos.message_erreur = "ERR: multiples champs TITRE";
+                        break;
+                    }
+                    else if (str.equals("PAYS") && !infos.PAYS.isEmpty()) {
+                        infos.erreur = true;
+                        infos.message_erreur = "ERR: multiples champs PAYS";
+                        break;
+                    }
+                    else if (str.equals("EN") && !infos.EN.isEmpty()) {
+                        infos.erreur = true;
+                        infos.message_erreur = "ERR: multiples champs EN";
+                        break;
+                    }
+
+                    else //si tout va bien pour le mot clef
+                    {
+                        field = str;
+                        newField = false;
+                    }
+                }
+                else //si le mot n'est pas un mot-clef valable
+                {
+                    if (str.equals("END")) {
+                        System.out.println(i+" OH");
+                    }
+                    else if (i==0) //si c'est le 1er mot-clef de la requete
+                    {
+                        infos.erreur = true;
+                        infos.message_erreur = "ERR: 1er champ invalide";
+                        break;
+                    }
                 }
             }
+
             else //si on regarde la valeur d'un champ
             {
                 if (str.equals("OU"))
                 {
-
+                    tmpStorage.add(value.trim());
+                    value="";
                 }
-                else if (str.equals(","))
+                else if (list[i].equals(","))
                 {
-                    if (field.equals("TITRE"))
-                    {
-                        if (tmpStorage.isEmpty())
-                        {
+                    tmpStorage.add(value.trim());
+                    value="";
 
-                        }
-                        else
-                        {
-
-                        }
-                        newField = Arrays.asList(possibleTerms).contains(list[i+1]);
+                    if (field.equals("TITRE")) {
+                        infos.TITRE = new ArrayList<>(tmpStorage);
                     }
+
                     // LIGNES = ET, COLONNES = OU
                     // PEUT IMPORTE 1, 2 OU PLUS DE 3 MOTS POUR LE NOM ET PRENOM : SQL FAIT TOUT
                     // NE PAS INSERER D'ESPACE DANS LE NOM COMPLET : TOUT COLLER !!
-                    else if (field.equals("DE"))
-                    {
-
+                    else if (field.equals("DE")) {
+                        ArrayList<String> tmpStorage2 = new ArrayList<>();
+                        for (String tmpVal : tmpStorage) {
+                            tmpStorage2.add(tmpVal.replaceAll("\\s+",""));
+                        }
+                        infos.DE.add(tmpStorage2);
                     }
+
                     // LIGNES = ET, COLONNES = OU
                     // PEUT IMPORTE 1, 2 OU PLUS DE 3 MOTS POUR LE NOM ET PRENOM : SQL FAIT TOUT
                     // NE PAS INSERER D'ESPACE DANS LE NOM COMPLET : TOUT COLLER !!
-                    else if (field.equals("AVEC"))
-                    {
-
+                    else if (field.equals("AVEC")) {
+                        ArrayList<String> tmpStorage2 = new ArrayList<>();
+                        for (String tmpVal : tmpStorage) {
+                            tmpStorage2.add(tmpVal.replaceAll("\\s+",""));
+                        }
+                        infos.AVEC.add(tmpStorage2);
                     }
-                    else if (field.equals("PAYS"))
-                    {
 
+                    else if (field.equals("PAYS")) {
+                        infos.PAYS = new ArrayList<>(tmpStorage);
                     }
-                    else if (field.equals("EN")) // TODO Convertir valeurs de EN en int
-                    {
 
+                    else if (field.equals("EN")) {
+                        ArrayList<Integer> tmpStorage2 = new ArrayList<>();
+                        for (String tmpVal : tmpStorage) {
+                            tmpStorage2.add(Integer.valueOf(tmpVal));
+                        }
+                        infos.EN = tmpStorage2;
                     }
-                    else if (field.equals("AVANT")) // TODO Convertir valeurs AVANT en int
-                    {
 
+                    else if (field.equals("AVANT")) {
+                        for (String tmpVal : tmpStorage) {
+                            infos.AVANT.add(Integer.valueOf(tmpVal));
+                        }
                     }
-                    else if (field.equals("APRES")) // TODO Convertir valeurs APRES en int
-                    {
 
+                    else if (field.equals("APRES")) {
+                        for (String tmpVal : tmpStorage) {
+                            infos.APRES.add(Integer.valueOf(tmpVal));
+                        }
                     }
+
+                    newField = Arrays.asList(possibleTerms).contains(list[i+1]);
+                    tmpStorage.clear();
+
                 }
                 else
                 {
-                    value.append(str).append(" ");
+                    value=value+str+" ";
                 }
+
             }
-
-            // TODO En cas d'erreur de syntaxe, renvoyer    {"erreur":"...."}   avec un message associé à l'erreur
-            // TODO et mettre le champ 'erreur' de la classe MoviePseudoRequest à true et mettre le message d'erreur associé
-            // TODO dans le champ 'message_erreur' de cette même classe
-
         }
-
         return infos;
-
-        /* //stockage
-        if (field.equals("TITRE")) {
-
-        } else if (field.equals("DE")) {
-
-        } else if (field.equals("AVEC")) {
-
-        } else if (field.equals("PAYS")) {
-
-        } else if (field.equals("EN")) {
-
-        } else if (field.equals("AVANT")) {
-
-        } else if (field.equals("APRES")) {
-
-        }
-        */
     }
 
     private String convertToSQL(MoviePseudoRequest moviePseudoRequestmap) {
