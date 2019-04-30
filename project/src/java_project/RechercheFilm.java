@@ -31,9 +31,7 @@ class RechercheFilm {
             String str = "";
             str+="TITRE "+TITRE.toString()+"\n";
             str+="DE "+DE.toString()+"\n";
-
             str+="AVEC "+AVEC.toString()+"\n";
-
             str+="PAYS "+PAYS.toString()+"\n";
             str+="EN "+EN.toString()+"\n";
             str+="AVANT "+AVANT.toString()+"\n";
@@ -104,17 +102,17 @@ class RechercheFilm {
                     //s'il s'agit d'un champ qui ne peut pas prendre de ET, et que le champ est deja pris
                     if (str.equals("TITRE") && !infos.TITRE.isEmpty()) {
                         infos.erreur = true;
-                        infos.message_erreur = "ERR: multiples champs TITRE";
+                        infos.message_erreur = "multiples champs TITRE";
                         break;
                     }
                     else if (str.equals("PAYS") && !infos.PAYS.isEmpty()) {
                         infos.erreur = true;
-                        infos.message_erreur = "ERR: multiples champs PAYS";
+                        infos.message_erreur = "multiples champs PAYS";
                         break;
                     }
                     else if (str.equals("EN") && !infos.EN.isEmpty()) {
                         infos.erreur = true;
-                        infos.message_erreur = "ERR: multiples champs EN";
+                        infos.message_erreur = "multiples champs EN";
                         break;
                     }
 
@@ -132,7 +130,7 @@ class RechercheFilm {
                     else if (i==0) //si c'est le 1er mot-clef de la requete
                     {
                         infos.erreur = true;
-                        infos.message_erreur = "ERR: 1er champ invalide";
+                        infos.message_erreur = "1er champ invalide";
                         break;
                     }
                 }
@@ -140,12 +138,12 @@ class RechercheFilm {
 
             else //si on regarde la valeur d'un champ
             {
-                if (str.equals("OU"))
+                if (str.equals("OU")) //si le mot actuel est "OU"
                 {
                     tmpStorage.add(value.trim());
                     value="";
                 }
-                else if (list[i].equals(","))
+                else if (list[i].equals(","))  //si le " mot " actuel est une virgule
                 {
                     tmpStorage.add(value.trim());
                     value="";
@@ -183,20 +181,38 @@ class RechercheFilm {
                     else if (field.equals("EN")) {
                         ArrayList<Integer> tmpStorage2 = new ArrayList<>();
                         for (String tmpVal : tmpStorage) {
-                            tmpStorage2.add(Integer.valueOf(tmpVal));
+                            try {
+                                tmpStorage2.add(Integer.valueOf(tmpVal));
+                            } catch(NumberFormatException err) {
+                                infos.erreur = true;
+                                infos.message_erreur = "champ 'EN' non numerique ["+err.getMessage()+"]";
+                                break;
+                            }
                         }
                         infos.EN = tmpStorage2;
                     }
 
                     else if (field.equals("AVANT")) {
                         for (String tmpVal : tmpStorage) {
-                            infos.AVANT.add(Integer.valueOf(tmpVal));
+                            try {
+                                infos.AVANT.add(Integer.valueOf(tmpVal));
+                            } catch(NumberFormatException err) {
+                                infos.erreur = true;
+                                infos.message_erreur = "champ 'AVANT' non numerique ["+err.getMessage()+"]";
+                                break;
+                            }
                         }
                     }
 
                     else if (field.equals("APRES")) {
                         for (String tmpVal : tmpStorage) {
-                            infos.APRES.add(Integer.valueOf(tmpVal));
+                            try {
+                                infos.APRES.add(Integer.valueOf(tmpVal));
+                            } catch(NumberFormatException err) {
+                                infos.erreur = true;
+                                infos.message_erreur = "champ 'APRES' non numerique ["+err.getMessage()+"]";
+                                break;
+                            }
                         }
                     }
 
@@ -204,13 +220,17 @@ class RechercheFilm {
                     tmpStorage.clear();
 
                 }
-                else
+                else //si le mot actuel fait partie de la valeur du champ
                 {
                     value=value+str+" ";
                 }
 
             }
         }
+        
+        // Afficher objet MoviePseudoRequest
+        System.out.println(infos);
+
         return infos;
     }
 
