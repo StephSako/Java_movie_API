@@ -172,7 +172,7 @@ class RechercheFilm {
                                 infos.message_erreur = "valeur numerique dans le champ 'DE'";
                                 break;
                             }
-                            else tmpStorage2.add(tmpVal.replaceAll("\\s+", ""));
+                            else tmpStorage2.add(tmpVal);
                         }
                         infos.DE.add(tmpStorage2);
                     }
@@ -189,7 +189,7 @@ class RechercheFilm {
                                 infos.message_erreur = "valeur numerique dans le champ 'AVEC'";
                                 break;
                             }
-                            else tmpStorage2.add(tmpVal.replaceAll("\\s+", ""));
+                            else tmpStorage2.add(tmpVal);
                         }
                         infos.AVEC.add(tmpStorage2);
                     }
