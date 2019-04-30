@@ -120,14 +120,26 @@ class RechercheFilm {
                 }
                 else //si le mot n'est pas un mot-clef valable
                 {
-                    if (str.equals("END")) {
-                        System.out.println(i+" OH");
+                    if (str.equals("END")) //si on a atteint le mot-clef de la fin
+                    {
+                        break;
                     }
                     else if (i==0) //si c'est le 1er mot-clef de la requete
                     {
                         infos.erreur = true;
                         infos.message_erreur = "1er champ invalide";
                         break;
+                    }
+                    else if (!field.matches("DE|AVEC")) //si on pas de mot clef et qu'il ne s'agit ni de "DE", ni de "AVEC"
+                    {
+                        infos.erreur = true;
+                        infos.message_erreur = "mot-clef de champ invalide : "+str;
+                        break;
+                    }
+                    else //si on a une autre valeur après un "DE" ou un "AVEC"
+                    {
+                        newField=false;
+                        i--;
                     }
                 }
             }
@@ -154,7 +166,13 @@ class RechercheFilm {
                     else if (field.equals("DE")) {
                         ArrayList<String> tmpStorage2 = new ArrayList<>();
                         for (String tmpVal : tmpStorage) {
-                            tmpStorage2.add(tmpVal.replaceAll("\\s+",""));
+                            if (tmpVal.matches(".*\\d.*")) //si le valeur contient un nombre
+                            {
+                                infos.erreur = true;
+                                infos.message_erreur = "valeur numerique dans le champ 'DE'";
+                                break;
+                            }
+                            else tmpStorage2.add(tmpVal.replaceAll("\\s+", ""));
                         }
                         infos.DE.add(tmpStorage2);
                     }
@@ -165,13 +183,25 @@ class RechercheFilm {
                     else if (field.equals("AVEC")) {
                         ArrayList<String> tmpStorage2 = new ArrayList<>();
                         for (String tmpVal : tmpStorage) {
-                            tmpStorage2.add(tmpVal.replaceAll("\\s+",""));
+                            if (tmpVal.matches(".*\\d.*")) //si le valeur contient un nombre
+                            {
+                                infos.erreur = true;
+                                infos.message_erreur = "valeur numerique dans le champ 'AVEC'";
+                                break;
+                            }
+                            else tmpStorage2.add(tmpVal.replaceAll("\\s+", ""));
                         }
                         infos.AVEC.add(tmpStorage2);
                     }
 
                     else if (field.equals("PAYS")) {
-                        infos.PAYS = new ArrayList<>(tmpStorage);
+                        if (tmpStorage.get(0).matches(".*\\d.*")) //si le valeur contient un nombre
+                        {
+                            infos.erreur = true;
+                            infos.message_erreur = "valeur numerique dans le champ 'DE'";
+                            break;
+                        }
+                        else infos.PAYS = new ArrayList<>(tmpStorage);
                     }
 
                     else if (field.equals("EN")) {
@@ -212,7 +242,7 @@ class RechercheFilm {
                         }
                     }
 
-                    newField = Arrays.asList(possibleTerms).contains(list[i+1]);
+                    newField = true;
                     tmpStorage.clear();
 
                 }
@@ -222,7 +252,7 @@ class RechercheFilm {
                 }
             }
         }
-        
+
         // Afficher objet MoviePseudoRequest
         System.out.println(infos);
 
