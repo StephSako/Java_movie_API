@@ -69,7 +69,7 @@ class RechercheFilm {
         MoviePseudoRequest moviePseudoRequest = formatRequest(requete);
         if (!moviePseudoRequest.erreur){
             String sql = convertToSQL(moviePseudoRequest);
-            System.out.println(sql);
+            //System.out.println(sql);
             ArrayList<InfoFilm> list = getInfoFilmArray(sql);
             return convertToJSON(list);
         } else return "{\"erreur\":\"" + moviePseudoRequest.message_erreur + "\"}"; // Envoi de l'erreur
@@ -218,7 +218,7 @@ class RechercheFilm {
                                 tmpStorage2.add(Integer.valueOf(tmpVal));
                             } catch(NumberFormatException err) {
                                 infos.erreur = true;
-                                infos.message_erreur = "champ 'EN' non numerique ["+err.getMessage()+"]";
+                                infos.message_erreur = "champ 'EN' non numerique ["+err.getMessage().replace('\"','\'')+"]";
                                 break;
                             }
                         }
@@ -231,7 +231,7 @@ class RechercheFilm {
                                 infos.AVANT.add(Integer.valueOf(tmpVal));
                             } catch(NumberFormatException err) {
                                 infos.erreur = true;
-                                infos.message_erreur = "champ 'AVANT' non numerique ["+err.getMessage()+"]";
+                                infos.message_erreur = "champ 'AVANT' non numerique ["+err.getMessage().replace('\"','\'')+"]";
                                 break;
                             }
                         }
@@ -243,7 +243,7 @@ class RechercheFilm {
                                 infos.APRES.add(Integer.valueOf(tmpVal));
                             } catch(NumberFormatException err) {
                                 infos.erreur = true;
-                                infos.message_erreur = "champ 'APRES' non numerique ["+err.getMessage()+"]";
+                                infos.message_erreur = "champ 'APRES' non numerique ["+err.getMessage().replace('\"','\'')+"]";
                                 break;
                             }
                         }
@@ -261,7 +261,7 @@ class RechercheFilm {
         }
 
         // Afficher objet MoviePseudoRequest
-        System.out.println(infos);
+        //System.out.println(infos);
 
         return infos;
     }
@@ -469,9 +469,6 @@ class RechercheFilm {
         return filmsList;
     }
 
-    // Le driver JDBC SQLite ne supporte pas la fonction isLast() et ne permet pas de connaître les valeurs de set.next()
-    // en étant à la ligne "actuelle" ;nous convertissons alors le ResultSet retourné en ArrayList<ArrayList<String>>
-    // pour un traitement plus facile d'un point de vue algorithmique
     private ArrayList<ArrayList<String>> convertRStoAL(ResultSet set) throws SQLException {
         ArrayList<ArrayList<String>> set_to_at = new ArrayList<>();
 
