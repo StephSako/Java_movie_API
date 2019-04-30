@@ -342,8 +342,7 @@ class RechercheFilm {
             for (int i = 0; i < moviePseudoRequestmap.TITRE.size(); i++) {
                 if (i > 0) TITRE_SQL.append(" OR");
                 // Permet une recherche sur les autres titres
-                TITRE_SQL.append(" f.id_film IN (SELECT id_film FROM recherche_titre rt WHERE rt.titre LIKE '%").append(moviePseudoRequestmap.TITRE.get(i)).append("%')");
-                TITRE_SQL.append(" OR f.titre LIKE '%").append(moviePseudoRequestmap.TITRE.get(i)).append("%'");
+                TITRE_SQL.append(" f.id_film IN (SELECT id_film FROM recherche_titre rt WHERE rt.titre LIKE '%' ||	replace('").append(moviePseudoRequestmap.TITRE.get(i)).append("', ' ', '%') || '%')");
             }
             TITRE_SQL.append(")");
         }
