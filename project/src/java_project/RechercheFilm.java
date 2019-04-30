@@ -148,8 +148,15 @@ class RechercheFilm {
             {
                 if (str.equals("OU")) //si le mot actuel est "OU"
                 {
-                    tmpStorage.add(value.trim());
-                    value="";
+                    if (value.isEmpty()) {
+                        infos.erreur = true;
+                        infos.message_erreur = "champ 'OU' juste après un mot-clef";
+                        break;
+                    }
+                    else {
+                        tmpStorage.add(value.trim());
+                        value="";
+                    }
                 }
                 else if (list[i].equals(","))  //si le " mot " actuel est une virgule
                 {

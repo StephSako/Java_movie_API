@@ -5,6 +5,6 @@ public class Main {
     public static void main(String[] args) {
 
         RechercheFilm r = new RechercheFilm("bdd/bdfilm.sqlite");
-        System.out.println(r.retrouve("AVEC robert de niro"));
+        System.out.println(r.retrouve("TITRE blues brothers OU avengers"));
     }
 }
