@@ -65,15 +65,11 @@ class RechercheFilm {
      * @return Reponse de la recherche au format JSON.
      */
     String retrouve(String requete) {
-        /**
-        MoviePseudoRequest moviePseudoRequestTest = formatRequest("TITRE intouchables, DE moi, AVEC Audrey Hepburn OU Marilyn Monroe, Kirk Douglas, ladydi, PAYS ukraine, EN 1950, AVANT 1960, APRES 1720");
-        String sqlTest = convertToSQL(moviePseudoRequestTest);
-        /**/
 
         MoviePseudoRequest moviePseudoRequest = formatRequest(requete);
         if (!moviePseudoRequest.erreur){
             String sql = convertToSQL(moviePseudoRequest);
-
+            System.out.println(sql);
             ArrayList<InfoFilm> list = getInfoFilmArray(sql);
             return convertToJSON(list);
         } else return "{\"erreur\":\"" + moviePseudoRequest.message_erreur + "\"}"; // Envoi de l'erreur
@@ -224,7 +220,6 @@ class RechercheFilm {
                 {
                     value=value+str+" ";
                 }
-
             }
         }
         
@@ -270,7 +265,7 @@ class RechercheFilm {
 
                     AVEC_SQL.append(" f.id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique");
                     // Permet de ne pas s'embêter avec l'ordre du nom et prénoms, et si la personne n'a que son nom de renseigné
-                    AVEC_SQL.append(" WHERE REPLACE(prenom_sans_accent || nom_sans_accent,' ','') LIKE '%").append(moviePseudoRequestmap.AVEC.get(i).get(j)).append("%' OR REPLACE(nom_sans_accent || prenom_sans_accent,' ','') LIKE '%").append(moviePseudoRequestmap.AVEC.get(i).get(j)).append("%' OR REPLACE(nom_sans_accent,' ','') LIKE '%").append(moviePseudoRequestmap.AVEC.get(i).get(j)).append("%'");
+                    AVEC_SQL.append(" WHERE (prenom_sans_accent || ' ' || nom_sans_accent LIKE '%").append(moviePseudoRequestmap.AVEC.get(i).get(j)).append("%' OR nom_sans_accent || ' ' || prenom_sans_accent LIKE '%").append(moviePseudoRequestmap.AVEC.get(i).get(j)).append("%' OR nom_sans_accent LIKE '%").append(moviePseudoRequestmap.AVEC.get(i).get(j)).append("%')");
                     AVEC_SQL.append(" AND role = 'A')");
                 }
                 AVEC_SQL.append(")");
@@ -292,7 +287,7 @@ class RechercheFilm {
 
                     // 3 lignes supplémentaires au cas où l'utilisateur saisie des accent, un l'un et/ou à l'autre, ou pas du tout
                     DE_SQL.append(" f.id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique");
-                    DE_SQL.append(" WHERE REPLACE(prenom_sans_accent || nom_sans_accent,' ','') LIKE '%").append(moviePseudoRequestmap.DE.get(i).get(j)).append("%' OR REPLACE(nom_sans_accent || prenom_sans_accent,' ','') LIKE '%").append(moviePseudoRequestmap.DE.get(i).get(j)).append("%' OR REPLACE(nom_sans_accent,' ','') LIKE '%").append(moviePseudoRequestmap.DE.get(i).get(j)).append("%'");
+                    DE_SQL.append(" WHERE (prenom_sans_accent || ' ' || nom_sans_accent LIKE '%").append(moviePseudoRequestmap.DE.get(i).get(j)).append("%' OR nom_sans_accent || ' ' || prenom_sans_accent LIKE '%").append(moviePseudoRequestmap.DE.get(i).get(j)).append("%' OR nom_sans_accent LIKE '%").append(moviePseudoRequestmap.DE.get(i).get(j)).append("%')");
                     DE_SQL.append(" AND role = 'R')");
                 }
                 DE_SQL.append(")");
