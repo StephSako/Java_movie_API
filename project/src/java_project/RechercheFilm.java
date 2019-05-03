@@ -348,33 +348,35 @@ class RechercheFilm {
         }
 
         // EN
-        if (!where_created){
-            EN_SQL.append("\nWHERE (");
-            where_created = true;
-        }
-        else EN_SQL.append("\nAND (");
-
-        for (int i = 0; i < moviePseudoRequestmap.EN.size(); i++) {
-            if (i > 0) EN_SQL.append("\nOR");
-            EN_SQL.append(" annee = ").append(moviePseudoRequestmap.EN.get(i));
-        }
-        EN_SQL.append(")");
-
-        // AVANT
-        if (!moviePseudoRequestmap.AVANT.isEmpty()){
-            if (where_created) AVANT_SQL.append("\nAND annee < ").append(Collections.max(moviePseudoRequestmap.AVANT));
-            else {
-                APRES_SQL.append("\nWHERE annee < ").append(Collections.max(moviePseudoRequestmap.AVANT));
+        if (!moviePseudoRequestmap.EN.isEmpty()){
+            if (!where_created){
+                EN_SQL.append("\nWHERE (");
                 where_created = true;
             }
+            else EN_SQL.append("\nAND (");
+
+            for (int i = 0; i < moviePseudoRequestmap.EN.size(); i++) {
+                if (i > 0) EN_SQL.append("\nOR");
+                EN_SQL.append(" annee = ").append(moviePseudoRequestmap.EN.get(i));
+            }
+            EN_SQL.append(")");
         }
-        
-        // APRES
-        if(!moviePseudoRequestmap.APRES.isEmpty()) {
-            if (where_created) APRES_SQL.append("\nAND annee > ").append(Collections.min(moviePseudoRequestmap.APRES));
-            else {
-                APRES_SQL.append("\nWHERE annee > ").append(Collections.min(moviePseudoRequestmap.APRES));
-                where_created = true;
+        else {
+            // AVANT
+            if (!moviePseudoRequestmap.AVANT.isEmpty()){
+                if (where_created) AVANT_SQL.append("\nAND annee < ").append(Collections.max(moviePseudoRequestmap.AVANT));
+                else {
+                    APRES_SQL.append("\nWHERE annee < ").append(Collections.max(moviePseudoRequestmap.AVANT));
+                    where_created = true;
+                }
+            }
+            // APRES
+            if(!moviePseudoRequestmap.APRES.isEmpty()) {
+                if (where_created) APRES_SQL.append("\nAND annee > ").append(Collections.min(moviePseudoRequestmap.APRES));
+                else {
+                    APRES_SQL.append("\nWHERE annee > ").append(Collections.min(moviePseudoRequestmap.APRES));
+                    where_created = true;
+                }
             }
         }
 
@@ -460,7 +462,7 @@ class RechercheFilm {
             }
 
         } catch (SQLException e) {
-            System.out.println("{\"erreur\":\"Impossible d'éxécuter des requêtes dans la BDD Sqlite\"");
+            e.printStackTrace();
         }
         bdd.fermeBase();
 

@@ -23,7 +23,7 @@ class BDDManager {
         try {
             this.co.close();
         } catch (SQLException e) {
-            System.out.println("{\"erreur\":\"Fermeture impossible\"");
+            System.out.println("{\"erreur\":\"Fermeture impossible\"}");
         }
     }
 
@@ -37,7 +37,7 @@ class BDDManager {
         try {
             co = DriverManager.getConnection(url);
         } catch(Exception err) {
-            System.out.println("{\"erreur\":\"Impossible d'accéder à la BDD Sqlite\"");
+            System.out.println("{\"erreur\":\"Impossible d'accéder à la BDD Sqlite\"}");
         }
     }
 }
