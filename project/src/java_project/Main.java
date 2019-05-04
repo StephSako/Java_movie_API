@@ -6,5 +6,6 @@ public class Main {
 
         RechercheFilm r = new RechercheFilm("../bdd/bdfilm.sqlite");
         System.out.println(r.retrouve(String.join(" ", args)));
+        //System.out.println(r.retrouve("AVANT 1914, fff"));
     }
 }

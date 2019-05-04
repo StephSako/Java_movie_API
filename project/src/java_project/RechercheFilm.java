@@ -1,5 +1,6 @@
 package java_project;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,31 +15,8 @@ import java.util.Collections;
  */
 class RechercheFilm {
 
-    private class MoviePseudoRequest {
-        ArrayList<String> TITRE = new ArrayList<>();
-        ArrayList<ArrayList<String>> DE = new ArrayList<>();
-        ArrayList<ArrayList<String>> AVEC = new ArrayList<>();
-        ArrayList<String> PAYS = new ArrayList<>();
-        ArrayList<Integer> EN = new ArrayList<>();
-        ArrayList<Integer> AVANT = new ArrayList<>();
-        ArrayList<Integer> APRES = new ArrayList<>();
-
-        boolean erreur = false;
-        String message_erreur = "";
-
-        @Override
-        public String toString() {
-            String str = "";
-            str+="TITRE "+TITRE.toString()+"\n";
-            str+="DE "+DE.toString()+"\n";
-            str+="AVEC "+AVEC.toString()+"\n";
-            str+="PAYS "+PAYS.toString()+"\n";
-            str+="EN "+EN.toString()+"\n";
-            str+="AVANT "+AVANT.toString()+"\n";
-            str+="APRES "+APRES.toString()+"\n";
-            return str;
-        }
-    }
+    private boolean erreur = false;
+    private String message_erreur = "";
 
     private BDDManager bdd;
 
@@ -66,52 +44,64 @@ class RechercheFilm {
      */
     String retrouve(String requete) {
 
-        MoviePseudoRequest moviePseudoRequest = formatRequest(requete);
-        if (!moviePseudoRequest.erreur){
-            String sql = convertToSQL(moviePseudoRequest);
+        String sql = formatRequest(requete);
+        if (!this.erreur){
             System.out.println(sql);
             ArrayList<InfoFilm> list = getInfoFilmArray(sql);
             return convertToJSON(list);
-        } else return "{\"erreur\":\"" + moviePseudoRequest.message_erreur + "\"}"; // Envoi de l'erreur
+        } else return "{\"erreur\":\"" + this.message_erreur + "\"}"; // Envoi de l'erreur
 
     }
 
-    private MoviePseudoRequest formatRequest(String requete) { // TODO En cours
+    private String formatRequest(String requete) { // TODO En cours
 
-        MoviePseudoRequest infos = new MoviePseudoRequest();
+        StringBuilder sql = new StringBuilder();
+        String SELECT = "SELECT f.id_film as id_film_f, prenom, p.nom as nom_p, f.titre as titre_f, duree, annee, py.nom as nom_py, role, (select group_concat(a_t.titre, '#') from autres_titres a_t where a_t.id_film=f.id_film) as liste_autres_titres";
+        String FROM = "\nFROM films f NATURAL JOIN generique g NATURAL JOIN personnes p LEFT JOIN pays py ON f.pays = py.code";
+        String ORDER_BY_SQL = "\nORDER BY annee DESC, f.titre";
+
+        sql.append(SELECT).append(FROM);
+
+        String activeKeyword = "";
+        boolean where_created = false, uniq_field_filled = false;
         requete += ",END";
 
         String field="";
-        String value="";
+        StringBuilder value= new StringBuilder();
         ArrayList<String> tmpStorage = new ArrayList<>();
         boolean newField = true;
         String[] possibleTerms = {"TITRE", "DE", "AVEC", "PAYS", "EN", "AVANT", "APRES"};
+        ArrayList<ArrayList<String>> AVEC = new ArrayList<>();
+        ArrayList<ArrayList<String>> DE = new ArrayList<>();
 
         String[] list = requete.split(" |((?<=,)|(?=,))");
-        for (int i=0; i<list.length; i++) //pour chaque mot de la recherche
+        label:
+        for (int i = 0; i<list.length; i++) //pour chaque mot de la recherche
         {
             String str = list[i];
-            if (newField) //si oregarde un mot-clef
+            if (newField) //si on regarde un mot-clef
             {
                 if (Arrays.asList(possibleTerms).contains(str)) //si le mot-clef fait partie des mots-clefs valables
                 {
-                    //s'il s'agit d'un champ qui ne peut pas prendre de ET, et que le champ est deja pris
-                    if (str.equals("TITRE") && !infos.TITRE.isEmpty()) {
-                        infos.erreur = true;
-                        infos.message_erreur = "multiples champs TITRE";
-                        break;
-                    }
-                    else if (str.equals("PAYS") && !infos.PAYS.isEmpty()) {
-                        infos.erreur = true;
-                        infos.message_erreur = "multiples champs PAYS";
-                        break;
-                    }
-                    else if (str.equals("EN") && !infos.EN.isEmpty()) {
-                        infos.erreur = true;
-                        infos.message_erreur = "multiples champs EN";
-                        break;
-                    }
+                    //s'il s'agit d'un champ qui ne peut pas prendre de ET et que le champ est deja pris
+                    if (uniq_field_filled) {
+                        switch (str){
+                            case "TITRE":
+                                this.erreur = true;
+                                this.message_erreur = "multiples champs TITRE";
+                                break;
+                            case "PAYS":
+                                this.erreur = true;
+                                this.message_erreur = "multiples champs PAYS";
+                                break;
+                            case "EN":
+                                this.erreur = true;
+                                this.message_erreur = "multiples champs EN";
+                                break;
 
+                        }
+                        break;
+                    }
                     else //si tout va bien pour le mot clef
                     {
                         field = str;
@@ -126,14 +116,14 @@ class RechercheFilm {
                     }
                     else if (i==0) //si c'est le 1er mot-clef de la requete
                     {
-                        infos.erreur = true;
-                        infos.message_erreur = "1er champ invalide";
+                        this.erreur = true;
+                        this.message_erreur = "1er champ invalide";
                         break;
                     }
                     else if (!field.matches("DE|AVEC")) //si on pas de mot clef et qu'il ne s'agit ni de "DE", ni de "AVEC"
                     {
-                        infos.erreur = true;
-                        infos.message_erreur = "mot-clef de champ invalide : "+str;
+                        this.erreur = true;
+                        this.message_erreur = "mot-clef de champ invalide : "+str;
                         break;
                     }
                     else //si on a une autre valeur après un "DE" ou un "AVEC"
@@ -143,110 +133,179 @@ class RechercheFilm {
                     }
                 }
             }
-
             else //si on regarde la valeur d'un champ
             {
                 if (str.equals("OU")) //si le mot actuel est "OU"
                 {
-                    if (value.isEmpty()) {
-                        infos.erreur = true;
-                        infos.message_erreur = "champ 'OU' juste après un mot-clef";
+                    if (value.length() == 0) {
+                        this.erreur = true;
+                        this.message_erreur = "champ 'OU' sans valeur préalable";
                         break;
                     }
                     else {
-                        tmpStorage.add(value.trim());
-                        value="";
+                        tmpStorage.add(value.toString().trim());
+                        value = new StringBuilder();
                     }
                 }
-                else if (list[i].equals(","))  //si le " mot " actuel est une virgule
+                else if (list[i].equals(","))  //si le "mot" actuel est une virgule
                 {
-                    tmpStorage.add(value.trim());
-                    value="";
+                    tmpStorage.add(value.toString().trim());
+                    value = new StringBuilder();
 
-                    if (field.equals("TITRE")) {
-                        infos.TITRE = new ArrayList<>(tmpStorage);
-                    }
+                    switch (field) {
+                        case "TITRE":
+                            if (!where_created) {
+                                where_created = true;
+                                sql.append("\nWHERE (");
+                            } else sql.append("\nAND (");
 
-                    // LIGNES = ET, COLONNES = OU
-                    // PEUT IMPORTE 1, 2 OU PLUS DE 3 MOTS POUR LE NOM ET PRENOM : SQL FAIT TOUT
-                    // NE PAS INSERER D'ESPACE DANS LE NOM COMPLET : TOUT COLLER !!
-                    else if (field.equals("DE")) {
-                        ArrayList<String> tmpStorage2 = new ArrayList<>();
-                        for (String tmpVal : tmpStorage) {
-                            if (tmpVal.matches(".*\\d.*")) //si le valeur contient un nombre
-                            {
-                                infos.erreur = true;
-                                infos.message_erreur = "valeur numerique dans le champ 'DE'";
-                                break;
+                            for (int j = 0; j < tmpStorage.size(); j++) {
+                                if (j > 0) sql.append(" OR");
+                                sql.append(" f.id_film IN (SELECT id_film FROM recherche_titre rt WHERE rt.titre LIKE '%' ||	replace('").append(tmpStorage.get(j)).append("', ' ', '%') || '%')");
                             }
-                            else tmpStorage2.add(tmpVal);
-                        }
-                        infos.DE.add(tmpStorage2);
-                    }
-
-                    // LIGNES = ET, COLONNES = OU
-                    // PEUT IMPORTE 1, 2 OU PLUS DE 3 MOTS POUR LE NOM ET PRENOM : SQL FAIT TOUT
-                    // NE PAS INSERER D'ESPACE DANS LE NOM COMPLET : TOUT COLLER !!
-                    else if (field.equals("AVEC")) {
-                        ArrayList<String> tmpStorage2 = new ArrayList<>();
-                        for (String tmpVal : tmpStorage) {
-                            if (tmpVal.matches(".*\\d.*")) //si le valeur contient un nombre
-                            {
-                                infos.erreur = true;
-                                infos.message_erreur = "valeur numerique dans le champ 'AVEC'";
-                                break;
+                            sql.append(")");
+                            uniq_field_filled = true;
+                            break;
+                        case "DE": {
+                            ArrayList<String> tmpStorage2 = new ArrayList<>();
+                            for (String tmpVal : tmpStorage) {
+                                if (tmpVal.matches(".*\\d.*")) //si le valeur contient un nombre
+                                {
+                                    this.erreur = true;
+                                    this.message_erreur = "valeur numerique dans le champ 'DE'";
+                                    break;
+                                } else tmpStorage2.add(tmpVal);
                             }
-                            else tmpStorage2.add(tmpVal);
-                        }
-                        infos.AVEC.add(tmpStorage2);
-                    }
+                            DE.add(tmpStorage2);
 
-                    else if (field.equals("PAYS")) {
-                        if (tmpStorage.get(0).matches(".*\\d.*")) //si le valeur contient un nombre
-                        {
-                            infos.erreur = true;
-                            infos.message_erreur = "valeur numerique dans le champ 'DE'";
+                            for (ArrayList<String> strings : DE) {
+                                if (!where_created) {
+                                    sql.append("\nWHERE (");
+                                    where_created = true;
+                                } else sql.append("\nAND (");
+
+                                for (int k = 0; k < DE.get(k).size(); k++) {
+                                    if (k > 0) sql.append("\nOR");
+                                    sql.append(" f.id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique");
+                                    sql.append(" WHERE (prenom_sans_accent || ' ' || nom_sans_accent LIKE '%").append(strings.get(k)).append("%' OR nom_sans_accent || ' ' || prenom_sans_accent LIKE '%").append(strings.get(k)).append("%' OR nom_sans_accent LIKE '%").append(strings.get(k)).append("%')");
+                                    sql.append(" AND role = 'R')");
+                                }
+                                sql.append(")");
+                            }
+                            DE.clear();
                             break;
                         }
-                        else infos.PAYS = new ArrayList<>(tmpStorage);
-                    }
-
-                    else if (field.equals("EN")) {
-                        ArrayList<Integer> tmpStorage2 = new ArrayList<>();
-                        for (String tmpVal : tmpStorage) {
-                            try {
-                                tmpStorage2.add(Integer.valueOf(tmpVal));
-                            } catch(NumberFormatException err) {
-                                infos.erreur = true;
-                                infos.message_erreur = "champ 'EN' non numerique ["+err.getMessage().replace('\"','\'')+"]";
-                                break;
+                        case "AVEC": {
+                            ArrayList<String> tmpStorage2 = new ArrayList<>();
+                            for (String tmpVal : tmpStorage) {
+                                if (tmpVal.matches(".*\\d.*")) //si la valeur contient un nombre
+                                {
+                                    this.erreur = true;
+                                    this.message_erreur = "valeur numerique dans le champ 'AVEC'";
+                                    break;
+                                } else tmpStorage2.add(tmpVal);
                             }
-                        }
-                        infos.EN = tmpStorage2;
-                    }
 
-                    else if (field.equals("AVANT")) {
-                        for (String tmpVal : tmpStorage) {
-                            try {
-                                infos.AVANT.add(Integer.valueOf(tmpVal));
-                            } catch(NumberFormatException err) {
-                                infos.erreur = true;
-                                infos.message_erreur = "champ 'AVANT' non numerique ["+err.getMessage().replace('\"','\'')+"]";
-                                break;
-                            }
-                        }
-                    }
+                            AVEC.add(tmpStorage2);
+                            for (ArrayList<String> strings : AVEC) {
+                                if (!where_created) {
+                                    sql.append("\nWHERE (");
+                                    where_created = true;
+                                } else sql.append("\nAND (");
 
-                    else if (field.equals("APRES")) {
-                        for (String tmpVal : tmpStorage) {
-                            try {
-                                infos.APRES.add(Integer.valueOf(tmpVal));
-                            } catch(NumberFormatException err) {
-                                infos.erreur = true;
-                                infos.message_erreur = "champ 'APRES' non numerique ["+err.getMessage().replace('\"','\'')+"]";
-                                break;
+                                for (int k = 0; k < strings.size(); k++) {
+                                    if (k > 0) sql.append("\nOR");
+                                    sql.append(" f.id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique");
+                                    sql.append(" WHERE (prenom_sans_accent || ' ' || nom_sans_accent LIKE '%").append(strings.get(k)).append("%' OR nom_sans_accent || ' ' || prenom_sans_accent LIKE '%").append(strings.get(k)).append("%' OR nom_sans_accent LIKE '%").append(strings.get(k)).append("%')");
+                                    sql.append(" AND role = 'A')");
+                                }
+                                sql.append(")");
                             }
+                            AVEC.clear();
+                            break;
                         }
+                        case "PAYS":
+                            if (tmpStorage.get(0).matches(".*\\d.*")) //si le valeur contient un nombre
+                            {
+                                this.erreur = true;
+                                this.message_erreur = "valeur numerique dans le champ 'DE'";
+                                break label;
+                            } else {
+                                if (!where_created) {
+                                    sql.append("\nWHERE (");
+                                    where_created = true;
+                                } else sql.append("\nAND (");
+
+                                for (int j = 0; j < tmpStorage.size(); j++) {
+                                    if (j > 0) sql.append("\nOR");
+                                    sql.append(" py.code LIKE '%").append(tmpStorage.get(j)).append("%' OR py.nom LIKE '%").append(tmpStorage.get(j)).append("%'");
+                                }
+                                sql.append(")");
+                            }
+                            uniq_field_filled = true;
+                            break;
+                        case "EN": {
+                            ArrayList<Integer> tmpStorage2 = new ArrayList<>();
+                            for (String tmpVal : tmpStorage) {
+                                try {
+                                    tmpStorage2.add(Integer.valueOf(tmpVal));
+                                } catch (NumberFormatException err) {
+                                    this.erreur = true;
+                                    this.message_erreur = "champ 'EN' non numerique [" + err.getMessage().replace('\"', '\'') + "]";
+                                    break;
+                                }
+                            }
+
+                            if (!where_created) {
+                                where_created = true;
+                                sql.append("\nWHERE (");
+                            } else sql.append("\nAND (");
+
+                            for (int j = 0; j < tmpStorage2.size(); j++) {
+                                if (j > 0) sql.append("\nOR");
+                                sql.append(" annee = ").append(tmpStorage2.get(j));
+                            }
+                            sql.append(")");
+                            uniq_field_filled = true;
+                            break;
+                        }
+                        case "AVANT":
+                            ArrayList<Integer> tmpAvant = new ArrayList<>();
+                            for (String tmpVal : tmpStorage) {
+                                try {
+                                    tmpAvant.add(Integer.valueOf(tmpVal));
+                                } catch (NumberFormatException err) {
+                                    this.erreur = true;
+                                    this.message_erreur = "champ 'AVANT' non numerique [" + err.getMessage().replace('\"', '\'') + "]";
+                                    break;
+                                }
+                            }
+
+                            if (!where_created) {
+                                where_created = true;
+                                sql.append("\nWHERE (");
+                            } else sql.append("\nAND (");
+
+                            if (tmpAvant.size() > 0) sql.append(" annee < ").append(Collections.max(tmpAvant)).append(")");
+                            break;
+                        case "APRES":
+                            ArrayList<Integer> tmpApres = new ArrayList<>();
+                            for (String tmpVal : tmpStorage) {
+                                try {
+                                    tmpApres.add(Integer.valueOf(tmpVal));
+                                } catch (NumberFormatException err) {
+                                    this.erreur = true;
+                                    this.message_erreur = "champ 'APRES' non numerique [" + err.getMessage().replace('\"', '\'') + "]";
+                                    break;
+                                }
+                            }
+                            if (!where_created) {
+                                where_created = true;
+                                sql.append("\nWHERE (");
+                            } else sql.append("\nAND (");
+
+                            if (tmpApres.size() > 0) sql.append(" annee > ").append(Collections.max(tmpApres)).append(")");
+                            break;
                     }
 
                     newField = true;
@@ -255,147 +314,12 @@ class RechercheFilm {
                 }
                 else //si le mot actuel fait partie de la valeur du champ
                 {
-                    value=value+str+" ";
+                    value.append(str).append(" ");
                 }
             }
         }
-
-        // Afficher objet MoviePseudoRequest
-        System.out.println(infos);
-
-        return infos;
-    }
-
-    private String convertToSQL(MoviePseudoRequest moviePseudoRequestmap) {
-        StringBuilder reqSQL = new StringBuilder();
-        String SELECT = "SELECT f.id_film as id_film_f, prenom, p.nom as nom_p, f.titre as titre_f, duree, annee, py.nom as nom_py, role, (select group_concat(a_t.titre, '#') from autres_titres a_t where a_t.id_film=f.id_film) as liste_autres_titres";
-
-        // Chaîne du FROM
-        String FROM = "\nFROM films f NATURAL JOIN generique g NATURAL JOIN personnes p LEFT JOIN pays py ON f.pays = py.code";
-
-        String ORDER_BY_SQL = "\nORDER BY annee DESC, f.titre";
-
-        StringBuilder AVEC_SQL = new StringBuilder();
-        StringBuilder PAYS_SQL = new StringBuilder();
-        StringBuilder TITRE_SQL = new StringBuilder();
-        StringBuilder DE_SQL = new StringBuilder();
-        StringBuilder AVANT_SQL = new StringBuilder();
-        StringBuilder APRES_SQL = new StringBuilder();
-        StringBuilder EN_SQL = new StringBuilder();
-
-        // Permet de savoir si le mot clef WHERE a déjà été ajouté à la requête (avant le(s) 'AND')
-        boolean where_created = false;
-
-        // AVEC (acteur(s))
-        if (!moviePseudoRequestmap.AVEC.isEmpty()){
-            for (int i = 0; i < moviePseudoRequestmap.AVEC.size(); i++) {
-
-                if (i == 0){
-                    AVEC_SQL.append("\nWHERE (");
-                    where_created = true;
-                }
-                else AVEC_SQL.append("\nAND (");
-
-                for (int j = 0; j < moviePseudoRequestmap.AVEC.get(i).size(); j++) {
-
-                    if (j > 0) AVEC_SQL.append("\nOR");
-
-                    AVEC_SQL.append(" f.id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique");
-                    // Permet de ne pas s'embêter avec l'ordre du nom et prénoms, et si la personne n'a que son nom de renseigné
-                    AVEC_SQL.append(" WHERE (prenom_sans_accent || ' ' || nom_sans_accent LIKE '%").append(moviePseudoRequestmap.AVEC.get(i).get(j)).append("%' OR nom_sans_accent || ' ' || prenom_sans_accent LIKE '%").append(moviePseudoRequestmap.AVEC.get(i).get(j)).append("%' OR nom_sans_accent LIKE '%").append(moviePseudoRequestmap.AVEC.get(i).get(j)).append("%')");
-                    AVEC_SQL.append(" AND role = 'A')");
-                }
-                AVEC_SQL.append(")");
-            }
-        }
-
-        // DE (réalisateur(s))
-        if (!moviePseudoRequestmap.DE.isEmpty()){
-            for (int i = 0; i < moviePseudoRequestmap.DE.size(); i++) {
-                if (!where_created){
-                    DE_SQL.append("\nWHERE (");
-                    where_created = true;
-                }
-                else DE_SQL.append("\nAND (");
-
-                for (int j = 0; j < moviePseudoRequestmap.DE.get(i).size(); j++) {
-
-                    if (j > 0) DE_SQL.append("\nOR");
-
-                    // 3 lignes supplémentaires au cas où l'utilisateur saisie des accent, un l'un et/ou à l'autre, ou pas du tout
-                    DE_SQL.append(" f.id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique");
-                    DE_SQL.append(" WHERE (prenom_sans_accent || ' ' || nom_sans_accent LIKE '%").append(moviePseudoRequestmap.DE.get(i).get(j)).append("%' OR nom_sans_accent || ' ' || prenom_sans_accent LIKE '%").append(moviePseudoRequestmap.DE.get(i).get(j)).append("%' OR nom_sans_accent LIKE '%").append(moviePseudoRequestmap.DE.get(i).get(j)).append("%')");
-                    DE_SQL.append(" AND role = 'R')");
-                }
-                DE_SQL.append(")");
-            }
-        }
-
-        // TITRE
-        if (!moviePseudoRequestmap.TITRE.isEmpty()){
-            if (!where_created){
-                where_created = true;
-                TITRE_SQL.append("\nWHERE (");
-            }
-            else TITRE_SQL.append("\nAND (");
-
-            for (int i = 0; i < moviePseudoRequestmap.TITRE.size(); i++) {
-                if (i > 0) TITRE_SQL.append(" OR");
-                // Permet une recherche sur les autres titres
-                TITRE_SQL.append(" f.id_film IN (SELECT id_film FROM recherche_titre rt WHERE rt.titre LIKE '%' ||	replace('").append(moviePseudoRequestmap.TITRE.get(i)).append("', ' ', '%') || '%')");
-            }
-            TITRE_SQL.append(")");
-        }
-
-        // EN
-        if (!moviePseudoRequestmap.EN.isEmpty()){
-            if (!where_created){
-                EN_SQL.append("\nWHERE (");
-                where_created = true;
-            }
-            else EN_SQL.append("\nAND (");
-
-            for (int i = 0; i < moviePseudoRequestmap.EN.size(); i++) {
-                if (i > 0) EN_SQL.append("\nOR");
-                EN_SQL.append(" annee = ").append(moviePseudoRequestmap.EN.get(i));
-            }
-            EN_SQL.append(")");
-        }
-
-        // AVANT
-        if (!moviePseudoRequestmap.AVANT.isEmpty()){
-            if (where_created) AVANT_SQL.append("\nAND annee < ").append(Collections.max(moviePseudoRequestmap.AVANT));
-            else {
-                APRES_SQL.append("\nWHERE annee < ").append(Collections.max(moviePseudoRequestmap.AVANT));
-                where_created = true;
-            }
-        }
-
-        // APRES
-        if(!moviePseudoRequestmap.APRES.isEmpty()) {
-            if (where_created) APRES_SQL.append("\nAND annee > ").append(Collections.min(moviePseudoRequestmap.APRES));
-            else {
-                APRES_SQL.append("\nWHERE annee > ").append(Collections.min(moviePseudoRequestmap.APRES));
-                where_created = true;
-            }
-        }
-
-        // PAYS
-        if (!moviePseudoRequestmap.PAYS.isEmpty()){
-            if (!where_created) PAYS_SQL.append("\nWHERE (");
-            else PAYS_SQL.append("\nAND (");
-
-            for (int i = 0; i < moviePseudoRequestmap.PAYS.size(); i++) {
-                if (i > 0) PAYS_SQL.append("\nOR");
-
-                PAYS_SQL.append(" py.code LIKE '%").append(moviePseudoRequestmap.PAYS.get(i)).append("%' OR py.nom LIKE '%").append(moviePseudoRequestmap.PAYS.get(i)).append("%'");
-            }
-            PAYS_SQL.append(")");
-        }
-
-        // Ajout de chaque clause
-        reqSQL.append(SELECT).append(FROM).append(AVEC_SQL).append(DE_SQL).append(TITRE_SQL).append(EN_SQL).append(APRES_SQL).append(AVANT_SQL).append(PAYS_SQL).append(ORDER_BY_SQL);
-        return reqSQL.toString();
+        sql.append(ORDER_BY_SQL);
+        return sql.toString();
     }
 
     /**
@@ -413,8 +337,10 @@ class RechercheFilm {
      */
     private ArrayList<InfoFilm> getInfoFilmArray(String sql) {
         ArrayList<InfoFilm> filmsList = new ArrayList<>();
+        ResultSet set;
 
-        try (ResultSet set = bdd.getCo().createStatement().executeQuery(sql)) {
+        try{
+            set = bdd.getCo().createStatement().executeQuery(sql);
 
             if (set.next()) { // Verifie si le ResultSet contient au moins un résultat
                 ArrayList<ArrayList<String>> liste = convertRStoAL(set);
