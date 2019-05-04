@@ -16,8 +16,8 @@ class RechercheFilm {
 
     private class MoviePseudoRequest {
         ArrayList<String> TITRE = new ArrayList<>();
-        ArrayList<ArrayList<String>> DE = new ArrayList<>(); // LIGNES = ET, COLONNES = OU
-        ArrayList<ArrayList<String>> AVEC = new ArrayList<>(); // LIGNES = ET, COLONNES = OU
+        ArrayList<ArrayList<String>> DE = new ArrayList<>();
+        ArrayList<ArrayList<String>> AVEC = new ArrayList<>();
         ArrayList<String> PAYS = new ArrayList<>();
         ArrayList<Integer> EN = new ArrayList<>();
         ArrayList<Integer> AVANT = new ArrayList<>();
@@ -69,7 +69,7 @@ class RechercheFilm {
         MoviePseudoRequest moviePseudoRequest = formatRequest(requete);
         if (!moviePseudoRequest.erreur){
             String sql = convertToSQL(moviePseudoRequest);
-            //System.out.println(sql);
+            System.out.println(sql);
             ArrayList<InfoFilm> list = getInfoFilmArray(sql);
             return convertToJSON(list);
         } else return "{\"erreur\":\"" + moviePseudoRequest.message_erreur + "\"}"; // Envoi de l'erreur
@@ -261,7 +261,7 @@ class RechercheFilm {
         }
 
         // Afficher objet MoviePseudoRequest
-        //System.out.println(infos);
+        System.out.println(infos);
 
         return infos;
     }
@@ -361,22 +361,22 @@ class RechercheFilm {
             }
             EN_SQL.append(")");
         }
-        else {
-            // AVANT
-            if (!moviePseudoRequestmap.AVANT.isEmpty()){
-                if (where_created) AVANT_SQL.append("\nAND annee < ").append(Collections.max(moviePseudoRequestmap.AVANT));
-                else {
-                    APRES_SQL.append("\nWHERE annee < ").append(Collections.max(moviePseudoRequestmap.AVANT));
-                    where_created = true;
-                }
+
+        // AVANT
+        if (!moviePseudoRequestmap.AVANT.isEmpty()){
+            if (where_created) AVANT_SQL.append("\nAND annee < ").append(Collections.max(moviePseudoRequestmap.AVANT));
+            else {
+                APRES_SQL.append("\nWHERE annee < ").append(Collections.max(moviePseudoRequestmap.AVANT));
+                where_created = true;
             }
-            // APRES
-            if(!moviePseudoRequestmap.APRES.isEmpty()) {
-                if (where_created) APRES_SQL.append("\nAND annee > ").append(Collections.min(moviePseudoRequestmap.APRES));
-                else {
-                    APRES_SQL.append("\nWHERE annee > ").append(Collections.min(moviePseudoRequestmap.APRES));
-                    where_created = true;
-                }
+        }
+
+        // APRES
+        if(!moviePseudoRequestmap.APRES.isEmpty()) {
+            if (where_created) APRES_SQL.append("\nAND annee > ").append(Collections.min(moviePseudoRequestmap.APRES));
+            else {
+                APRES_SQL.append("\nWHERE annee > ").append(Collections.min(moviePseudoRequestmap.APRES));
+                where_created = true;
             }
         }
 
