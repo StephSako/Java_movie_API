@@ -46,7 +46,7 @@ class RechercheFilm {
 
         String sql = formatRequest(requete);
         if (!this.erreur){
-            System.out.println(sql);
+            //System.out.println(sql);
             ArrayList<InfoFilm> list = getInfoFilmArray(sql);
             return convertToJSON(list);
         } else return "{\"erreur\":\"" + this.message_erreur + "\"}"; // Envoi de l'erreur
@@ -62,7 +62,6 @@ class RechercheFilm {
 
         sql.append(SELECT).append(FROM);
 
-        String activeKeyword = "";
         boolean where_created = false, TITRE_filled = false, PAYS_filled = false, EN_filled = false;
         requete += ",END";
 
@@ -119,9 +118,26 @@ class RechercheFilm {
                     }
                     else if (!field.matches("DE|AVEC")) //si on pas de mot clef et qu'il ne s'agit ni de "DE", ni de "AVEC"
                     {
-                        this.erreur = true;
-                        this.message_erreur = "mot-clef de champ invalide : "+str;
-                        break;
+                        if (field.equals("TITRE") && TITRE_filled) {
+                            this.erreur = true;
+                            this.message_erreur = "multiples champs TITRE";
+                            break;
+                        }
+                        else if (field.equals("PAYS") && PAYS_filled) {
+                            this.erreur = true;
+                            this.message_erreur = "multiples champs PAYS";
+                            break;
+                        }
+                        else if (field.equals("EN") && EN_filled) {
+                            this.erreur = true;
+                            this.message_erreur = "multiples champs EN";
+                            break;
+                        }
+                        else {
+                            this.erreur = true;
+                            this.message_erreur = "mot-clef de champ invalide : " + str;
+                            break;
+                        }
                     }
                     else //si on a une autre valeur après un "DE" ou un "AVEC"
                     {
@@ -181,7 +197,7 @@ class RechercheFilm {
                                     where_created = true;
                                 } else sql.append("\nAND (");
 
-                                for (int k = 0; k < DE.get(k).size(); k++) {
+                                for (int k = 0; k < strings.size(); k++) {
                                     if (k > 0) sql.append("\nOR");
                                     sql.append(" f.id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique");
                                     sql.append(" WHERE (prenom_sans_accent || ' ' || nom_sans_accent LIKE '%").append(strings.get(k)).append("%' OR nom_sans_accent || ' ' || prenom_sans_accent LIKE '%").append(strings.get(k)).append("%' OR nom_sans_accent LIKE '%").append(strings.get(k)).append("%')");
