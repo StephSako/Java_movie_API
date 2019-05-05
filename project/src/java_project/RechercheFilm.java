@@ -63,7 +63,7 @@ class RechercheFilm {
         sql.append(SELECT).append(FROM);
 
         String activeKeyword = "";
-        boolean where_created = false, uniq_field_filled = false;
+        boolean where_created = false, TITRE_filled = false, PAYS_filled = false, EN_filled = false;
         requete += ",END";
 
         String field="";
@@ -84,22 +84,19 @@ class RechercheFilm {
                 if (Arrays.asList(possibleTerms).contains(str)) //si le mot-clef fait partie des mots-clefs valables
                 {
                     //s'il s'agit d'un champ qui ne peut pas prendre de ET et que le champ est deja pris
-                    if (uniq_field_filled) {
-                        switch (str){
-                            case "TITRE":
-                                this.erreur = true;
-                                this.message_erreur = "multiples champs TITRE";
-                                break;
-                            case "PAYS":
-                                this.erreur = true;
-                                this.message_erreur = "multiples champs PAYS";
-                                break;
-                            case "EN":
-                                this.erreur = true;
-                                this.message_erreur = "multiples champs EN";
-                                break;
-
-                        }
+                    if (str.equals("TITRE") && TITRE_filled) {
+                        this.erreur = true;
+                        this.message_erreur = "multiples champs TITRE";
+                        break;
+                    }
+                    else if (str.equals("PAYS") && PAYS_filled) {
+                        this.erreur = true;
+                        this.message_erreur = "multiples champs PAYS";
+                        break;
+                    }
+                    else if (str.equals("EN") && EN_filled) {
+                        this.erreur = true;
+                        this.message_erreur = "multiples champs EN";
                         break;
                     }
                     else //si tout va bien pour le mot clef
@@ -164,7 +161,7 @@ class RechercheFilm {
                                 sql.append(" f.id_film IN (SELECT id_film FROM recherche_titre rt WHERE rt.titre LIKE '%' ||	replace('").append(tmpStorage.get(j)).append("', ' ', '%') || '%')");
                             }
                             sql.append(")");
-                            uniq_field_filled = true;
+                            TITRE_filled = true;
                             break;
                         case "DE": {
                             ArrayList<String> tmpStorage2 = new ArrayList<>();
@@ -242,7 +239,7 @@ class RechercheFilm {
                                 }
                                 sql.append(")");
                             }
-                            uniq_field_filled = true;
+                            PAYS_filled = true;
                             break;
                         case "EN": {
                             ArrayList<Integer> tmpStorage2 = new ArrayList<>();
@@ -266,7 +263,7 @@ class RechercheFilm {
                                 sql.append(" annee = ").append(tmpStorage2.get(j));
                             }
                             sql.append(")");
-                            uniq_field_filled = true;
+                            EN_filled = true;
                             break;
                         }
                         case "AVANT":
@@ -304,7 +301,7 @@ class RechercheFilm {
                                 sql.append("\nWHERE (");
                             } else sql.append("\nAND (");
 
-                            if (tmpApres.size() > 0) sql.append(" annee > ").append(Collections.max(tmpApres)).append(")");
+                            if (tmpApres.size() > 0) sql.append(" annee > ").append(Collections.min(tmpApres)).append(")");
                             break;
                     }
 
