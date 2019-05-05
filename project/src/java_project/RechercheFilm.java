@@ -45,8 +45,8 @@ class RechercheFilm {
     String retrouve(String requete) {
 
         String sql = formatRequest(requete);
+        //System.out.println(sql);
         if (!this.erreur){
-            //System.out.println(sql);
             ArrayList<InfoFilm> list = getInfoFilmArray(sql);
             return convertToJSON(list);
         } else return "{\"erreur\":\"" + this.message_erreur + "\"}"; // Envoi de l'erreur
@@ -110,15 +110,20 @@ class RechercheFilm {
                     {
                         break;
                     }
-                    else if (i==0) //si c'est le 1er mot-clef de la requete
+                    /*else if (i==0) //si c'est le 1er mot-clef de la requete
                     {
                         this.erreur = true;
                         this.message_erreur = "1er champ invalide";
                         break;
-                    }
+                    }*/
                     else if (!field.matches("DE|AVEC")) //si on pas de mot clef et qu'il ne s'agit ni de "DE", ni de "AVEC"
                     {
-                        if (field.equals("TITRE") && TITRE_filled) {
+                        if (!Arrays.asList(possibleTerms).contains(str)){
+                            this.erreur = true;
+                            this.message_erreur = "mot-clef de champ invalide : " + str;
+                            break;
+                        }
+                        else if (field.equals("TITRE") && TITRE_filled) {
                             this.erreur = true;
                             this.message_erreur = "multiples champs TITRE";
                             break;
@@ -131,11 +136,6 @@ class RechercheFilm {
                         else if (field.equals("EN") && EN_filled) {
                             this.erreur = true;
                             this.message_erreur = "multiples champs EN";
-                            break;
-                        }
-                        else {
-                            this.erreur = true;
-                            this.message_erreur = "mot-clef de champ invalide : " + str;
                             break;
                         }
                     }
