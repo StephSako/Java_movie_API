@@ -85,17 +85,17 @@ class RechercheFilm {
                     //s'il s'agit d'un champ qui ne peut pas prendre de ET et que le champ est deja pris
                     if (str.equals("TITRE") && TITRE_filled) {
                         this.erreur = true;
-                        this.message_erreur = "multiples champs TITRE";
+                        this.message_erreur = "Le mot-clef TITRE n'accepte qu'une seule valeur";
                         break;
                     }
                     else if (str.equals("PAYS") && PAYS_filled) {
                         this.erreur = true;
-                        this.message_erreur = "multiples champs PAYS";
+                        this.message_erreur = "Le mot-clef PAYS n'accepte qu'une seule valeur";
                         break;
                     }
                     else if (str.equals("EN") && EN_filled) {
                         this.erreur = true;
-                        this.message_erreur = "multiples champs EN";
+                        this.message_erreur = "Le mot-clef EN n'accepte qu'une seule valeur";
                         break;
                     }
                     else //si tout va bien pour le mot clef
@@ -110,32 +110,21 @@ class RechercheFilm {
                     {
                         break;
                     }
-                    /*else if (i==0) //si c'est le 1er mot-clef de la requete
-                    {
-                        this.erreur = true;
-                        this.message_erreur = "1er champ invalide";
-                        break;
-                    }*/
                     else if (!field.matches("DE|AVEC")) //si on pas de mot clef et qu'il ne s'agit ni de "DE", ni de "AVEC"
                     {
-                        if (!Arrays.asList(possibleTerms).contains(str)){
+                        if (field.equals("TITRE")) {
                             this.erreur = true;
-                            this.message_erreur = "mot-clef de champ invalide : " + str;
+                            this.message_erreur = "Le mot-clef '" + str + "' est invalide ou plusieurs valeurs ont été saisies pour le mot-clef TITRE";
                             break;
                         }
-                        else if (field.equals("TITRE") && TITRE_filled) {
+                        else if (field.equals("PAYS")) {
                             this.erreur = true;
-                            this.message_erreur = "multiples champs TITRE";
+                            this.message_erreur = "Le mot-clef '" + str + "' est invalide ou plusieurs valeurs ont été saisies pour le mot-clef PAYS";
                             break;
                         }
-                        else if (field.equals("PAYS") && PAYS_filled) {
+                        else if (field.equals("EN")) {
                             this.erreur = true;
-                            this.message_erreur = "multiples champs PAYS";
-                            break;
-                        }
-                        else if (field.equals("EN") && EN_filled) {
-                            this.erreur = true;
-                            this.message_erreur = "multiples champs EN";
+                            this.message_erreur = "Le mot-clef '" + str + "' est invalide ou plusieurs valeurs ont été saisies pour le mot-clef EN";
                             break;
                         }
                     }
@@ -152,7 +141,7 @@ class RechercheFilm {
                 {
                     if (value.length() == 0) {
                         this.erreur = true;
-                        this.message_erreur = "champ 'OU' sans valeur préalable";
+                        this.message_erreur = "Une valeur préalable est requise pour le mot-clef OU";
                         break;
                     }
                     else {
@@ -185,7 +174,7 @@ class RechercheFilm {
                                 if (tmpVal.matches(".*\\d.*")) //si le valeur contient un nombre
                                 {
                                     this.erreur = true;
-                                    this.message_erreur = "valeur numerique dans le champ 'DE'";
+                                    this.message_erreur = "Une valeur numérique a été saisie pour le mot-clef DE";
                                     break;
                                 } else tmpStorage2.add(tmpVal);
                             }
@@ -214,7 +203,7 @@ class RechercheFilm {
                                 if (tmpVal.matches(".*\\d.*")) //si la valeur contient un nombre
                                 {
                                     this.erreur = true;
-                                    this.message_erreur = "valeur numerique dans le champ 'AVEC'";
+                                    this.message_erreur = "Une valeur numérique a été saisie pour le mot-clef AVEC";
                                     break;
                                 } else tmpStorage2.add(tmpVal);
                             }
@@ -241,7 +230,7 @@ class RechercheFilm {
                             if (tmpStorage.get(0).matches(".*\\d.*")) //si le valeur contient un nombre
                             {
                                 this.erreur = true;
-                                this.message_erreur = "valeur numerique dans le champ 'DE'";
+                                this.message_erreur = "Une valeur numérique a été saisie pour le mot-clef PAYS";
                                 break label;
                             } else {
                                 if (!where_created) {
@@ -264,7 +253,7 @@ class RechercheFilm {
                                     tmpStorage2.add(Integer.valueOf(tmpVal));
                                 } catch (NumberFormatException err) {
                                     this.erreur = true;
-                                    this.message_erreur = "champ 'EN' non numerique [" + err.getMessage().replace('\"', '\'') + "]";
+                                    this.message_erreur = "Une valeur non-numérique a été saisie pour le mot-clef EN : [" + err.getMessage().replace('\"', '\'') + "]";
                                     break;
                                 }
                             }
@@ -289,7 +278,7 @@ class RechercheFilm {
                                     tmpAvant.add(Integer.valueOf(tmpVal));
                                 } catch (NumberFormatException err) {
                                     this.erreur = true;
-                                    this.message_erreur = "champ 'AVANT' non numerique [" + err.getMessage().replace('\"', '\'') + "]";
+                                    this.message_erreur = "Une valeur non-numérique a été saisie pour le mot-clef AVANT : [" + err.getMessage().replace('\"', '\'') + "]";
                                     break;
                                 }
                             }
@@ -308,7 +297,7 @@ class RechercheFilm {
                                     tmpApres.add(Integer.valueOf(tmpVal));
                                 } catch (NumberFormatException err) {
                                     this.erreur = true;
-                                    this.message_erreur = "champ 'APRES' non numerique [" + err.getMessage().replace('\"', '\'') + "]";
+                                    this.message_erreur = "Une valeur non-numérique a été saisie pour le mot-clef APRES : [" + err.getMessage().replace('\"', '\'') + "]";
                                     break;
                                 }
                             }
