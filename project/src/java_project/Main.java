@@ -6,6 +6,6 @@ public class Main {
 
         RechercheFilm r = new RechercheFilm("bdd/bdfilm.sqlite");
         //System.out.println(r.retrouve(String.join(" ", args)));
-        System.out.println(r.retrouve("TITRE INtouchables OU blair"));
+        System.out.println(r.retrouve("TITRE Intouchables OU Blair"));
     }
 }

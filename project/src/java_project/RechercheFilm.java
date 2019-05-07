@@ -45,7 +45,7 @@ class RechercheFilm {
     String retrouve(String requete) {
 
         String sql = formatRequest(requete);
-        //System.out.println(sql);
+        System.out.println(sql);
         if (!this.erreur){
             ArrayList<InfoFilm> list = getInfoFilmArray(sql);
             return convertToJSON(list);
@@ -68,7 +68,7 @@ class RechercheFilm {
         String field="";
         StringBuilder value= new StringBuilder();
         ArrayList<String> tmpStorage = new ArrayList<>();
-        boolean newField = true;
+        boolean newField = true, or_btwn_kw = false;
         String[] possibleTerms = {"TITRE", "DE", "AVEC", "PAYS", "EN", "AVANT", "APRES"};
         ArrayList<ArrayList<String>> AVEC = new ArrayList<>();
         ArrayList<ArrayList<String>> DE = new ArrayList<>();
@@ -139,10 +139,187 @@ class RechercheFilm {
             {
                 if (str.equals("OU")) //si le mot actuel est "OU"
                 {
-                    if (value.length() == 0) {
+                    if (list[i+1] == null || list[i+1].equals(",")){
+                        this.erreur = true;
+                        this.message_erreur = "Une valeur est attendue après le mot-clef OU";
+                        break;
+                    }
+                    else if (value.length() == 0) {
                         this.erreur = true;
                         this.message_erreur = "Une valeur préalable est requise pour le mot-clef OU";
                         break;
+                    }
+                    else if(list[i+1] != null && Arrays.asList(possibleTerms).contains(list[i+1])){
+                        tmpStorage.add(value.toString().trim());
+                        value = new StringBuilder();
+
+                        or_btwn_kw = true;
+
+                        switch (field) {
+                            case "TITRE":
+                                if (!where_created) {
+                                    where_created = true;
+                                    sql.append("\nWHERE (");
+                                }
+                                else sql.append("\nOR (");
+
+                                for (int j = 0; j < tmpStorage.size(); j++) {
+                                    if (j > 0) sql.append(" OR");
+                                    sql.append(" f.id_film IN (SELECT id_film FROM recherche_titre rt WHERE rt.titre LIKE '%' || replace('").append(tmpStorage.get(j)).append("', ' ', '%') || '%')");
+                                }
+                                sql.append(")");
+                                TITRE_filled = true;
+                                break;
+                            case "DE": {
+                                ArrayList<String> tmpStorage2 = new ArrayList<>();
+                                for (String tmpVal : tmpStorage) {
+                                    if (tmpVal.matches(".*\\d.*")) //si le valeur contient un nombre
+                                    {
+                                        this.erreur = true;
+                                        this.message_erreur = "Une valeur numérique a été saisie pour le mot-clef DE";
+                                        break;
+                                    } else tmpStorage2.add(tmpVal);
+                                }
+                                DE.add(tmpStorage2);
+
+                                for (ArrayList<String> strings : DE) {
+                                    if (!where_created) {
+                                        where_created = true;
+                                        sql.append("\nWHERE (");
+                                    }
+                                    else sql.append("\nOR (");
+
+                                    for (int k = 0; k < strings.size(); k++) {
+                                        if (k > 0) sql.append("\nOR");
+                                        sql.append(" f.id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique");
+                                        sql.append(" WHERE (prenom_sans_accent || ' ' || nom_sans_accent LIKE '%").append(strings.get(k)).append("%' OR nom_sans_accent || ' ' || prenom_sans_accent LIKE '%").append(strings.get(k)).append("%' OR nom_sans_accent LIKE '%").append(strings.get(k)).append("%')");
+                                        sql.append(" AND role = 'R')");
+                                    }
+                                    sql.append(")");
+                                }
+                                DE.clear();
+                                break;
+                            }
+                            case "AVEC": {
+                                ArrayList<String> tmpStorage2 = new ArrayList<>();
+                                for (String tmpVal : tmpStorage) {
+                                    if (tmpVal.matches(".*\\d.*")) //si la valeur contient un nombre
+                                    {
+                                        this.erreur = true;
+                                        this.message_erreur = "Une valeur numérique a été saisie pour le mot-clef AVEC";
+                                        break;
+                                    }
+                                    else tmpStorage2.add(tmpVal);
+                                }
+
+                                AVEC.add(tmpStorage2);
+                                for (ArrayList<String> strings : AVEC) {
+                                    if (!where_created) {
+                                        where_created = true;
+                                        sql.append("\nWHERE (");
+                                    }
+                                    else sql.append("\nOR (");
+
+                                    for (int k = 0; k < strings.size(); k++) {
+                                        if (k > 0) sql.append("\nOR");
+                                        sql.append(" f.id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique");
+                                        sql.append(" WHERE (prenom_sans_accent || ' ' || nom_sans_accent LIKE '%").append(strings.get(k)).append("%' OR nom_sans_accent || ' ' || prenom_sans_accent LIKE '%").append(strings.get(k)).append("%' OR nom_sans_accent LIKE '%").append(strings.get(k)).append("%')");
+                                        sql.append(" AND role = 'A')");
+                                    }
+                                    sql.append(")");
+                                }
+                                AVEC.clear();
+                                break;
+                            }
+                            case "PAYS":
+                                if (tmpStorage.get(0).matches(".*\\d.*")) //si le valeur contient un nombre
+                                {
+                                    this.erreur = true;
+                                    this.message_erreur = "Une valeur numérique a été saisie pour le mot-clef PAYS";
+                                    break label;
+                                } else {
+                                    if (!where_created) {
+                                        where_created = true;
+                                        sql.append("\nWHERE (");
+                                    }
+                                    else sql.append("\nOR (");
+
+                                    for (int j = 0; j < tmpStorage.size(); j++) {
+                                        if (j > 0) sql.append("\nOR");
+                                        sql.append(" py.code LIKE '%").append(tmpStorage.get(j)).append("%' OR py.nom LIKE '%").append(tmpStorage.get(j)).append("%'");
+                                    }
+                                    sql.append(")");
+                                }
+                                PAYS_filled = true;
+                                break;
+                            case "EN": {
+                                ArrayList<Integer> tmpStorage2 = new ArrayList<>();
+                                for (String tmpVal : tmpStorage) {
+                                    try {
+                                        tmpStorage2.add(Integer.valueOf(tmpVal));
+                                    } catch (NumberFormatException err) {
+                                        this.erreur = true;
+                                        this.message_erreur = "Une valeur non-numérique a été saisie pour le mot-clef EN : [" + err.getMessage().replace('\"', '\'') + "]";
+                                        break;
+                                    }
+                                }
+
+                                if (!where_created) {
+                                    where_created = true;
+                                    sql.append("\nWHERE (");
+                                }
+                                else sql.append("\nOR (");
+
+                                for (int j = 0; j < tmpStorage2.size(); j++) {
+                                    if (j > 0) sql.append("\nOR");
+                                    sql.append(" annee = ").append(tmpStorage2.get(j));
+                                }
+                                sql.append(")");
+                                EN_filled = true;
+                                break;
+                            }
+                            case "AVANT":
+                                ArrayList<Integer> tmpAvant = new ArrayList<>();
+                                for (String tmpVal : tmpStorage) {
+                                    try {
+                                        tmpAvant.add(Integer.valueOf(tmpVal));
+                                    } catch (NumberFormatException err) {
+                                        this.erreur = true;
+                                        this.message_erreur = "Une valeur non-numérique a été saisie pour le mot-clef AVANT : [" + err.getMessage().replace('\"', '\'') + "]";
+                                        break;
+                                    }
+                                }
+
+                                if (!where_created) {
+                                    where_created = true;
+                                    sql.append("\nWHERE (");
+                                }
+                                else sql.append("\nOR (");
+
+                                if (tmpAvant.size() > 0) sql.append(" annee < ").append(Collections.max(tmpAvant)).append(")");
+                                break;
+                            case "APRES":
+                                ArrayList<Integer> tmpApres = new ArrayList<>();
+                                for (String tmpVal : tmpStorage) {
+                                    try {
+                                        tmpApres.add(Integer.valueOf(tmpVal));
+                                    } catch (NumberFormatException err) {
+                                        this.erreur = true;
+                                        this.message_erreur = "Une valeur non-numérique a été saisie pour le mot-clef APRES : [" + err.getMessage().replace('\"', '\'') + "]";
+                                        break;
+                                    }
+                                }
+                                if (!where_created) {
+                                    where_created = true;
+                                    sql.append("\nWHERE (");
+                                }
+                                else sql.append("\nOR (");
+
+                                if (tmpApres.size() > 0) sql.append(" annee > ").append(Collections.min(tmpApres)).append(")");
+                                break;
+                        }
+                        newField = true;
+                        tmpStorage.clear();
                     }
                     else {
                         tmpStorage.add(value.toString().trim());
@@ -151,6 +328,12 @@ class RechercheFilm {
                 }
                 else if (list[i].equals(","))  //si le "mot" actuel est une virgule
                 {
+                    if (list[i+1] == null || list[i+1].equals(",")){
+                        this.erreur = true;
+                        this.message_erreur = "Une valeur est attendue après une virgule";
+                        break;
+                    }
+
                     tmpStorage.add(value.toString().trim());
                     value = new StringBuilder();
 
@@ -159,11 +342,12 @@ class RechercheFilm {
                             if (!where_created) {
                                 where_created = true;
                                 sql.append("\nWHERE (");
-                            } else sql.append("\nAND (");
+                            }
+                            else sql.append("\nAND (");
 
                             for (int j = 0; j < tmpStorage.size(); j++) {
                                 if (j > 0) sql.append(" OR");
-                                sql.append(" f.id_film IN (SELECT id_film FROM recherche_titre rt WHERE rt.titre LIKE '%' ||	replace('").append(tmpStorage.get(j)).append("', ' ', '%') || '%')");
+                                sql.append(" f.id_film IN (SELECT id_film FROM recherche_titre rt WHERE rt.titre LIKE '%' || replace('").append(tmpStorage.get(j)).append("', ' ', '%') || '%')");
                             }
                             sql.append(")");
                             TITRE_filled = true;
@@ -184,7 +368,12 @@ class RechercheFilm {
                                 if (!where_created) {
                                     sql.append("\nWHERE (");
                                     where_created = true;
-                                } else sql.append("\nAND (");
+                                }
+                                else if (or_btwn_kw){
+                                    or_btwn_kw = false;
+                                    sql.append("\n OR (");
+                                }
+                                else sql.append("\nAND (");
 
                                 for (int k = 0; k < strings.size(); k++) {
                                     if (k > 0) sql.append("\nOR");
@@ -205,7 +394,8 @@ class RechercheFilm {
                                     this.erreur = true;
                                     this.message_erreur = "Une valeur numérique a été saisie pour le mot-clef AVEC";
                                     break;
-                                } else tmpStorage2.add(tmpVal);
+                                }
+                                else tmpStorage2.add(tmpVal);
                             }
 
                             AVEC.add(tmpStorage2);
@@ -213,7 +403,12 @@ class RechercheFilm {
                                 if (!where_created) {
                                     sql.append("\nWHERE (");
                                     where_created = true;
-                                } else sql.append("\nAND (");
+                                }
+                                else if (or_btwn_kw){
+                                    or_btwn_kw = false;
+                                    sql.append("\n OR (");
+                                }
+                                else sql.append("\nAND (");
 
                                 for (int k = 0; k < strings.size(); k++) {
                                     if (k > 0) sql.append("\nOR");
@@ -236,7 +431,12 @@ class RechercheFilm {
                                 if (!where_created) {
                                     sql.append("\nWHERE (");
                                     where_created = true;
-                                } else sql.append("\nAND (");
+                                }
+                                else if (or_btwn_kw){
+                                    or_btwn_kw = false;
+                                    sql.append("\n OR (");
+                                }
+                                else sql.append("\nAND (");
 
                                 for (int j = 0; j < tmpStorage.size(); j++) {
                                     if (j > 0) sql.append("\nOR");
@@ -261,7 +461,12 @@ class RechercheFilm {
                             if (!where_created) {
                                 where_created = true;
                                 sql.append("\nWHERE (");
-                            } else sql.append("\nAND (");
+                            }
+                            else if (or_btwn_kw){
+                                or_btwn_kw = false;
+                                sql.append("\n OR (");
+                            }
+                            else sql.append("\nAND (");
 
                             for (int j = 0; j < tmpStorage2.size(); j++) {
                                 if (j > 0) sql.append("\nOR");
@@ -286,7 +491,12 @@ class RechercheFilm {
                             if (!where_created) {
                                 where_created = true;
                                 sql.append("\nWHERE (");
-                            } else sql.append("\nAND (");
+                            }
+                            else if (or_btwn_kw){
+                                or_btwn_kw = false;
+                                sql.append("\n OR (");
+                            }
+                            else sql.append("\nAND (");
 
                             if (tmpAvant.size() > 0) sql.append(" annee < ").append(Collections.max(tmpAvant)).append(")");
                             break;
@@ -304,15 +514,18 @@ class RechercheFilm {
                             if (!where_created) {
                                 where_created = true;
                                 sql.append("\nWHERE (");
-                            } else sql.append("\nAND (");
+                            }
+                            else if (or_btwn_kw){
+                                or_btwn_kw = false;
+                                sql.append("\n OR (");
+                            }
+                            else sql.append("\nAND (");
 
                             if (tmpApres.size() > 0) sql.append(" annee > ").append(Collections.min(tmpApres)).append(")");
                             break;
                     }
-
                     newField = true;
                     tmpStorage.clear();
-
                 }
                 else //si le mot actuel fait partie de la valeur du champ
                 {
