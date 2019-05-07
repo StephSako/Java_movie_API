@@ -45,7 +45,7 @@ class RechercheFilm {
     String retrouve(String requete) {
 
         String sql = formatRequest(requete);
-        System.out.println(sql);
+        //System.out.println(sql);
         if (!this.erreur){
             ArrayList<InfoFilm> list = getInfoFilmArray(sql);
             return convertToJSON(list);
@@ -83,19 +83,9 @@ class RechercheFilm {
                 if (Arrays.asList(possibleTerms).contains(str)) //si le mot-clef fait partie des mots-clefs valables
                 {
                     //s'il s'agit d'un champ qui ne peut pas prendre de ET et que le champ est deja pris
-                    if (str.equals("TITRE") && TITRE_filled) {
+                    if (str.matches("TITRE|PAYS|EN") && (TITRE_filled && PAYS_filled && EN_filled)) {
                         this.erreur = true;
-                        this.message_erreur = "Le mot-clef TITRE n'accepte qu'une seule valeur";
-                        break;
-                    }
-                    else if (str.equals("PAYS") && PAYS_filled) {
-                        this.erreur = true;
-                        this.message_erreur = "Le mot-clef PAYS n'accepte qu'une seule valeur";
-                        break;
-                    }
-                    else if (str.equals("EN") && EN_filled) {
-                        this.erreur = true;
-                        this.message_erreur = "Le mot-clef EN n'accepte qu'une seule valeur";
+                        this.message_erreur = "Le mot-clef " + str + " n'accepte qu'une seule valeur. Utilisez des'OU'.";
                         break;
                     }
                     else //si tout va bien pour le mot clef
@@ -112,19 +102,9 @@ class RechercheFilm {
                     }
                     else if (!field.matches("DE|AVEC")) //si on pas de mot clef et qu'il ne s'agit ni de "DE", ni de "AVEC"
                     {
-                        if (field.equals("TITRE")) {
+                        if (field.matches("TITRE|PAYS|EN")) {
                             this.erreur = true;
-                            this.message_erreur = "Le mot-clef '" + str + "' est invalide ou plusieurs valeurs ont été saisies pour le mot-clef TITRE";
-                            break;
-                        }
-                        else if (field.equals("PAYS")) {
-                            this.erreur = true;
-                            this.message_erreur = "Le mot-clef '" + str + "' est invalide ou plusieurs valeurs ont été saisies pour le mot-clef PAYS";
-                            break;
-                        }
-                        else if (field.equals("EN")) {
-                            this.erreur = true;
-                            this.message_erreur = "Le mot-clef '" + str + "' est invalide ou plusieurs valeurs ont été saisies pour le mot-clef EN";
+                            this.message_erreur = "Le mot-clef '" + str + "' est invalide ou plusieurs valeurs ont été saisies pour le mot-clef " + field + ". Utilisez des 'OU'.";
                             break;
                         }
                     }
