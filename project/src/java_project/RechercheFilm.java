@@ -1,6 +1,5 @@
 package java_project;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -8,131 +7,103 @@ import java.util.Arrays;
 import java.util.Collections;
 
 /**
- * Classe de recherche simplifiée sur la BDD IMDB.
- * @author Théo Machon 32
- * @author Stephen Sakovitch 32
- * @version 0.1
+ * Classe de recherche dans la BDD SQLite d'IMDB.
+ * @author Theo Machon 3A-32
+ * @author Stephen Sakovitch 3A-32
+ * @version 0.2
  */
 class RechercheFilm {
 
     private boolean erreur = false;
     private String message_erreur = "";
-
     private BDDManager bdd;
 
     /**
      * Constructeur, ouvre la BDD.
-     * @param nomFichierSQLite Nom du ficher BDD.
+     * @param nomFichierSQLite Chemin et nom du ficher BDD.
      */
     RechercheFilm(String nomFichierSQLite) {
         bdd = new BDDManager(nomFichierSQLite);
     }
 
     /**
-     * Effectue une recherche dans la BDD.
+     * Traduit la pseudo-requete en requete SQL, effectue la recherche dans la BDD SQLite et renvoie les films en format JSON.
      * @param requete Langage de recherce simplifee:<br>
      * TITRE suivi d'un titre de film;<br>
-     * DE suivi d'un nom de réalisateur;<br>
+     * DE suivi d'un nom de realisateur;<br>
      * AVEC suivi d'un nom d'acteur ou d'actrice;<br>
      * PAYS suivi d'un code (ISO sur deux lettres) ou nom de pays;<br>
      * EN suivi d'une annee de sortie;<br>
      * AVANT suivi d'une annee de sortie (correspond a <, on ne traite pas <=);<br>
-     * APRES (ou APRÈS) suivi d'une annee de sortie (correspond a >, on ne traite pas >=).<br>
-     * Les conditions ainsi exprimees peuvent être combinees soit en les separant par une virgule ("et" implicite), soit avec OU.<br>
+     * APRES (ou APReS) suivi d'une annee de sortie (correspond a >, on ne traite pas >=).<br>
+     * Les conditions ainsi exprimees peuvent etre combinees soit en les separant par une virgule ("et" implicite), soit avec OU.<br>
      * On peut omettre le mot-clef apres une virgule ou OU, dans ce cas c'est implicitement le meme type de critere que precedemment qui s'applique.
      * @return Reponse de la recherche au format JSON.
      */
     String retrouve(String requete) {
-
         String sql = formatRequest(requete);
-        //System.out.println(sql);
-        if (!this.erreur){
-            ArrayList<InfoFilm> list = getInfoFilmArray(sql);
-            return convertToJSON(list);
-        } else return "{\"erreur\":\"" + this.message_erreur + "\"}"; // Envoi de l'erreur
-
+        if (!this.erreur) return convertToJSON(getInfoFilmArray(sql));
+        else return "{\"erreur\":\"" + this.message_erreur + "\"}";
     }
 
-    private String formatRequest(String requete) { // TODO En cours
-
-        StringBuilder sql = new StringBuilder();
+    private String formatRequest(String requete) {
+        StringBuilder sql = new StringBuilder(), value= new StringBuilder();
         String SELECT = "SELECT f.id_film as id_film_f, prenom, p.nom as nom_p, f.titre as titre_f, duree, annee, py.nom as nom_py, role, (select group_concat(a_t.titre, '#') from autres_titres a_t where a_t.id_film=f.id_film) as liste_autres_titres";
         String FROM = "\nFROM films f NATURAL JOIN generique g NATURAL JOIN personnes p LEFT JOIN pays py ON f.pays = py.code";
         String ORDER_BY_SQL = "\nORDER BY annee DESC, f.titre";
-
         sql.append(SELECT).append(FROM);
-
-        boolean where_created = false, TITRE_filled = false, PAYS_filled = false, EN_filled = false;
+        boolean where_created = false, TITRE_filled = false, PAYS_filled = false, EN_filled = false, newField = true, or_btwn_kw = false;
         requete += ",END";
-
-        String field="";
-        StringBuilder value= new StringBuilder();
+        String field = "";
         ArrayList<String> tmpStorage = new ArrayList<>();
-        boolean newField = true, or_btwn_kw = false;
         String[] possibleTerms = {"TITRE", "DE", "AVEC", "PAYS", "EN", "AVANT", "APRES"};
-        ArrayList<ArrayList<String>> AVEC = new ArrayList<>();
-        ArrayList<ArrayList<String>> DE = new ArrayList<>();
+        ArrayList<ArrayList<String>> AVEC = new ArrayList<>(), DE = new ArrayList<>();
 
         String[] list = requete.split(" |((?<=,)|(?=,))");
         label:
-        for (int i = 0; i<list.length; i++) //pour chaque mot de la recherche
-        {
+        for (int i = 0; i<list.length; i++) { // Parcourt de la pseudo-requete
             String str = list[i];
-            if (newField) //si on regarde un mot-clef
-            {
-                if (Arrays.asList(possibleTerms).contains(str)) //si le mot-clef fait partie des mots-clefs valables
-                {
-                    //s'il s'agit d'un champ qui ne peut pas prendre de ET et que le champ est deja pris
+            if (newField) { // Si on lit un mot-clef
+                if (Arrays.asList(possibleTerms).contains(str)) { // Si le mot-clef fait partie des mots-clefs valides
+                    // S'il s'agit d'un champ qui ne peut pas prendre de ET et que le champ a deja ete saisie
                     if (str.matches("TITRE|PAYS|EN") && (TITRE_filled && PAYS_filled && EN_filled)) {
                         this.erreur = true;
                         this.message_erreur = "Le mot-clef " + str + " n'accepte qu'une seule valeur. Utilisez des'OU'.";
                         break;
                     }
-                    else //si tout va bien pour le mot clef
-                    {
+                    else {// Si tout va bien pour le mot clef
                         field = str;
                         newField = false;
                     }
                 }
-                else //si le mot n'est pas un mot-clef valable
-                {
-                    if (str.equals("END")) //si on a atteint le mot-clef de la fin
-                    {
+                else { // Si le mot n'est pas un mot-clef valide
+                    if (str.equals("END")) break; // Si on lit le mot-clef de la fin
+                    else if (!field.matches("DE|AVEC") && field.matches("TITRE|PAYS|EN")) { // S'il ne s'agit ni de "DE", ni de "AVEC" et que plusieurs valeurs sont saisies
+                        this.erreur = true;
+                        this.message_erreur = "Le mot-clef '" + str + "' est invalide ou plusieurs valeurs ont ete saisies pour le mot-clef " + field + ". Utilisez des 'OU'.";
                         break;
                     }
-                    else if (!field.matches("DE|AVEC")) //si on pas de mot clef et qu'il ne s'agit ni de "DE", ni de "AVEC"
-                    {
-                        if (field.matches("TITRE|PAYS|EN")) {
-                            this.erreur = true;
-                            this.message_erreur = "Le mot-clef '" + str + "' est invalide ou plusieurs valeurs ont été saisies pour le mot-clef " + field + ". Utilisez des 'OU'.";
-                            break;
-                        }
-                    }
-                    else //si on a une autre valeur après un "DE" ou un "AVEC"
-                    {
+                    else { // Si on lit une autre valeur apres un "DE" ou un "AVEC"
                         newField=false;
                         i--;
                     }
                 }
             }
-            else //si on regarde la valeur d'un champ
-            {
-                if (str.equals("OU")) //si le mot actuel est "OU"
-                {
-                    if (list[i+1] == null || list[i+1].equals(",")){
+            else { // Si on lit la valeur d'un champ
+                if (str.equals("OU")) { // Si le mot actuel lu est un "OU"
+                    if (list[i+1] == null || list[i+1].equals(",")) { // S'il n'y a pas de valeur qui suit
                         this.erreur = true;
-                        this.message_erreur = "Une valeur est attendue après le mot-clef OU";
+                        this.message_erreur = "Une valeur est attendue apres le mot-clef 'OU'.";
                         break;
                     }
-                    else if (value.length() == 0) {
+                    else if (value.length() == 0) { // S'il n'y a pas de valeur avant un 'OU'
                         this.erreur = true;
-                        this.message_erreur = "Une valeur préalable est requise pour le mot-clef OU";
+                        this.message_erreur = "Une valeur prealable est requise pour le mot-clef 'OU'.";
                         break;
                     }
-                    else if(list[i+1] != null && Arrays.asList(possibleTerms).contains(list[i+1])){
+                    else if(list[i+1] != null && Arrays.asList(possibleTerms).contains(list[i+1])) { // Si un mot-clef est lu apres un 'OU', on concatene le SQL avec les valeurs du mot-clef precedent
                         tmpStorage.add(value.toString().trim());
                         value = new StringBuilder();
-
                         or_btwn_kw = true;
 
                         switch (field) {
@@ -153,12 +124,12 @@ class RechercheFilm {
                             case "DE": {
                                 ArrayList<String> tmpStorage2 = new ArrayList<>();
                                 for (String tmpVal : tmpStorage) {
-                                    if (tmpVal.matches(".*\\d.*")) //si le valeur contient un nombre
-                                    {
+                                    if (tmpVal.matches(".*\\d.*")) { //si le valeur contient un nombre
                                         this.erreur = true;
-                                        this.message_erreur = "Une valeur numérique a été saisie pour le mot-clef DE";
+                                        this.message_erreur = "Une valeur numerique a ete saisie pour le mot-clef DE";
                                         break;
-                                    } else tmpStorage2.add(tmpVal);
+                                    }
+                                    else tmpStorage2.add(tmpVal);
                                 }
                                 DE.add(tmpStorage2);
 
@@ -183,10 +154,9 @@ class RechercheFilm {
                             case "AVEC": {
                                 ArrayList<String> tmpStorage2 = new ArrayList<>();
                                 for (String tmpVal : tmpStorage) {
-                                    if (tmpVal.matches(".*\\d.*")) //si la valeur contient un nombre
-                                    {
+                                    if (tmpVal.matches(".*\\d.*")) { //si la valeur contient un nombre
                                         this.erreur = true;
-                                        this.message_erreur = "Une valeur numérique a été saisie pour le mot-clef AVEC";
+                                        this.message_erreur = "Une valeur numerique a ete saisie pour le mot-clef AVEC";
                                         break;
                                     }
                                     else tmpStorage2.add(tmpVal);
@@ -212,12 +182,12 @@ class RechercheFilm {
                                 break;
                             }
                             case "PAYS":
-                                if (tmpStorage.get(0).matches(".*\\d.*")) //si le valeur contient un nombre
-                                {
+                                if (tmpStorage.get(0).matches(".*\\d.*")) { //si le valeur contient un nombre
                                     this.erreur = true;
-                                    this.message_erreur = "Une valeur numérique a été saisie pour le mot-clef PAYS";
+                                    this.message_erreur = "Une valeur numerique a ete saisie pour le mot-clef PAYS";
                                     break label;
-                                } else {
+                                }
+                                else {
                                     if (!where_created) {
                                         where_created = true;
                                         sql.append("\nWHERE (");
@@ -237,9 +207,10 @@ class RechercheFilm {
                                 for (String tmpVal : tmpStorage) {
                                     try {
                                         tmpStorage2.add(Integer.valueOf(tmpVal));
-                                    } catch (NumberFormatException err) {
+                                    }
+                                    catch (NumberFormatException err) {
                                         this.erreur = true;
-                                        this.message_erreur = "Une valeur non-numérique a été saisie pour le mot-clef EN : [" + err.getMessage().replace('\"', '\'') + "]";
+                                        this.message_erreur = "Une valeur non-numerique a ete saisie pour le mot-clef EN : [" + err.getMessage().replace('\"', '\'') + "]";
                                         break;
                                     }
                                 }
@@ -263,9 +234,10 @@ class RechercheFilm {
                                 for (String tmpVal : tmpStorage) {
                                     try {
                                         tmpAvant.add(Integer.valueOf(tmpVal));
-                                    } catch (NumberFormatException err) {
+                                    }
+                                    catch (NumberFormatException err) {
                                         this.erreur = true;
-                                        this.message_erreur = "Une valeur non-numérique a été saisie pour le mot-clef AVANT : [" + err.getMessage().replace('\"', '\'') + "]";
+                                        this.message_erreur = "Une valeur non-numerique a ete saisie pour le mot-clef AVANT : [" + err.getMessage().replace('\"', '\'') + "]";
                                         break;
                                     }
                                 }
@@ -283,9 +255,10 @@ class RechercheFilm {
                                 for (String tmpVal : tmpStorage) {
                                     try {
                                         tmpApres.add(Integer.valueOf(tmpVal));
-                                    } catch (NumberFormatException err) {
+                                    }
+                                    catch (NumberFormatException err) {
                                         this.erreur = true;
-                                        this.message_erreur = "Une valeur non-numérique a été saisie pour le mot-clef APRES : [" + err.getMessage().replace('\"', '\'') + "]";
+                                        this.message_erreur = "Une valeur non-numerique a ete saisie pour le mot-clef APRES : [" + err.getMessage().replace('\"', '\'') + "]";
                                         break;
                                     }
                                 }
@@ -306,11 +279,10 @@ class RechercheFilm {
                         value = new StringBuilder();
                     }
                 }
-                else if (list[i].equals(","))  //si le "mot" actuel est une virgule
-                {
-                    if (list[i+1] == null || list[i+1].equals(",")){
+                else if (list[i].equals(",")) { // Si le mot actuel lu est une virgule
+                    if (list[i+1] == null || list[i+1].equals(",")) {
                         this.erreur = true;
-                        this.message_erreur = "Une valeur est attendue après une virgule";
+                        this.message_erreur = "Surplus d'une virgule avant " + list[i-1] + ". Sinon, une valeur est attendue.";
                         break;
                     }
 
@@ -335,12 +307,12 @@ class RechercheFilm {
                         case "DE": {
                             ArrayList<String> tmpStorage2 = new ArrayList<>();
                             for (String tmpVal : tmpStorage) {
-                                if (tmpVal.matches(".*\\d.*")) //si le valeur contient un nombre
-                                {
+                                if (tmpVal.matches(".*\\d.*")) { // Si le valeur contient un nombre
                                     this.erreur = true;
-                                    this.message_erreur = "Une valeur numérique a été saisie pour le mot-clef DE";
+                                    this.message_erreur = "Une valeur numerique a ete saisie pour le mot-clef DE";
                                     break;
-                                } else tmpStorage2.add(tmpVal);
+                                }
+                                else tmpStorage2.add(tmpVal);
                             }
                             DE.add(tmpStorage2);
 
@@ -349,7 +321,7 @@ class RechercheFilm {
                                     sql.append("\nWHERE (");
                                     where_created = true;
                                 }
-                                else if (or_btwn_kw){
+                                else if (or_btwn_kw) {
                                     or_btwn_kw = false;
                                     sql.append("\n OR (");
                                 }
@@ -369,10 +341,9 @@ class RechercheFilm {
                         case "AVEC": {
                             ArrayList<String> tmpStorage2 = new ArrayList<>();
                             for (String tmpVal : tmpStorage) {
-                                if (tmpVal.matches(".*\\d.*")) //si la valeur contient un nombre
-                                {
+                                if (tmpVal.matches(".*\\d.*")) { //si la valeur contient un nombre
                                     this.erreur = true;
-                                    this.message_erreur = "Une valeur numérique a été saisie pour le mot-clef AVEC";
+                                    this.message_erreur = "Une valeur numerique a ete saisie pour le mot-clef AVEC";
                                     break;
                                 }
                                 else tmpStorage2.add(tmpVal);
@@ -402,12 +373,12 @@ class RechercheFilm {
                             break;
                         }
                         case "PAYS":
-                            if (tmpStorage.get(0).matches(".*\\d.*")) //si le valeur contient un nombre
-                            {
+                            if (tmpStorage.get(0).matches(".*\\d.*")) { //si le valeur contient un nombre
                                 this.erreur = true;
-                                this.message_erreur = "Une valeur numérique a été saisie pour le mot-clef PAYS";
+                                this.message_erreur = "Une valeur numerique a ete saisie pour le mot-clef PAYS";
                                 break label;
-                            } else {
+                            }
+                            else {
                                 if (!where_created) {
                                     sql.append("\nWHERE (");
                                     where_created = true;
@@ -431,9 +402,10 @@ class RechercheFilm {
                             for (String tmpVal : tmpStorage) {
                                 try {
                                     tmpStorage2.add(Integer.valueOf(tmpVal));
-                                } catch (NumberFormatException err) {
+                                }
+                                catch (NumberFormatException err) {
                                     this.erreur = true;
-                                    this.message_erreur = "Une valeur non-numérique a été saisie pour le mot-clef EN : [" + err.getMessage().replace('\"', '\'') + "]";
+                                    this.message_erreur = "Une valeur non-numerique a ete saisie pour le mot-clef EN : [" + err.getMessage().replace('\"', '\'') + "]";
                                     break;
                                 }
                             }
@@ -461,9 +433,10 @@ class RechercheFilm {
                             for (String tmpVal : tmpStorage) {
                                 try {
                                     tmpAvant.add(Integer.valueOf(tmpVal));
-                                } catch (NumberFormatException err) {
+                                }
+                                catch (NumberFormatException err) {
                                     this.erreur = true;
-                                    this.message_erreur = "Une valeur non-numérique a été saisie pour le mot-clef AVANT : [" + err.getMessage().replace('\"', '\'') + "]";
+                                    this.message_erreur = "Une valeur non-numerique a ete saisie pour le mot-clef AVANT : [" + err.getMessage().replace('\"', '\'') + "]";
                                     break;
                                 }
                             }
@@ -485,9 +458,10 @@ class RechercheFilm {
                             for (String tmpVal : tmpStorage) {
                                 try {
                                     tmpApres.add(Integer.valueOf(tmpVal));
-                                } catch (NumberFormatException err) {
+                                }
+                                catch (NumberFormatException err) {
                                     this.erreur = true;
-                                    this.message_erreur = "Une valeur non-numérique a été saisie pour le mot-clef APRES : [" + err.getMessage().replace('\"', '\'') + "]";
+                                    this.message_erreur = "Une valeur non-numerique a ete saisie pour le mot-clef APRES : [" + err.getMessage().replace('\"', '\'') + "]";
                                     break;
                                 }
                             }
@@ -507,10 +481,7 @@ class RechercheFilm {
                     newField = true;
                     tmpStorage.clear();
                 }
-                else //si le mot actuel fait partie de la valeur du champ
-                {
-                    value.append(str).append(" ");
-                }
+                else value.append(str).append(" ");// Si le mot actuel lu fait partie de la valeur du champ comme un nom compose
             }
         }
         sql.append(ORDER_BY_SQL);
@@ -520,47 +491,41 @@ class RechercheFilm {
     /**
      * Ordre des colonnes dans le resultSet (-1 pour l'ArrayList) :
      * [1] f.id_film (ID du film)
-     * [2] prenom [3] p.nom (prénom/nom d'une personne)
+     * [2] prenom [3] p.nom (prenom/nom d'une personne)
      * [4] titre (titre du film)
      * [5] duree (duree du film en minutes)
      * [6] annee (annee de sortie du film)
      * [7] py.nom (nom du pays en entier)
-     * [8] role (role de la personne => 'A' : acteur, 'R' : réalisateur)
+     * [8] role (role de la personne => 'A' : acteur, 'R' : realisateur)
      * [9] liste des autres titres sur une ligne
-     * @param sql resultSet de la requête SQL construite à partir du pseudo-langage
+     * @param sql resultSet de la requete SQL construite a partir du pseudo-langage
      * @return ArrayList<java_project.InfoFilm> liste des films
      */
-    private ArrayList<InfoFilm> getInfoFilmArray(String sql) {
+    private ArrayList<InfoFilm> getInfoFilmArray(String sql){
         ArrayList<InfoFilm> filmsList = new ArrayList<>();
-        ResultSet set;
 
-        try{
-            set = bdd.getCo().createStatement().executeQuery(sql);
-
-            if (set.next()) { // Verifie si le ResultSet contient au moins un résultat
-                ArrayList<ArrayList<String>> liste = convertRStoAL(set);
-
-                // Champs de la classe java_project.InfoFilm
-                ArrayList<NomPersonne> realisateurs = new ArrayList<>();
-                ArrayList<NomPersonne> acteurs = new ArrayList<>();
+        try {
+            ResultSet set = bdd.getCo().createStatement().executeQuery(sql);
+            if (set.next()) { // Si le ResultSet contient au moins une ligne
+                ArrayList<ArrayList<String>> liste = convertRStoAL(set); // ResultSet converti
+                ArrayList<NomPersonne> realisateurs = new ArrayList<>(), acteurs = new ArrayList<>();
                 ArrayList<String> autres_titres = new ArrayList<>();
                 int duree, annee;
                 String pays, titre;
 
-                for( int i = 0; i < liste.size(); i++) {
-
+                for (int i = 0; i < liste.size(); i++) {
                     if (liste.get(i).get(7).equals("A")) {
                         String prenom_act = "";
                         if (liste.get(i).get(1) != null) prenom_act = liste.get(i).get(1);
                         acteurs.add(new NomPersonne(prenom_act, liste.get(i).get(2)));
-                    } else if (liste.get(i).get(7).equals("R")) {
+                    }
+                    else if (liste.get(i).get(7).equals("R")) {
                         String prenom_real = "";
                         if (liste.get(i).get(1) != null) prenom_real = liste.get(i).get(1);
                         realisateurs.add(new NomPersonne(prenom_real, liste.get(i).get(2)));
                     }
 
                     titre = liste.get(i).get(3);
-
                     duree = (liste.get(i).get(4) != null) ? Integer.valueOf(liste.get(i).get(4)) : 0;
                     annee = (liste.get(i).get(5) != null) ? Integer.valueOf(liste.get(i).get(5)) : 0;
                     pays = (liste.get(i).get(5) != null) ? liste.get(i).get(6) : "";
@@ -570,48 +535,53 @@ class RechercheFilm {
                         Collections.addAll(autres_titres, autres_titres_list_splited);
                     }
 
-                    // Nouveau film lu ou fin de la liste : on créé et ajoute une nouvelle instance d'java_project.InfoFilm dans l'ArrayList
+                    // Nouveau film lu ou fin de la liste : on cree et ajoute une nouvelle instance d'java_project.InfoFilm dans l'ArrayList
                     if (i == (liste.size()-1) || !Integer.valueOf(liste.get(i).get(0)).equals(Integer.valueOf(liste.get(i + 1).get(0)))) {
                         filmsList.add(new InfoFilm(titre, realisateurs, acteurs, pays, annee, duree, autres_titres));
-
-                        // On vide les tableaux pour passer au film suivant
                         acteurs = new ArrayList<>();
                         realisateurs = new ArrayList<>();
                         autres_titres = new ArrayList<>();
                     }
                 }
             }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
+        catch (SQLException e) { e.printStackTrace(); }
         bdd.fermeBase();
-
         return filmsList;
     }
 
-    private ArrayList<ArrayList<String>> convertRStoAL(ResultSet set) throws SQLException {
+    /**
+     * Permet de convertir le ResultSet en ArrayList<ArrayList<String>> car le driver jdbc ne permet pas de changer\n
+     * les parametres de lecture du ResultSet et il n'est pas possible d'acceder a n+1 avec isNext() pour savoir si\n
+     * le prochain film est une nouvelle entree.
+     * @param set ResultSet obtenu
+     * @return ArrayList<ArrayList<String>> ResultSet converti
+     * @throws SQLException Se lance si le ResultSet est vide
+     */
+    public ArrayList<ArrayList<String>> convertRStoAL(ResultSet set) throws SQLException {
         ArrayList<ArrayList<String>> set_to_at = new ArrayList<>();
-
         do {
             ArrayList<String> liste_simple = new ArrayList<>();
             for (int i = 1; i <= 9; i++) liste_simple.add(set.getString(i));
             set_to_at.add(liste_simple);
         } while (set.next());
-
         set.close();
         return set_to_at;
     }
 
-    private String convertToJSON(ArrayList<InfoFilm> list) {
+    /**
+     * Permet de formatter le json final lisible par un lecteur de json, comme jq dans le terminal
+     * @param list Tableau d'InfoFilm
+     * @return String json enfin retourne
+     */
+    public String convertToJSON(ArrayList<InfoFilm> list) {
         StringBuilder result = new StringBuilder();
-
         int n;
-        if (list.size() >= 100){
+        if (list.size() >= 100) {
             n = 100;
-            result.append("{\"info\":\"Résultat limité à 100 films\", \"resultat\":[ ");
+            result.append("{\"info\":\"Resultat limite a 100 films\", \"resultat\":[ ");
         }
-        else{
+        else {
             n = list.size();
             result.append("{\"resultat\":[ ");
         }
