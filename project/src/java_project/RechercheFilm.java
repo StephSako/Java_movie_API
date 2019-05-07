@@ -14,19 +14,19 @@ import java.util.Collections;
  * @author Stephen Sakovitch 3A-32
  * @version 0.2
  */
-class RechercheFilm {
+public class RechercheFilm {
 
     /**
      * Accesseur a la BDD SQLite des films
      */
-    class BDDManager {
+    public class BDDManager {
         private Connection co;
         Connection getCo(){ return this.co; }
 
         /**
          * Ferme la BDD
          */
-        void fermeBase() {
+        public void fermeBase() {
             try { this.co.close(); }
             catch (SQLException e) { System.out.println("{\"erreur\":\"Fermeture impossible\"}"); }
         }
@@ -35,7 +35,7 @@ class RechercheFilm {
          * Constructeur de l'accesseur de BDD SQLite
          *  @param file Chemin d'acces au fichier BDD
          */
-        BDDManager(String file) {
+        public BDDManager(String file) {
             String url = "jdbc:sqlite:";
             url += file;
             try { co = DriverManager.getConnection(url); }
@@ -51,7 +51,7 @@ class RechercheFilm {
      * Constructeur, ouvre la BDD.
      * @param nomFichierSQLite Chemin et nom du ficher BDD.
      */
-    RechercheFilm(String nomFichierSQLite) {
+    public RechercheFilm(String nomFichierSQLite) {
         bdd = new BDDManager(nomFichierSQLite);
     }
 
@@ -69,13 +69,18 @@ class RechercheFilm {
      * On peut omettre le mot-clef apres une virgule ou OU, dans ce cas c'est implicitement le meme type de critere que precedemment qui s'applique.
      * @return Reponse de la recherche au format JSON.
      */
-    String retrouve(String requete) {
+    public String retrouve(String requete) {
         String sql = formatRequest(requete);
         if (!this.erreur) return convertToJSON(getInfoFilmArray(sql));
         else return "{\"erreur\":\"" + this.message_erreur + "\"}";
     }
 
-    private String formatRequest(String requete) {
+    /**
+     * Convertit la pseudo-requete en requete SQL exploitable
+     * @param requete Pseudo-requete
+     * @return String REquete SQL cree
+     */
+    public String formatRequest(String requete) {
         StringBuilder sql = new StringBuilder(), value= new StringBuilder();
         String SELECT = "SELECT f.id_film as id_film_f, prenom, p.nom as nom_p, f.titre as titre_f, duree, annee, py.nom as nom_py, role, (select group_concat(a_t.titre, '#') from autres_titres a_t where a_t.id_film=f.id_film) as liste_autres_titres";
         String FROM = "\nFROM films f NATURAL JOIN generique g NATURAL JOIN personnes p LEFT JOIN pays py ON f.pays = py.code";
@@ -530,7 +535,7 @@ class RechercheFilm {
      * @param sql resultSet de la requete SQL construite a partir du pseudo-langage
      * @return ArrayList<java_project.InfoFilm> liste des films
      */
-    private ArrayList<InfoFilm> getInfoFilmArray(String sql){
+    public ArrayList<InfoFilm> getInfoFilmArray(String sql){
         ArrayList<InfoFilm> filmsList = new ArrayList<>();
 
         try {
@@ -580,9 +585,7 @@ class RechercheFilm {
     }
 
     /**
-     * Permet de convertir le ResultSet en ArrayList<ArrayList<String>> car le driver jdbc ne permet pas de changer\n
-     * les parametres de lecture du ResultSet et il n'est pas possible d'acceder a n+1 avec isNext() pour savoir si\n
-     * le prochain film est une nouvelle entree.
+     * Permet de convertir le ResultSet en ArrayList<ArrayList<String>> car le driver jdbc ne permet pas de changer les parametres de lecture du ResultSet et il n'est pas possible d'acceder a n+1 avec isNext() pour savoir si le prochain film est une nouvelle entree.
      * @param set ResultSet obtenu
      * @return ArrayList<ArrayList<String>> ResultSet converti
      * @throws SQLException Se lance si le ResultSet est vide
