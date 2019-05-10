@@ -91,7 +91,7 @@ public class RechercheFilm {
         String field = "";
         ArrayList<String> tmpStorage = new ArrayList<>();
         String[] possibleTerms = {"TITRE", "DE", "AVEC", "PAYS", "EN", "AVANT", "APRES"};
-        ArrayList<ArrayList<String>> AVEC = new ArrayList<>(), DE = new ArrayList<>();
+        ArrayList<ArrayList<String>> array2D = new ArrayList<>();
 
         String[] list = requete.split(" |((?<=,)|(?=,))");
         label:
@@ -165,9 +165,9 @@ public class RechercheFilm {
                                     }
                                     else tmpStorage2.add(tmpVal);
                                 }
-                                DE.add(tmpStorage2);
+                                array2D.add(tmpStorage2);
 
-                                for (ArrayList<String> strings : DE) {
+                                for (ArrayList<String> strings : array2D) {
                                     if (!where_created) {
                                         where_created = true;
                                         sql.append("\nWHERE (");
@@ -182,7 +182,7 @@ public class RechercheFilm {
                                     }
                                     sql.append(")");
                                 }
-                                DE.clear();
+                                array2D.clear();
                                 break;
                             }
                             case "AVEC": {
@@ -196,8 +196,8 @@ public class RechercheFilm {
                                     else tmpStorage2.add(tmpVal);
                                 }
 
-                                AVEC.add(tmpStorage2);
-                                for (ArrayList<String> strings : AVEC) {
+                                array2D.add(tmpStorage2);
+                                for (ArrayList<String> strings : array2D) {
                                     if (!where_created) {
                                         where_created = true;
                                         sql.append("\nWHERE (");
@@ -212,7 +212,7 @@ public class RechercheFilm {
                                     }
                                     sql.append(")");
                                 }
-                                AVEC.clear();
+                                array2D.clear();
                                 break;
                             }
                             case "PAYS":
@@ -348,9 +348,9 @@ public class RechercheFilm {
                                 }
                                 else tmpStorage2.add(tmpVal);
                             }
-                            DE.add(tmpStorage2);
+                            array2D.add(tmpStorage2);
 
-                            for (ArrayList<String> strings : DE) {
+                            for (ArrayList<String> strings : array2D) {
                                 if (!where_created) {
                                     sql.append("\nWHERE (");
                                     where_created = true;
@@ -369,7 +369,7 @@ public class RechercheFilm {
                                 }
                                 sql.append(")");
                             }
-                            DE.clear();
+                            array2D.clear();
                             break;
                         }
                         case "AVEC": {
@@ -383,8 +383,8 @@ public class RechercheFilm {
                                 else tmpStorage2.add(tmpVal);
                             }
 
-                            AVEC.add(tmpStorage2);
-                            for (ArrayList<String> strings : AVEC) {
+                            array2D.add(tmpStorage2);
+                            for (ArrayList<String> strings : array2D) {
                                 if (!where_created) {
                                     sql.append("\nWHERE (");
                                     where_created = true;
@@ -403,7 +403,7 @@ public class RechercheFilm {
                                 }
                                 sql.append(")");
                             }
-                            AVEC.clear();
+                            array2D.clear();
                             break;
                         }
                         case "PAYS":
