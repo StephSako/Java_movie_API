@@ -78,7 +78,7 @@ public class RechercheFilm {
     /**
      * Convertit la pseudo-requete en requete SQL exploitable
      * @param requete Pseudo-requete
-     * @return String REquete SQL cree
+     * @return String Requete SQL cree
      */
     public String formatRequest(String requete) {
         StringBuilder sql = new StringBuilder(), value= new StringBuilder();
@@ -105,7 +105,7 @@ public class RechercheFilm {
                         this.message_erreur = "Le mot-clef " + str + " n'accepte qu'une seule valeur. Utilisez des'OU'.";
                         break;
                     }
-                    else {// Si tout va bien pour le mot clef
+                    else if (!field.equals(str)){// Si tout va bien pour le mot clef
                         field = str;
                         newField = false;
                     }
@@ -135,7 +135,7 @@ public class RechercheFilm {
                         this.message_erreur = "Une valeur prealable est requise pour le mot-clef 'OU'.";
                         break;
                     }
-                    else if(list[i+1] != null && Arrays.asList(possibleTerms).contains(list[i+1])) { // Si un mot-clef est lu apres un 'OU', on concatene le SQL avec les valeurs du mot-clef precedent
+                    else if(list[i+1] != null && Arrays.asList(possibleTerms).contains(list[i+1]) && !field.equals(list[i+1])) { // Si un mot-clef est lu apres un 'OU', on concatene le SQL avec les valeurs du mot-clef precedent
                         tmpStorage.add(value.toString().trim());
                         value = new StringBuilder();
                         or_btwn_kw = true;
@@ -313,7 +313,7 @@ public class RechercheFilm {
                         value = new StringBuilder();
                     }
                 }
-                else if (list[i].equals(",")) { // Si le mot actuel lu est une virgule
+                else if (str.equals(",")) { // Si le mot actuel lu est une virgule
                     if (list[i+1] == null || list[i+1].equals(",")) {
                         this.erreur = true;
                         this.message_erreur = "Surplus d'une virgule avant " + list[i-1] + ". Sinon, une valeur est attendue.";
