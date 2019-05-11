@@ -1,7 +1,9 @@
 package java_project;
 
+
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -21,7 +23,19 @@ public class RechercheFilm {
      */
     public class BDDManager {
         private Connection co;
-        Connection getCo(){ return this.co; }
+
+        private ArrayList<ArrayList<String>> ArrayResultSQL(String sql){
+            PreparedStatement ps;
+            ResultSet set;
+            ArrayList<ArrayList<String>> liste = new ArrayList<>();
+            try {
+                ps = this.co.prepareStatement(sql);
+                set = ps.executeQuery();
+                if (set.next()) liste = convertRStoAL(set); // Si le ResultSet contient au moins une ligne
+            }
+            catch (SQLException e) { e.printStackTrace(); }
+            return liste;
+        }
 
         /**
          * Ferme la BDD
@@ -537,49 +551,43 @@ public class RechercheFilm {
      */
     public ArrayList<InfoFilm> getInfoFilmArray(String sql){
         ArrayList<InfoFilm> filmsList = new ArrayList<>();
+        ArrayList<ArrayList<String>> liste = bdd.ArrayResultSQL(sql); // ResultSet converti
+        ArrayList<NomPersonne> realisateurs = new ArrayList<>(), acteurs = new ArrayList<>();
+        ArrayList<String> autres_titres = new ArrayList<>();
+        int duree, annee;
+        String pays, titre;
 
-        try {
-            ResultSet set = bdd.getCo().createStatement().executeQuery(sql);
-            if (set.next()) { // Si le ResultSet contient au moins une ligne
-                ArrayList<ArrayList<String>> liste = convertRStoAL(set); // ResultSet converti
-                ArrayList<NomPersonne> realisateurs = new ArrayList<>(), acteurs = new ArrayList<>();
-                ArrayList<String> autres_titres = new ArrayList<>();
-                int duree, annee;
-                String pays, titre;
+        for (int i = 0; i < liste.size(); i++) {
+            if (liste.get(i).get(7).equals("A")) {
+                String prenom_act = "";
+                if (liste.get(i).get(1) != null) prenom_act = liste.get(i).get(1);
+                acteurs.add(new NomPersonne(prenom_act, liste.get(i).get(2)));
+            }
+            else if (liste.get(i).get(7).equals("R")) {
+                String prenom_real = "";
+                if (liste.get(i).get(1) != null) prenom_real = liste.get(i).get(1);
+                realisateurs.add(new NomPersonne(prenom_real, liste.get(i).get(2)));
+            }
 
-                for (int i = 0; i < liste.size(); i++) {
-                    if (liste.get(i).get(7).equals("A")) {
-                        String prenom_act = "";
-                        if (liste.get(i).get(1) != null) prenom_act = liste.get(i).get(1);
-                        acteurs.add(new NomPersonne(prenom_act, liste.get(i).get(2)));
-                    }
-                    else if (liste.get(i).get(7).equals("R")) {
-                        String prenom_real = "";
-                        if (liste.get(i).get(1) != null) prenom_real = liste.get(i).get(1);
-                        realisateurs.add(new NomPersonne(prenom_real, liste.get(i).get(2)));
-                    }
+            titre = liste.get(i).get(3);
+            duree = (liste.get(i).get(4) != null) ? Integer.valueOf(liste.get(i).get(4)) : 0;
+            annee = (liste.get(i).get(5) != null) ? Integer.valueOf(liste.get(i).get(5)) : 0;
+            pays = (liste.get(i).get(5) != null) ? liste.get(i).get(6) : "";
 
-                    titre = liste.get(i).get(3);
-                    duree = (liste.get(i).get(4) != null) ? Integer.valueOf(liste.get(i).get(4)) : 0;
-                    annee = (liste.get(i).get(5) != null) ? Integer.valueOf(liste.get(i).get(5)) : 0;
-                    pays = (liste.get(i).get(5) != null) ? liste.get(i).get(6) : "";
+            if (liste.get(i).get(8) != null && autres_titres.isEmpty()) {
+                String[] autres_titres_list_splited = liste.get(i).get(8).split("#");
+                Collections.addAll(autres_titres, autres_titres_list_splited);
+            }
 
-                    if (liste.get(i).get(8) != null && autres_titres.isEmpty()) {
-                        String[] autres_titres_list_splited = liste.get(i).get(8).split("#");
-                        Collections.addAll(autres_titres, autres_titres_list_splited);
-                    }
-
-                    // Nouveau film lu ou fin de la liste : on cree et ajoute une nouvelle instance d'java_project.InfoFilm dans l'ArrayList
-                    if (i == (liste.size()-1) || !Integer.valueOf(liste.get(i).get(0)).equals(Integer.valueOf(liste.get(i + 1).get(0)))) {
-                        filmsList.add(new InfoFilm(titre, realisateurs, acteurs, pays, annee, duree, autres_titres));
-                        acteurs = new ArrayList<>();
-                        realisateurs = new ArrayList<>();
-                        autres_titres = new ArrayList<>();
-                    }
-                }
+            // Nouveau film lu ou fin de la liste : on cree et ajoute une nouvelle instance d'java_project.InfoFilm dans l'ArrayList
+            if (i == (liste.size()-1) || !Integer.valueOf(liste.get(i).get(0)).equals(Integer.valueOf(liste.get(i + 1).get(0)))) {
+                filmsList.add(new InfoFilm(titre, realisateurs, acteurs, pays, annee, duree, autres_titres));
+                acteurs = new ArrayList<>();
+                realisateurs = new ArrayList<>();
+                autres_titres = new ArrayList<>();
             }
         }
-        catch (SQLException e) { e.printStackTrace(); }
+
         bdd.fermeBase();
         return filmsList;
     }
