@@ -322,7 +322,7 @@ public class RechercheFilm {
                         newField = true;
                         tmpStorage.clear();
                     }
-                    else {
+                    else if (!Arrays.asList(possibleTerms).contains(str)){ // mot clef après un OU ou valeur de champ
                         tmpStorage.add(value.toString().trim());
                         value = new StringBuilder();
                     }
@@ -342,6 +342,10 @@ public class RechercheFilm {
                             if (!where_created) {
                                 where_created = true;
                                 sql.append("\nWHERE (");
+                            }
+                            else if (or_btwn_kw){
+                                or_btwn_kw = false;
+                                sql.append("\n OR (");
                             }
                             else sql.append("\nAND (");
 
@@ -529,7 +533,7 @@ public class RechercheFilm {
                     newField = true;
                     tmpStorage.clear();
                 }
-                else value.append(str).append(" ");// Si le mot actuel lu fait partie de la valeur du champ comme un nom compose
+                else if (!Arrays.asList(possibleTerms).contains(str)) value.append(str).append(" ");// Si le mot actuel lu fait partie de la valeur du champ comme un nom compose
             }
         }
         sql.append(ORDER_BY_SQL);
