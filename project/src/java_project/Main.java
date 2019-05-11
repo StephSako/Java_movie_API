@@ -6,6 +6,6 @@ public class Main {
 
         RechercheFilm r = new RechercheFilm("bdd/bdfilm.sqlite");
         //System.out.println(r.retrouve(String.join(" ", args)));
-        System.out.println(r.retrouve("TITRE Intouchables OU EN 2020, PAYS us"));
+        System.out.println(r.retrouve("EN 2011, AVEC heather donahue OU DE ERIC TOLEDANO"));
     }
 }

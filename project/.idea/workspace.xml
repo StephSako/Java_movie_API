@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c203bad0-6597-4e90-81e6-42c9ec4fa239" name="Default Changelist" comment="">
+    <list default="true" id="c203bad0-6597-4e90-81e6-42c9ec4fa239" name="Default Changelist" comment="Fixing OU before an AND">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/GenieLogicielProjet/java_project/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/GenieLogicielProjet/java_project/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/GenieLogicielProjet/java_project/RechercheFilm.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/GenieLogicielProjet/java_project/RechercheFilm.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java_project/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java_project/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java_project/RechercheFilm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java_project/RechercheFilm.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,20 +20,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/java_project/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="10" column="1" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
+            <state relative-caret-position="120">
+              <caret line="8" column="117" selection-start-line="8" selection-start-column="117" selection-end-line="8" selection-end-column="117" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/java_project/RechercheFilm.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2989">
-              <caret line="357" column="14" selection-start-line="357" selection-start-column="14" selection-end-line="357" selection-end-column="14" />
+            <state relative-caret-position="76">
+              <caret line="415" column="65" selection-start-line="415" selection-start-column="65" selection-end-line="415" selection-end-column="65" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -99,8 +102,8 @@
         <option value="$PROJECT_DIR$/src/java_project/BDDManager.java" />
         <option value="$PROJECT_DIR$/src/java_project/NomPersonne.java" />
         <option value="$PROJECT_DIR$/GenieLogicielProjet.iml" />
-        <option value="$PROJECT_DIR$/src/java_project/RechercheFilm.java" />
         <option value="$PROJECT_DIR$/src/java_project/Main.java" />
+        <option value="$PROJECT_DIR$/src/java_project/RechercheFilm.java" />
       </list>
     </option>
   </component>
@@ -122,6 +125,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -144,7 +148,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -435,7 +438,14 @@
       <option name="project" value="LOCAL" />
       <updated>1557613570846</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="Fixing OU before an AND">
+      <created>1557614026522</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1557614026523</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TodoView">
@@ -450,7 +460,7 @@
   <component name="ToolWindowManager">
     <frame x="0" y="25" width="1366" height="696" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24469697" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24848485" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -459,7 +469,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.31040564" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.6606061" weight="0.41093475" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.6606061" visible="true" weight="0.5044092" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4909091" weight="0.3968254" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -584,20 +594,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/java_project/RechercheFilm.java">
+    <entry file="file://$PROJECT_DIR$/src/java_project/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2989">
-          <caret line="357" column="14" selection-start-line="357" selection-start-column="14" selection-end-line="357" selection-end-column="14" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="120">
+          <caret line="8" column="117" selection-start-line="8" selection-start-column="117" selection-end-line="8" selection-end-column="117" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/java_project/Main.java">
+    <entry file="file://$PROJECT_DIR$/src/java_project/RechercheFilm.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="1" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
+        <state relative-caret-position="76">
+          <caret line="415" column="65" selection-start-line="415" selection-start-column="65" selection-end-line="415" selection-end-column="65" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

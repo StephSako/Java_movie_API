@@ -158,13 +158,13 @@ public class RechercheFilm {
                             case "TITRE":
                                 if (!where_created) {
                                     where_created = true;
-                                    sql.append("\nWHERE (");
+                                    sql.append("\nWHERE ((");
                                 }
                                 else if (or_btwn_kw){
                                     or_btwn_kw = false;
                                     sql.append("\n OR (");
                                 }
-                                else sql.append("\nAND (");
+                                else sql.append("\nAND ((");
 
                                 for (int j = 0; j < tmpStorage.size(); j++) {
                                     if (j > 0) sql.append(" OR");
@@ -188,13 +188,13 @@ public class RechercheFilm {
                                 for (ArrayList<String> strings : array2D) {
                                     if (!where_created) {
                                         where_created = true;
-                                        sql.append("\nWHERE (");
+                                        sql.append("\nWHERE ((");
                                     }
                                     else if (or_btwn_kw){
                                         or_btwn_kw = false;
                                         sql.append("\n OR (");
                                     }
-                                    else sql.append("\nAND (");
+                                    else sql.append("\nAND ((");
 
                                     for (int k = 0; k < strings.size(); k++) {
                                         if (k > 0) sql.append("\nOR");
@@ -222,13 +222,13 @@ public class RechercheFilm {
                                 for (ArrayList<String> strings : array2D) {
                                     if (!where_created) {
                                         where_created = true;
-                                        sql.append("\nWHERE (");
+                                        sql.append("\nWHERE ((");
                                     }
                                     else if (or_btwn_kw){
                                         or_btwn_kw = false;
                                         sql.append("\n OR (");
                                     }
-                                    else sql.append("\nAND (");
+                                    else sql.append("\nAND ((");
 
                                     for (int k = 0; k < strings.size(); k++) {
                                         if (k > 0) sql.append("\nOR");
@@ -250,13 +250,13 @@ public class RechercheFilm {
                                 else {
                                     if (!where_created) {
                                         where_created = true;
-                                        sql.append("\nWHERE (");
+                                        sql.append("\nWHERE ((");
                                     }
                                     else if (or_btwn_kw){
                                         or_btwn_kw = false;
                                         sql.append("\n OR (");
                                     }
-                                    else sql.append("\nAND (");
+                                    else sql.append("\nAND ((");
 
                                     for (int j = 0; j < tmpStorage.size(); j++) {
                                         if (j > 0) sql.append("\nOR");
@@ -281,13 +281,13 @@ public class RechercheFilm {
 
                                 if (!where_created) {
                                     where_created = true;
-                                    sql.append("\nWHERE (");
+                                    sql.append("\nWHERE ((");
                                 }
                                 else if (or_btwn_kw){
                                     or_btwn_kw = false;
                                     sql.append("\n OR (");
                                 }
-                                else sql.append("\nAND (");
+                                else sql.append("\nAND ((");
 
                                 for (int j = 0; j < tmpStorage2.size(); j++) {
                                     if (j > 0) sql.append("\nOR");
@@ -312,13 +312,13 @@ public class RechercheFilm {
 
                                 if (!where_created) {
                                     where_created = true;
-                                    sql.append("\nWHERE (");
+                                    sql.append("\nWHERE ((");
                                 }
                                 else if (or_btwn_kw){
                                     or_btwn_kw = false;
                                     sql.append("\n OR (");
                                 }
-                                else sql.append("\nAND (");
+                                else sql.append("\nAND ((");
 
                                 if (tmpAvant.size() > 0) sql.append(" annee < ").append(Collections.max(tmpAvant)).append(")");
                                 break;
@@ -336,17 +336,18 @@ public class RechercheFilm {
                                 }
                                 if (!where_created) {
                                     where_created = true;
-                                    sql.append("\nWHERE (");
+                                    sql.append("\nWHERE ((");
                                 }
                                 else if (or_btwn_kw){
                                     or_btwn_kw = false;
                                     sql.append("\n OR (");
                                 }
-                                else sql.append("\nAND (");
+                                else sql.append("\nAND ((");
 
                                 if (tmpApres.size() > 0) sql.append(" annee > ").append(Collections.min(tmpApres)).append(")");
                                 break;
                         }
+
                         or_btwn_kw = true;
                         newField = true;
                         tmpStorage.clear();
@@ -370,13 +371,13 @@ public class RechercheFilm {
                         case "TITRE":
                             if (!where_created) {
                                 where_created = true;
-                                sql.append("\nWHERE (");
+                                sql.append("\nWHERE ((");
                             }
                             else if (or_btwn_kw){
                                 or_btwn_kw = false;
                                 sql.append("\n OR (");
                             }
-                            else sql.append("\nAND (");
+                            else sql.append("\nAND ((");
 
                             for (int j = 0; j < tmpStorage.size(); j++) {
                                 if (j > 0) sql.append(" OR");
@@ -399,14 +400,14 @@ public class RechercheFilm {
 
                             for (ArrayList<String> strings : array2D) {
                                 if (!where_created) {
-                                    sql.append("\nWHERE (");
+                                    sql.append("\nWHERE ((");
                                     where_created = true;
                                 }
                                 else if (or_btwn_kw) {
                                     or_btwn_kw = false;
                                     sql.append("\n OR (");
                                 }
-                                else sql.append("\nAND (");
+                                else sql.append("\nAND ((");
 
                                 for (int k = 0; k < strings.size(); k++) {
                                     if (k > 0) sql.append("\nOR");
@@ -433,14 +434,14 @@ public class RechercheFilm {
                             array2D.add(tmpStorage2);
                             for (ArrayList<String> strings : array2D) {
                                 if (!where_created) {
-                                    sql.append("\nWHERE (");
+                                    sql.append("\nWHERE ((");
                                     where_created = true;
                                 }
                                 else if (or_btwn_kw){
                                     or_btwn_kw = false;
                                     sql.append("\n OR (");
                                 }
-                                else sql.append("\nAND (");
+                                else sql.append("\nAND ((");
 
                                 for (int k = 0; k < strings.size(); k++) {
                                     if (k > 0) sql.append("\nOR");
@@ -461,14 +462,14 @@ public class RechercheFilm {
                             }
                             else {
                                 if (!where_created) {
-                                    sql.append("\nWHERE (");
+                                    sql.append("\nWHERE ((");
                                     where_created = true;
                                 }
                                 else if (or_btwn_kw){
                                     or_btwn_kw = false;
                                     sql.append("\n OR (");
                                 }
-                                else sql.append("\nAND (");
+                                else sql.append("\nAND ((");
 
                                 for (int j = 0; j < tmpStorage.size(); j++) {
                                     if (j > 0) sql.append("\nOR");
@@ -493,13 +494,13 @@ public class RechercheFilm {
 
                             if (!where_created) {
                                 where_created = true;
-                                sql.append("\nWHERE (");
+                                sql.append("\nWHERE ((");
                             }
                             else if (or_btwn_kw){
                                 or_btwn_kw = false;
                                 sql.append("\n OR (");
                             }
-                            else sql.append("\nAND (");
+                            else sql.append("\nAND ((");
 
                             for (int j = 0; j < tmpStorage2.size(); j++) {
                                 if (j > 0) sql.append("\nOR");
@@ -524,13 +525,13 @@ public class RechercheFilm {
 
                             if (!where_created) {
                                 where_created = true;
-                                sql.append("\nWHERE (");
+                                sql.append("\nWHERE ((");
                             }
                             else if (or_btwn_kw){
                                 or_btwn_kw = false;
                                 sql.append("\n OR (");
                             }
-                            else sql.append("\nAND (");
+                            else sql.append("\nAND ((");
 
                             if (tmpAvant.size() > 0) sql.append(" annee < ").append(Collections.max(tmpAvant)).append(")");
                             break;
@@ -548,17 +549,18 @@ public class RechercheFilm {
                             }
                             if (!where_created) {
                                 where_created = true;
-                                sql.append("\nWHERE (");
+                                sql.append("\nWHERE ((");
                             }
                             else if (or_btwn_kw){
                                 or_btwn_kw = false;
                                 sql.append("\n OR (");
                             }
-                            else sql.append("\nAND (");
+                            else sql.append("\nAND ((");
 
                             if (tmpApres.size() > 0) sql.append(" annee > ").append(Collections.min(tmpApres)).append(")");
                             break;
                     }
+                    if (list[i+1] != null && !list[i+1].equals("OU")) sql.append(")");
                     newField = true;
                     tmpStorage.clear();
                 }
@@ -656,7 +658,7 @@ public class RechercheFilm {
         }
         else {
             n = list.size();
-            result.append("{\"resultat\":[ ");
+            result.append("{\"resultat\":[");
         }
 
         for (int i = 0; i < n; i++) {
