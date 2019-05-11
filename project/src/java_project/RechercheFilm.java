@@ -85,6 +85,7 @@ public class RechercheFilm {
      */
     public String retrouve(String requete) {
         String sql = formatRequest(requete);
+        System.out.println(sql);
         if (!this.erreur) return convertToJSON(getInfoFilmArray(sql));
         else return "{\"erreur\":\"" + this.message_erreur + "\"}";
     }
@@ -152,7 +153,6 @@ public class RechercheFilm {
                     else if(list[i+1] != null && Arrays.asList(possibleTerms).contains(list[i+1]) && !field.equals(list[i+1])) { // Si un mot-clef est lu apres un 'OU', on concatene le SQL avec les valeurs du mot-clef precedent
                         tmpStorage.add(value.toString().trim());
                         value = new StringBuilder();
-                        or_btwn_kw = true;
 
                         switch (field) {
                             case "TITRE":
@@ -160,7 +160,11 @@ public class RechercheFilm {
                                     where_created = true;
                                     sql.append("\nWHERE (");
                                 }
-                                else sql.append("\nOR (");
+                                else if (or_btwn_kw){
+                                    or_btwn_kw = false;
+                                    sql.append("\n OR (");
+                                }
+                                else sql.append("\nAND (");
 
                                 for (int j = 0; j < tmpStorage.size(); j++) {
                                     if (j > 0) sql.append(" OR");
@@ -186,7 +190,11 @@ public class RechercheFilm {
                                         where_created = true;
                                         sql.append("\nWHERE (");
                                     }
-                                    else sql.append("\nOR (");
+                                    else if (or_btwn_kw){
+                                        or_btwn_kw = false;
+                                        sql.append("\n OR (");
+                                    }
+                                    else sql.append("\nAND (");
 
                                     for (int k = 0; k < strings.size(); k++) {
                                         if (k > 0) sql.append("\nOR");
@@ -216,7 +224,11 @@ public class RechercheFilm {
                                         where_created = true;
                                         sql.append("\nWHERE (");
                                     }
-                                    else sql.append("\nOR (");
+                                    else if (or_btwn_kw){
+                                        or_btwn_kw = false;
+                                        sql.append("\n OR (");
+                                    }
+                                    else sql.append("\nAND (");
 
                                     for (int k = 0; k < strings.size(); k++) {
                                         if (k > 0) sql.append("\nOR");
@@ -240,7 +252,11 @@ public class RechercheFilm {
                                         where_created = true;
                                         sql.append("\nWHERE (");
                                     }
-                                    else sql.append("\nOR (");
+                                    else if (or_btwn_kw){
+                                        or_btwn_kw = false;
+                                        sql.append("\n OR (");
+                                    }
+                                    else sql.append("\nAND (");
 
                                     for (int j = 0; j < tmpStorage.size(); j++) {
                                         if (j > 0) sql.append("\nOR");
@@ -267,7 +283,11 @@ public class RechercheFilm {
                                     where_created = true;
                                     sql.append("\nWHERE (");
                                 }
-                                else sql.append("\nOR (");
+                                else if (or_btwn_kw){
+                                    or_btwn_kw = false;
+                                    sql.append("\n OR (");
+                                }
+                                else sql.append("\nAND (");
 
                                 for (int j = 0; j < tmpStorage2.size(); j++) {
                                     if (j > 0) sql.append("\nOR");
@@ -294,7 +314,11 @@ public class RechercheFilm {
                                     where_created = true;
                                     sql.append("\nWHERE (");
                                 }
-                                else sql.append("\nOR (");
+                                else if (or_btwn_kw){
+                                    or_btwn_kw = false;
+                                    sql.append("\n OR (");
+                                }
+                                else sql.append("\nAND (");
 
                                 if (tmpAvant.size() > 0) sql.append(" annee < ").append(Collections.max(tmpAvant)).append(")");
                                 break;
@@ -314,11 +338,16 @@ public class RechercheFilm {
                                     where_created = true;
                                     sql.append("\nWHERE (");
                                 }
-                                else sql.append("\nOR (");
+                                else if (or_btwn_kw){
+                                    or_btwn_kw = false;
+                                    sql.append("\n OR (");
+                                }
+                                else sql.append("\nAND (");
 
                                 if (tmpApres.size() > 0) sql.append(" annee > ").append(Collections.min(tmpApres)).append(")");
                                 break;
                         }
+                        or_btwn_kw = true;
                         newField = true;
                         tmpStorage.clear();
                     }
