@@ -4,8 +4,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        RechercheFilm r = new RechercheFilm("bdd/bdfilm.sqlite");
-        //System.out.println(r.retrouve(String.join(" ", args)));
-        System.out.println(r.retrouve("EN 2011, AVEC heather donahue OU DE ERIC TOLEDANO"));
+        RechercheFilm r = new RechercheFilm("../bdd/bdfilm.sqlite");
+        System.out.println(r.retrouve(String.join(" ", args)));
     }
 }

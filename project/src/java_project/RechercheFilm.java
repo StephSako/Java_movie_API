@@ -85,7 +85,6 @@ public class RechercheFilm {
      */
     public String retrouve(String requete) {
         String sql = formatRequest(requete);
-        System.out.println(sql);
         if (!this.erreur) return convertToJSON(getInfoFilmArray(sql));
         else return "{\"erreur\":\"" + this.message_erreur + "\"}";
     }
@@ -162,7 +161,7 @@ public class RechercheFilm {
                                 }
                                 else if (or_btwn_kw){
                                     or_btwn_kw = false;
-                                    sql.append("\n OR (");
+                                    sql.append("\nOR (");
                                 }
                                 else sql.append("\nAND ((");
 
@@ -192,7 +191,7 @@ public class RechercheFilm {
                                     }
                                     else if (or_btwn_kw){
                                         or_btwn_kw = false;
-                                        sql.append("\n OR (");
+                                        sql.append("\nOR (");
                                     }
                                     else sql.append("\nAND ((");
 
@@ -226,7 +225,7 @@ public class RechercheFilm {
                                     }
                                     else if (or_btwn_kw){
                                         or_btwn_kw = false;
-                                        sql.append("\n OR (");
+                                        sql.append("\nOR (");
                                     }
                                     else sql.append("\nAND ((");
 
@@ -254,7 +253,7 @@ public class RechercheFilm {
                                     }
                                     else if (or_btwn_kw){
                                         or_btwn_kw = false;
-                                        sql.append("\n OR (");
+                                        sql.append("\nOR (");
                                     }
                                     else sql.append("\nAND ((");
 
@@ -285,7 +284,7 @@ public class RechercheFilm {
                                 }
                                 else if (or_btwn_kw){
                                     or_btwn_kw = false;
-                                    sql.append("\n OR (");
+                                    sql.append("\nOR (");
                                 }
                                 else sql.append("\nAND ((");
 
@@ -316,7 +315,7 @@ public class RechercheFilm {
                                 }
                                 else if (or_btwn_kw){
                                     or_btwn_kw = false;
-                                    sql.append("\n OR (");
+                                    sql.append("\nOR (");
                                 }
                                 else sql.append("\nAND ((");
 
@@ -340,7 +339,7 @@ public class RechercheFilm {
                                 }
                                 else if (or_btwn_kw){
                                     or_btwn_kw = false;
-                                    sql.append("\n OR (");
+                                    sql.append("\nOR (");
                                 }
                                 else sql.append("\nAND ((");
 
@@ -375,7 +374,7 @@ public class RechercheFilm {
                             }
                             else if (or_btwn_kw){
                                 or_btwn_kw = false;
-                                sql.append("\n OR (");
+                                sql.append("\nOR (");
                             }
                             else sql.append("\nAND ((");
 
@@ -405,7 +404,7 @@ public class RechercheFilm {
                                 }
                                 else if (or_btwn_kw) {
                                     or_btwn_kw = false;
-                                    sql.append("\n OR (");
+                                    sql.append("\nOR (");
                                 }
                                 else sql.append("\nAND ((");
 
@@ -439,7 +438,7 @@ public class RechercheFilm {
                                 }
                                 else if (or_btwn_kw){
                                     or_btwn_kw = false;
-                                    sql.append("\n OR (");
+                                    sql.append("\nOR (");
                                 }
                                 else sql.append("\nAND ((");
 
@@ -467,7 +466,7 @@ public class RechercheFilm {
                                 }
                                 else if (or_btwn_kw){
                                     or_btwn_kw = false;
-                                    sql.append("\n OR (");
+                                    sql.append("\nOR (");
                                 }
                                 else sql.append("\nAND ((");
 
@@ -498,7 +497,7 @@ public class RechercheFilm {
                             }
                             else if (or_btwn_kw){
                                 or_btwn_kw = false;
-                                sql.append("\n OR (");
+                                sql.append("\nOR (");
                             }
                             else sql.append("\nAND ((");
 
@@ -529,7 +528,7 @@ public class RechercheFilm {
                             }
                             else if (or_btwn_kw){
                                 or_btwn_kw = false;
-                                sql.append("\n OR (");
+                                sql.append("\nOR (");
                             }
                             else sql.append("\nAND ((");
 
@@ -553,7 +552,7 @@ public class RechercheFilm {
                             }
                             else if (or_btwn_kw){
                                 or_btwn_kw = false;
-                                sql.append("\n OR (");
+                                sql.append("\nOR (");
                             }
                             else sql.append("\nAND ((");
 
