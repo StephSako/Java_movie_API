@@ -12,9 +12,9 @@ import java.util.Collections;
 
 /**
  * Classe de recherche dans la BDD SQLite d'IMDB.
- * @author Theo Machon 3A-32
  * @author Stephen Sakovitch 3A-32
- * @version 0.2
+ * @author Theo Machon 3A-32
+ * @version 0.3
  */
 public class RechercheFilm {
 
@@ -31,7 +31,7 @@ public class RechercheFilm {
             try {
                 ps = this.co.prepareStatement(sql);
                 set = ps.executeQuery();
-                if (set.next()) liste = convertRStoAL(set); // Si le ResultSet contient au moins une ligne
+                if (set.next()) liste = convertRStoAL(set);
             }
             catch (SQLException e) { e.printStackTrace(); }
             return liste;
@@ -100,62 +100,63 @@ public class RechercheFilm {
         String FROM = "\nFROM films f NATURAL JOIN generique g NATURAL JOIN personnes p LEFT JOIN pays py ON f.pays = py.code";
         String ORDER_BY_SQL = "\nORDER BY annee DESC, f.titre";
         sql.append(SELECT).append(FROM);
-        boolean where_created = false, TITRE_filled = false, PAYS_filled = false, EN_filled = false, newField = true, or_btwn_kw = false;
         requete += ",END";
         String field = "";
+
+        boolean where_created = false, TITRE_filled = false, PAYS_filled = false, EN_filled = false, newField = true, or_btwn_kw = false;
+
         ArrayList<String> tmpStorage = new ArrayList<>();
         String[] possibleTerms = {"TITRE", "DE", "AVEC", "PAYS", "EN", "AVANT", "APRES"};
         ArrayList<ArrayList<String>> array2D = new ArrayList<>();
 
         String[] list = requete.split(" |((?<=,)|(?=,))");
         label:
-        for (int i = 0; i<list.length; i++) { // Parcourt de la pseudo-requete
+        for (int i = 0; i<list.length; i++) {
             String str = list[i];
-            if (newField) { // Si on lit un mot-clef
-                if (Arrays.asList(possibleTerms).contains(str)) { // Si le mot-clef fait partie des mots-clefs valides
-                    // S'il s'agit d'un champ qui ne peut pas prendre de ET et que le champ a deja ete saisie
-                    if (str.matches("TITRE|PAYS|EN") && (TITRE_filled && PAYS_filled && EN_filled)) {
-                        this.erreur = true;
-                        this.message_erreur = "Le mot-clef " + str + " n'accepte qu'une seule valeur. Utilisez des'OU'.";
-                        break;
-                    }
-                    if (list[i+1].equals("OU") || list[i+1].equals(",")) { // Pas de valeur pour le mot clef
+            if (newField) {
+                if (Arrays.asList(possibleTerms).contains(str)) {
+                    if (list[i+1].equals("OU") || list[i+1].equals(",")) {
                         this.erreur = true;
                         this.message_erreur = "Une valeur ou plusieurs valeurs sont attendues apres le mot-clef " + str + ".";
                         break;
                     }
-                    else if (!field.equals(str)) { // Si tout va bien pour le mot clef
+                    else if (!field.equals(str)) {
                         field = str;
                         newField = false;
                     }
                 }
-                else { // Si le mot n'est pas un mot-clef valide
-                    if (str.equals("END")) break; // Si on lit le mot-clef de la fin
-                    else if (!field.matches("DE|AVEC") && field.matches("TITRE|PAYS|EN")) { // S'il ne s'agit ni de "DE", ni de "AVEC" et que plusieurs valeurs sont saisies
+                else {
+                    if (str.equals("END")) break;
+                    else if (i == 0){
                         this.erreur = true;
-                        this.message_erreur = "Le mot-clef '" + str + "' est invalide ou plusieurs valeurs ont ete saisies pour le mot-clef " + field + ". Utilisez des 'OU'.";
+                        this.message_erreur = "Le mot-clef '" + str + "' n'existe pas ...";
                         break;
                     }
-                    else { // Si on lit une autre valeur apres un "DE" ou un "AVEC"
+                    else if ((TITRE_filled && PAYS_filled && EN_filled) && field.matches("TITRE|PAYS|EN")) {
+                        this.erreur = true;
+                        this.message_erreur = "Le mot-clef '" + field + "' n'accepte qu'une seule valeur : utilisez des 'OU'. Sinon, le mot clef '" + str + "' n'existe pas ...";
+                        break;
+                    }
+                    else {
                         newField=false;
                         i--;
                     }
                 }
             }
-            else { // Si on lit la valeur d'un champ
-                if (str.equals("OU")) { // Si le mot actuel lu est un "OU"
-                    if (list[i+1] == null || list[i+1].equals(",")) { // S'il n'y a pas de valeur qui suit
+            else {
+                if (str.equals("OU")) {
+                    if (list[i+1].equals(",")) {
                         this.erreur = true;
                         this.message_erreur = "Une valeur est attendue apres le mot-clef 'OU'.";
                         break;
                     }
-                    else if (value.length() == 0) { // S'il n'y a pas de valeur avant un 'OU'
+                    else if (value.length() == 0) {
                         this.erreur = true;
                         this.message_erreur = "Une valeur prealable est requise pour le mot-clef 'OU'.";
                         break;
                     }
 
-                    else if(list[i+1] != null && Arrays.asList(possibleTerms).contains(list[i+1]) && !field.equals(list[i+1])) { // Si un mot-clef est lu apres un 'OU', on concatene le SQL avec les valeurs du mot-clef precedent
+                    else if(Arrays.asList(possibleTerms).contains(list[i+1]) && !field.equals(list[i+1])) {
                         tmpStorage.add(value.toString().trim());
                         value = new StringBuilder();
 
@@ -180,7 +181,7 @@ public class RechercheFilm {
                             case "DE": {
                                 ArrayList<String> tmpStorage2 = new ArrayList<>();
                                 for (String tmpVal : tmpStorage) {
-                                    if (tmpVal.matches(".*\\d.*")) { //si le valeur contient un nombre
+                                    if (tmpVal.matches(".*\\d.*")) {
                                         this.erreur = true;
                                         this.message_erreur = "Une valeur numerique a ete saisie pour le mot-clef DE";
                                         break;
@@ -565,11 +566,11 @@ public class RechercheFilm {
                             if (tmpApres.size() > 0) sql.append(" annee > ").append(Collections.min(tmpApres)).append(")");
                             break;
                     }
-                    if (list[i+1] != null && !list[i+1].equals("OU")) sql.append(")");
+                    if (!list[i+1].equals("OU")) sql.append(")");
                     newField = true;
                     tmpStorage.clear();
                 }
-                else if (!Arrays.asList(possibleTerms).contains(str)) value.append(str).append(" "); // Si le mot actuel lu fait partie de la valeur du champ comme un nom compose
+                else if (!Arrays.asList(possibleTerms).contains(str)) value.append(str).append(" ");
             }
         }
         sql.append(ORDER_BY_SQL);
@@ -586,12 +587,12 @@ public class RechercheFilm {
      * [7] py.nom (nom du pays en entier)
      * [8] role (role de la personne => 'A' : acteur, 'R' : realisateur)
      * [9] liste des autres titres sur une ligne
-     * @param sql resultSet de la requete SQL construite a partir du pseudo-langage
+     * @param sql ResultSet de la requete SQL construite a partir du pseudo-langage
      * @return ArrayList<java_project.InfoFilm> liste des films
      */
     public ArrayList<InfoFilm> getInfoFilmArray(String sql){
         ArrayList<InfoFilm> filmsList = new ArrayList<>();
-        ArrayList<ArrayList<String>> liste = bdd.ArrayResultSQL(sql); // ResultSet converti
+        ArrayList<ArrayList<String>> liste = bdd.ArrayResultSQL(sql);
         ArrayList<NomPersonne> realisateurs = new ArrayList<>(), acteurs = new ArrayList<>();
         ArrayList<String> autres_titres = new ArrayList<>();
         int duree, annee;
@@ -612,14 +613,13 @@ public class RechercheFilm {
             titre = liste.get(i).get(3);
             duree = (liste.get(i).get(4) != null) ? Integer.valueOf(liste.get(i).get(4)) : 0;
             annee = (liste.get(i).get(5) != null) ? Integer.valueOf(liste.get(i).get(5)) : 0;
-            pays = (liste.get(i).get(5) != null) ? liste.get(i).get(6) : "";
+            pays = (liste.get(i).get(6) != null) ? liste.get(i).get(6) : "";
 
             if (liste.get(i).get(8) != null && autres_titres.isEmpty()) {
                 String[] autres_titres_list_splited = liste.get(i).get(8).split("#");
                 Collections.addAll(autres_titres, autres_titres_list_splited);
             }
 
-            // Nouveau film lu ou fin de la liste : on cree et ajoute une nouvelle instance d'java_project.InfoFilm dans l'ArrayList
             if (i == (liste.size()-1) || !Integer.valueOf(liste.get(i).get(0)).equals(Integer.valueOf(liste.get(i + 1).get(0)))) {
                 filmsList.add(new InfoFilm(titre, realisateurs, acteurs, pays, annee, duree, autres_titres));
                 acteurs = new ArrayList<>();
@@ -650,7 +650,7 @@ public class RechercheFilm {
     }
 
     /**
-     * Permet de formatter le json final lisible par un lecteur de json, comme jq dans le terminal
+     * Permet de formatter le JSON final lisible par un lecteur de json, comme jq dans le terminal.
      * @param list Tableau d'InfoFilm
      * @return String json enfin retourne
      */
