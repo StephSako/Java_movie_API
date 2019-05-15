@@ -115,7 +115,12 @@ public class RechercheFilm {
             String str = list[i];
             if (newField) {
                 if (Arrays.asList(possibleTerms).contains(str)) {
-                    if (list[i+1].equals("OU") || list[i+1].equals(",")) {
+                    if ((TITRE_filled || PAYS_filled || EN_filled) && str.matches("TITRE|PAYS|EN")) {
+                        this.erreur = true;
+                        this.message_erreur = "Le mot-clef '" + field + "' n'accepte qu'une seule valeur : utilisez des 'OU'. Sinon, le mot clef '" + str + "' n'existe pas ...";
+                        break;
+                    }
+                    else if (list[i+1].equals("OU") || list[i+1].equals(",")) {
                         this.erreur = true;
                         this.message_erreur = "Une valeur ou plusieurs valeurs sont attendues apres le mot-clef " + str + ".";
                         break;
@@ -132,7 +137,7 @@ public class RechercheFilm {
                         this.message_erreur = "Le mot-clef '" + str + "' n'existe pas ...";
                         break;
                     }
-                    else if ((TITRE_filled && PAYS_filled && EN_filled) && field.matches("TITRE|PAYS|EN")) {
+                    else if ((TITRE_filled || PAYS_filled || EN_filled) && field.matches("TITRE|PAYS|EN")) {
                         this.erreur = true;
                         this.message_erreur = "Le mot-clef '" + field + "' n'accepte qu'une seule valeur : utilisez des 'OU'. Sinon, le mot clef '" + str + "' n'existe pas ...";
                         break;
