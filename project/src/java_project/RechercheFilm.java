@@ -119,7 +119,12 @@ public class RechercheFilm {
                         this.message_erreur = "Le mot-clef " + str + " n'accepte qu'une seule valeur. Utilisez des'OU'.";
                         break;
                     }
-                    else if (!field.equals(str)){// Si tout va bien pour le mot clef
+                    if (list[i+1].equals("OU") || list[i+1].equals(",")) { // Pas de valeur pour le mot clef
+                        this.erreur = true;
+                        this.message_erreur = "Une valeur ou plusieurs valeurs sont attendues apres le mot-clef " + str + ".";
+                        break;
+                    }
+                    else if (!field.equals(str)) { // Si tout va bien pour le mot clef
                         field = str;
                         newField = false;
                     }
@@ -149,6 +154,7 @@ public class RechercheFilm {
                         this.message_erreur = "Une valeur prealable est requise pour le mot-clef 'OU'.";
                         break;
                     }
+
                     else if(list[i+1] != null && Arrays.asList(possibleTerms).contains(list[i+1]) && !field.equals(list[i+1])) { // Si un mot-clef est lu apres un 'OU', on concatene le SQL avec les valeurs du mot-clef precedent
                         tmpStorage.add(value.toString().trim());
                         value = new StringBuilder();
@@ -160,7 +166,6 @@ public class RechercheFilm {
                                     sql.append("\nWHERE ((");
                                 }
                                 else if (or_btwn_kw){
-                                    or_btwn_kw = false;
                                     sql.append("\nOR (");
                                 }
                                 else sql.append("\nAND ((");
@@ -252,7 +257,6 @@ public class RechercheFilm {
                                         sql.append("\nWHERE ((");
                                     }
                                     else if (or_btwn_kw){
-                                        or_btwn_kw = false;
                                         sql.append("\nOR (");
                                     }
                                     else sql.append("\nAND ((");
@@ -283,7 +287,6 @@ public class RechercheFilm {
                                     sql.append("\nWHERE ((");
                                 }
                                 else if (or_btwn_kw){
-                                    or_btwn_kw = false;
                                     sql.append("\nOR (");
                                 }
                                 else sql.append("\nAND ((");
@@ -314,7 +317,6 @@ public class RechercheFilm {
                                     sql.append("\nWHERE ((");
                                 }
                                 else if (or_btwn_kw){
-                                    or_btwn_kw = false;
                                     sql.append("\nOR (");
                                 }
                                 else sql.append("\nAND ((");
@@ -338,7 +340,6 @@ public class RechercheFilm {
                                     sql.append("\nWHERE ((");
                                 }
                                 else if (or_btwn_kw){
-                                    or_btwn_kw = false;
                                     sql.append("\nOR (");
                                 }
                                 else sql.append("\nAND ((");
@@ -357,9 +358,14 @@ public class RechercheFilm {
                     }
                 }
                 else if (str.equals(",")) { // Si le mot actuel lu est une virgule
-                    if (list[i+1] == null || list[i+1].equals(",")) {
+                    if (list[i+1].equals(",")) {
                         this.erreur = true;
-                        this.message_erreur = "Surplus d'une virgule avant " + list[i-1] + ". Sinon, une valeur est attendue.";
+                        this.message_erreur = "Surplus d'une virgule avant '" + list[i-1] + "'. Sinon, une valeur est attendue.";
+                        break;
+                    }
+                    else if (list[i+1].equals("OU")) {  // Si on rencontre un 'OU' directement apres une virgule
+                        this.erreur = true;
+                        this.message_erreur = "Plusieurs valeurs sont attendues apres une virgule. Sinon, supprimez-la";
                         break;
                     }
 
@@ -388,7 +394,7 @@ public class RechercheFilm {
                         case "DE": {
                             ArrayList<String> tmpStorage2 = new ArrayList<>();
                             for (String tmpVal : tmpStorage) {
-                                if (tmpVal.matches(".*\\d.*")) { // Si le valeur contient un nombre
+                                if (tmpVal.matches(".*\\d.*")) { // Si la valeur contient un nombre
                                     this.erreur = true;
                                     this.message_erreur = "Une valeur numerique a ete saisie pour le mot-clef DE";
                                     break;
@@ -422,7 +428,7 @@ public class RechercheFilm {
                         case "AVEC": {
                             ArrayList<String> tmpStorage2 = new ArrayList<>();
                             for (String tmpVal : tmpStorage) {
-                                if (tmpVal.matches(".*\\d.*")) { //si la valeur contient un nombre
+                                if (tmpVal.matches(".*\\d.*")) { // Si la valeur contient un nombre
                                     this.erreur = true;
                                     this.message_erreur = "Une valeur numerique a ete saisie pour le mot-clef AVEC";
                                     break;
@@ -454,7 +460,7 @@ public class RechercheFilm {
                             break;
                         }
                         case "PAYS":
-                            if (tmpStorage.get(0).matches(".*\\d.*")) { //si le valeur contient un nombre
+                            if (tmpStorage.get(0).matches(".*\\d.*")) { // Si la valeur contient un nombre
                                 this.erreur = true;
                                 this.message_erreur = "Une valeur numerique a ete saisie pour le mot-clef PAYS";
                                 break label;
@@ -563,7 +569,7 @@ public class RechercheFilm {
                     newField = true;
                     tmpStorage.clear();
                 }
-                else if (!Arrays.asList(possibleTerms).contains(str)) value.append(str).append(" ");// Si le mot actuel lu fait partie de la valeur du champ comme un nom compose
+                else if (!Arrays.asList(possibleTerms).contains(str)) value.append(str).append(" "); // Si le mot actuel lu fait partie de la valeur du champ comme un nom compose
             }
         }
         sql.append(ORDER_BY_SQL);
