@@ -115,9 +115,9 @@ public class RechercheFilm {
             String str = list[i];
             if (newField) {
                 if (Arrays.asList(possibleTerms).contains(str)) {
-                    if ((TITRE_filled || PAYS_filled || EN_filled) && str.matches("TITRE|PAYS|EN")) {
+                    if ((str.equals("TITRE") && TITRE_filled) || (str.equals("EN") && EN_filled) || (str.equals("PAYS") && PAYS_filled)) {
                         this.erreur = true;
-                        this.message_erreur = "Le mot-clef '" + field + "' n'accepte qu'une seule valeur : utilisez des 'OU'. Sinon, le mot clef '" + str + "' n'existe pas ...";
+                        this.message_erreur = "Le mot-clef '" + str + "' n'accepte qu'une seule valeur : utilisez des 'OU'.";
                         break;
                     }
                     else if (list[i+1].equals("OU") || list[i+1].equals(",")) {
@@ -137,9 +137,9 @@ public class RechercheFilm {
                         this.message_erreur = "Le mot-clef '" + str + "' n'existe pas ...";
                         break;
                     }
-                    else if ((TITRE_filled || PAYS_filled || EN_filled) && field.matches("TITRE|PAYS|EN")) {
+                    else if (!field.matches("DE|AVEC") && field.matches("TITRE|PAYS|EN")) {
                         this.erreur = true;
-                        this.message_erreur = "Le mot-clef '" + field + "' n'accepte qu'une seule valeur : utilisez des 'OU'. Sinon, le mot clef '" + str + "' n'existe pas ...";
+                        this.message_erreur = "Le mot-clef '" + field + "' n'accepte qu'une seule valeur : utilisez des 'OU'.";
                         break;
                     }
                     else {
@@ -605,13 +605,11 @@ public class RechercheFilm {
 
         for (int i = 0; i < liste.size(); i++) {
             if (liste.get(i).get(7).equals("A")) {
-                String prenom_act = "";
-                if (liste.get(i).get(1) != null) prenom_act = liste.get(i).get(1);
+                String prenom_act = (liste.get(i).get(1) != null) ? liste.get(i).get(1) : "";
                 acteurs.add(new NomPersonne(prenom_act, liste.get(i).get(2)));
             }
             else if (liste.get(i).get(7).equals("R")) {
-                String prenom_real = "";
-                if (liste.get(i).get(1) != null) prenom_real = liste.get(i).get(1);
+                String prenom_real = (liste.get(i).get(1) != null) ? liste.get(i).get(1) : "";
                 realisateurs.add(new NomPersonne(prenom_real, liste.get(i).get(2)));
             }
 
