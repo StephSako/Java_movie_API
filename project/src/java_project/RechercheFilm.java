@@ -220,7 +220,7 @@ public class RechercheFilm {
                             case "AVEC": {
                                 ArrayList<String> tmpStorage2 = new ArrayList<>();
                                 for (String tmpVal : tmpStorage) {
-                                    if (tmpVal.matches(".*\\d.*")) { //si la valeur contient un nombre
+                                    if (tmpVal.matches(".*\\d.*")) {
                                         this.erreur = true;
                                         this.message_erreur = "Une valeur numerique a ete saisie pour le mot-clef AVEC";
                                         break;
@@ -252,7 +252,7 @@ public class RechercheFilm {
                                 break;
                             }
                             case "PAYS":
-                                if (tmpStorage.get(0).matches(".*\\d.*")) { //si le valeur contient un nombre
+                                if (tmpStorage.get(0).matches(".*\\d.*")) {
                                     this.erreur = true;
                                     this.message_erreur = "Une valeur numerique a ete saisie pour le mot-clef PAYS";
                                     break label;
@@ -358,18 +358,18 @@ public class RechercheFilm {
                         newField = true;
                         tmpStorage.clear();
                     }
-                    else if (!Arrays.asList(possibleTerms).contains(str)){ // mot clef après un OU ou valeur de champ
+                    else if (!Arrays.asList(possibleTerms).contains(str)){
                         tmpStorage.add(value.toString().trim());
                         value = new StringBuilder();
                     }
                 }
-                else if (str.equals(",")) { // Si le mot actuel lu est une virgule
+                else if (str.equals(",")) {
                     if (list[i+1].equals(",")) {
                         this.erreur = true;
                         this.message_erreur = "Surplus d'une virgule avant '" + list[i-1] + "'. Sinon, une valeur est attendue.";
                         break;
                     }
-                    else if (list[i+1].equals("OU")) {  // Si on rencontre un 'OU' directement apres une virgule
+                    else if (list[i+1].equals("OU")) {
                         this.erreur = true;
                         this.message_erreur = "Plusieurs valeurs sont attendues apres une virgule. Sinon, supprimez-la";
                         break;
@@ -400,7 +400,7 @@ public class RechercheFilm {
                         case "DE": {
                             ArrayList<String> tmpStorage2 = new ArrayList<>();
                             for (String tmpVal : tmpStorage) {
-                                if (tmpVal.matches(".*\\d.*")) { // Si la valeur contient un nombre
+                                if (tmpVal.matches(".*\\d.*")) {
                                     this.erreur = true;
                                     this.message_erreur = "Une valeur numerique a ete saisie pour le mot-clef DE";
                                     break;
@@ -434,7 +434,7 @@ public class RechercheFilm {
                         case "AVEC": {
                             ArrayList<String> tmpStorage2 = new ArrayList<>();
                             for (String tmpVal : tmpStorage) {
-                                if (tmpVal.matches(".*\\d.*")) { // Si la valeur contient un nombre
+                                if (tmpVal.matches(".*\\d.*")) {
                                     this.erreur = true;
                                     this.message_erreur = "Une valeur numerique a ete saisie pour le mot-clef AVEC";
                                     break;
@@ -466,7 +466,7 @@ public class RechercheFilm {
                             break;
                         }
                         case "PAYS":
-                            if (tmpStorage.get(0).matches(".*\\d.*")) { // Si la valeur contient un nombre
+                            if (tmpStorage.get(0).matches(".*\\d.*")) {
                                 this.erreur = true;
                                 this.message_erreur = "Une valeur numerique a ete saisie pour le mot-clef PAYS";
                                 break label;
