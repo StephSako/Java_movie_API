@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c203bad0-6597-4e90-81e6-42c9ec4fa239" name="Default Changelist" comment="JavaDoc à jour">
+    <list default="true" id="c203bad0-6597-4e90-81e6-42c9ec4fa239" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/JavaDoc/allclasses-index.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/allclasses-index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/JavaDoc/allpackages-index.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/allpackages-index.html" afterDir="false" />
@@ -28,11 +28,11 @@
       <change beforePath="$PROJECT_DIR$/JavaDoc/java_project/StringHelper.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/java_project/StringHelper.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/JavaDoc/java_project/package-summary.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/java_project/package-summary.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/JavaDoc/java_project/package-tree.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/java_project/package-tree.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/member-search-index.js" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/member-search-index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/JavaDoc/member-search-index.zip" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/member-search-index.zip" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/JavaDoc/overview-tree.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/overview-tree.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/JavaDoc/package-search-index.zip" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/package-search-index.zip" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/JavaDoc/type-search-index.zip" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/type-search-index.zip" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java_project/RechercheFilm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java_project/RechercheFilm.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -58,8 +58,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/java_project/RechercheFilm.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="291">
-              <caret line="614" lean-forward="true" selection-start-line="614" selection-end-line="614" />
+            <state relative-caret-position="46">
+              <caret line="592" column="48" selection-start-line="592" selection-start-column="48" selection-end-line="592" selection-end-column="48" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1956#1957#0" expanded="true" />
@@ -103,6 +103,7 @@
       <find>surplus</find>
       <find>//</find>
       <find>!= null</find>
+      <find>&amp;</find>
     </findStrings>
     <replaceStrings>
       <replace>##</replace>
@@ -112,6 +113,7 @@
     </replaceStrings>
   </component>
   <component name="Git.Settings">
+    <option name="UPDATE_TYPE" value="REBASE" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
@@ -135,8 +137,8 @@
         <option value="$PROJECT_DIR$/src/java_project/BDDManager.java" />
         <option value="$PROJECT_DIR$/src/java_project/NomPersonne.java" />
         <option value="$PROJECT_DIR$/GenieLogicielProjet.iml" />
-        <option value="$PROJECT_DIR$/src/java_project/RechercheFilm.java" />
         <option value="$PROJECT_DIR$/src/java_project/Main.java" />
+        <option value="$PROJECT_DIR$/src/java_project/RechercheFilm.java" />
       </list>
     </option>
   </component>
@@ -159,6 +161,7 @@
     </navigator>
     <panes>
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -181,7 +184,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -486,7 +488,14 @@
       <option name="project" value="LOCAL" />
       <updated>1557616624637</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="JavaDoc à jour">
+      <created>1558018018348</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1558018018348</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TodoView">
@@ -502,7 +511,7 @@
     <frame x="0" y="25" width="1366" height="696" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16439395" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1689394" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -511,7 +520,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.31040564" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.6606061" visible="true" weight="0.22574955" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.6606061" visible="true" weight="0.6084656" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4909091" weight="0.42151675" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -645,8 +654,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/java_project/RechercheFilm.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="291">
-          <caret line="614" lean-forward="true" selection-start-line="614" selection-end-line="614" />
+        <state relative-caret-position="46">
+          <caret line="592" column="48" selection-start-line="592" selection-start-column="48" selection-end-line="592" selection-end-column="48" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1956#1957#0" expanded="true" />

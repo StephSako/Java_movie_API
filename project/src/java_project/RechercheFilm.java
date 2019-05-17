@@ -46,8 +46,8 @@ public class RechercheFilm {
         }
 
         /**
-         * Constructeur de l'accesseur de BDD SQLite
-         *  @param file Chemin d'acces au fichier BDD
+         * Constructeur de l'accesseur a la BDD SQLite
+         *  @param file Chemin d'acc&egrave;s au fichier BDD
          */
         public BDDManager(String file) {
             String url = "jdbc:sqlite:";
@@ -62,7 +62,7 @@ public class RechercheFilm {
     private BDDManager bdd;
 
     /**
-     * Constructeur, ouvre la BDD.
+     * Constructeur de la classe RechercheFilm et ouvre la BDD.
      * @param nomFichierSQLite Chemin et nom du ficher BDD.
      */
     public RechercheFilm(String nomFichierSQLite) {
@@ -70,18 +70,18 @@ public class RechercheFilm {
     }
 
     /**
-     * Traduit la pseudo-requete en requete SQL, effectue la recherche dans la BDD SQLite et renvoie les films en format JSON.
-     * @param requete Langage de recherce simplifee:<br>
+     * M&eacute;thode permettant la traduction de la pseudo-requ&ecirc;te en requ&ecirc;te SQL, effectue la recherche dans la BDD SQLite et renvoie les films au format JSON.
+     * @param requete Langage de recherce simplif&eacute;e:<br>
      * TITRE suivi d'un titre de film;<br>
-     * DE suivi d'un nom de realisateur;<br>
+     * DE suivi d'un nom de r&eacute;alisateur;<br>
      * AVEC suivi d'un nom d'acteur ou d'actrice;<br>
      * PAYS suivi d'un code (ISO sur deux lettres) ou nom de pays;<br>
-     * EN suivi d'une annee de sortie;<br>
-     * AVANT suivi d'une annee de sortie (correspond a <, on ne traite pas <=);<br>
-     * APRES (ou APReS) suivi d'une annee de sortie (correspond a >, on ne traite pas >=).<br>
-     * Les conditions ainsi exprimees peuvent etre combinees soit en les separant par une virgule ("et" implicite), soit avec OU.<br>
-     * On peut omettre le mot-clef apres une virgule ou OU, dans ce cas c'est implicitement le meme type de critere que precedemment qui s'applique.
-     * @return Reponse de la recherche au format JSON.
+     * EN suivi d'une ann&eacute;e de sortie;<br>
+     * AVANT suivi d'une ann&eacute;e de sortie (correspond &agrave; &lt;, on ne traite pas &lt;= );<br>
+     * APRES (ou APRES) suivi d'une ann&eacute;e de sortie (correspond &agrave; &gt;, on ne traite pas &gt;=).<br>
+     * Les conditions ainsi exprim&eacute;es peuvent &ecirc;tre combin&eacute;es soit en les s&eacute;parant par une virgule ("et" implicite), soit avec OU.<br>
+     * On peut omettre le mot-clef apr&egrave;s une virgule ou OU, dans ce cas c'est implicitement le m&ecirc;me type de crit&egrave;re que pr&eacute;c&eacute;demment qui s'applique.
+     * @return R&eacute;ponse de la recherche au format JSON.
      */
     public String retrouve(String requete) {
         String sql = formatRequest(requete);
@@ -90,9 +90,9 @@ public class RechercheFilm {
     }
 
     /**
-     * Convertit la pseudo-requete en requete SQL exploitable
-     * @param requete Pseudo-requete
-     * @return String Requete SQL cree
+     * Convertit la pseudo-requ&ecirc;te en requ&ecirc;te SQL exploitable
+     * @param requete Pseudo-requ&ecirc;te
+     * @return String Requete SQL cr&eacute;&eacute;e
      */
     public String formatRequest(String requete) {
         StringBuilder sql = new StringBuilder(), value= new StringBuilder();
@@ -583,17 +583,17 @@ public class RechercheFilm {
     }
 
     /**
-     * Ordre des colonnes dans le resultSet (-1 pour l'ArrayList) :
+     * Ordre des colonnes dans le resultSet (faire -1 pour l'ArrayList) :
      * [1] f.id_film (ID du film)
-     * [2] prenom [3] p.nom (prenom/nom d'une personne)
+     * [2] prenom [3] p.nom (pr&eacute;nom/nom d'une personne)
      * [4] titre (titre du film)
-     * [5] duree (duree du film en minutes)
-     * [6] annee (annee de sortie du film)
+     * [5] duree (dur&eacute;e du film en minutes)
+     * [6] annee (ann&eacute;e de sortie du film)
      * [7] py.nom (nom du pays en entier)
-     * [8] role (role de la personne => 'A' : acteur, 'R' : realisateur)
+     * [8] role (r&ocirc;le de la personne =&gt; 'A' : acteur, 'R' : r&eacute;alisateur)
      * [9] liste des autres titres sur une ligne
-     * @param sql ResultSet de la requete SQL construite a partir du pseudo-langage
-     * @return ArrayList<java_project.InfoFilm> liste des films
+     * @param sql ResultSet de la requ&ecirc;te SQL construite &agrave; partir du pseudo-langage
+     * @return ArrayList&lt;java_project.InfoFilm&gt; liste des films
      */
     public ArrayList<InfoFilm> getInfoFilmArray(String sql){
         ArrayList<InfoFilm> filmsList = new ArrayList<>();
@@ -636,9 +636,9 @@ public class RechercheFilm {
     }
 
     /**
-     * Permet de convertir le ResultSet en ArrayList<ArrayList<String>> car le driver jdbc ne permet pas de changer les parametres de lecture du ResultSet et il n'est pas possible d'acceder a n+1 avec isNext() pour savoir si le prochain film est une nouvelle entree.
+     * Permet de convertir le ResultSet en ArrayList&lt;ArrayList&lt;String&gt;&gt; car le driver jdbc ne permet pas de changer les param&egrave;tres de lecture du ResultSet et il n'est pas possible d'acc&eacute;der a n+1 avec isNext() pour savoir si le prochain film est une nouvelle entr&eacute;e.
      * @param set ResultSet obtenu
-     * @return ArrayList<ArrayList<String>> ResultSet converti
+     * @return ArrayList&lt;ArrayList&lt;String&gt;&gt; ResultSet converti
      * @throws SQLException Se lance si le ResultSet est vide
      */
     public ArrayList<ArrayList<String>> convertRStoAL(ResultSet set) throws SQLException {
@@ -653,9 +653,9 @@ public class RechercheFilm {
     }
 
     /**
-     * Permet de formatter le JSON final lisible par un lecteur de json, comme jq dans le terminal.
+     * Permet de formatter le JSON final lisible par un lecteur de JSON, comme 'jq' dans le terminal.
      * @param list Tableau d'InfoFilm
-     * @return String json enfin retourne
+     * @return String JSON enfin retourn&eacute;
      */
     public String convertToJSON(ArrayList<InfoFilm> list) {
         StringBuilder result = new StringBuilder();
