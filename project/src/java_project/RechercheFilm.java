@@ -155,7 +155,7 @@ public class RechercheFilm {
                         break;
                     }
 
-                    else if(Arrays.asList(possibleTerms).contains(list[i+1]) && !field.equals(list[i+1])) {
+                    else if(Arrays.asList(possibleTerms).contains(list[i+1].toUpperCase()) && !field.equals(list[i+1].toUpperCase())) {
                         tmpStorage.add(value.toString().trim());
                         value = new StringBuilder();
 

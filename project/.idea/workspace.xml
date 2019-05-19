@@ -2,20 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c203bad0-6597-4e90-81e6-42c9ec4fa239" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/java_project/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/GenieLogicielProjet/script.sh" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/GenieLogicielProjet/script.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/projet_GLPOO_3A/InfoFilm.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/projet_GLPOO_3A/InfoFilm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java_project/InfoFilm.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/projet_GLPOO_3A/Main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/projet_GLPOO_3A/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/projet_GLPOO_3A/NomPersonne.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/projet_GLPOO_3A/NomPersonne.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java_project/NomPersonne.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/projet_GLPOO_3A/RechercheFilm$BDDManager.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/projet_GLPOO_3A/RechercheFilm.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/projet_GLPOO_3A/RechercheFilm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java_project/RechercheFilm.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/projet_GLPOO_3A/StringHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java_project/StringHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/script.sh" beforeDir="false" afterPath="$PROJECT_DIR$/src/script.sh" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -32,8 +20,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/java_project/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" column="8" selection-start-line="7" selection-start-column="8" selection-end-line="7" selection-end-column="8" />
+            <state relative-caret-position="90">
+              <caret line="6" column="48" selection-start-line="6" selection-start-column="48" selection-end-line="6" selection-end-column="48" />
             </state>
           </provider>
         </entry>
@@ -41,8 +29,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/java_project/RechercheFilm.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-4575">
-              <caret line="112" column="123" lean-forward="true" selection-start-line="112" selection-start-column="123" selection-end-line="112" selection-end-column="123" />
+            <state relative-caret-position="315">
+              <caret line="121" column="50" lean-forward="true" selection-start-line="121" selection-start-column="50" selection-end-line="121" selection-end-column="50" />
             </state>
           </provider>
         </entry>
@@ -498,7 +486,21 @@
       <option name="project" value="LOCAL" />
       <updated>1558291427349</updated>
     </task>
-    <option name="localTasksCounter" value="40" />
+    <task id="LOCAL-00040" summary="Terminé (normalement)">
+      <created>1558296375645</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1558296375646</updated>
+    </task>
+    <task id="LOCAL-00041" summary="'\'' in titre, é en majus corrigé">
+      <created>1558299132761</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1558299132761</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="TodoView">
@@ -512,7 +514,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="25" width="1366" height="696" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18787879" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -523,7 +524,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" visible="true" weight="0.31040564" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.6606061" visible="true" weight="0.12698413" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.6606061" visible="true" weight="0.23280424" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4909091" weight="0.46737212" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -543,9 +544,6 @@
     </layout>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Fixing AVEC + DE with many terms in names" />
-    <MESSAGE value="Fixing bugs AVEC + DE with many terms in names (adding REPLACE())" />
-    <MESSAGE value="Optimize title search with recherche_titre (considering that a film has many titles)" />
     <MESSAGE value="Delete dummy concatenation in REPLACE()" />
     <MESSAGE value="Exemple pour Intouchables + ajouts de commentaires" />
     <MESSAGE value="Adding 'Info : LIMIT 100' to JSON + verification NULL values retrieved by the ResultSet" />
@@ -568,7 +566,10 @@
     <MESSAGE value="JavaDoc à jour 2" />
     <MESSAGE value="&quot; &quot; résolu" />
     <MESSAGE value="Refactor package project name" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactor package project name" />
+    <MESSAGE value="Terminé (normalement)" />
+    <MESSAGE value="'\'' in titre, é en majus corrigé, ',' in titre" />
+    <MESSAGE value="'\'' in titre, é en majus corrigé" />
+    <option name="LAST_COMMIT_MESSAGE" value="'\'' in titre, é en majus corrigé" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
@@ -688,15 +689,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/java_project/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="8" selection-start-line="7" selection-start-column="8" selection-end-line="7" selection-end-column="8" />
+        <state relative-caret-position="90">
+          <caret line="6" column="48" selection-start-line="6" selection-start-column="48" selection-end-line="6" selection-end-column="48" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/java_project/RechercheFilm.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4575">
-          <caret line="112" column="123" lean-forward="true" selection-start-line="112" selection-start-column="123" selection-end-line="112" selection-end-column="123" />
+        <state relative-caret-position="315">
+          <caret line="121" column="50" lean-forward="true" selection-start-line="121" selection-start-column="50" selection-end-line="121" selection-end-column="50" />
         </state>
       </provider>
     </entry>
