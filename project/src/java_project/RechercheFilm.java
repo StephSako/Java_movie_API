@@ -112,6 +112,7 @@ public class RechercheFilm {
                     if ((str.equals("TITRE") && TITRE_filled) || (str.equals("EN") && EN_filled) || (str.equals("PAYS") && PAYS_filled)) {
                         this.erreur = true;
                         this.message_erreur = "Le mot-clef '" + str + "' n'accepte qu'une seule valeur : utilisez des 'OU'.";
+                        if ((str.equals("TITRE") && TITRE_filled)) this.message_erreur += " Si le titre comporte des virgules, utilisez un 'ou' a la place car il n'est pas possible de savoir si la suite de la pseudo-requete fais partie du titre ou pas.";
                         break;
                     }
                     else if (list[i+1].equals("OU") || list[i+1].equals(",")) {
@@ -134,6 +135,7 @@ public class RechercheFilm {
                     else if (!field.matches("DE|AVEC") && field.matches("TITRE|PAYS|EN")) {
                         this.erreur = true;
                         this.message_erreur = "Le mot-clef '" + field + "' n'accepte qu'une seule valeur : utilisez des 'OU'.";
+                        if ((str.equals("TITRE") && TITRE_filled)) this.message_erreur += " Si le titre comporte des virgules, utilisez un 'ou' a la place car il n'est pas possible de savoir si la suite de la pseudo-requete fais partie du titre ou pas.";
                         break;
                     }
                     else {

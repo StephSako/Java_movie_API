@@ -3,7 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="c203bad0-6597-4e90-81e6-42c9ec4fa239" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/GenieLogicielProjet/script.sh" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/GenieLogicielProjet/script.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java_project/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java_project/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java_project/RechercheFilm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java_project/RechercheFilm.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -29,8 +30,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/java_project/RechercheFilm.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="121" column="50" lean-forward="true" selection-start-line="121" selection-start-column="50" selection-end-line="121" selection-end-column="50" />
+            <state relative-caret-position="255">
+              <caret line="114" column="251" selection-start-line="114" selection-start-column="251" selection-end-line="114" selection-end-column="251" />
             </state>
           </provider>
         </entry>
@@ -500,7 +501,14 @@
       <option name="project" value="LOCAL" />
       <updated>1558299132761</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL-00042" summary="correction str.toUpperCase() pour verif si mot clef apres , ou OU">
+      <created>1558299629060</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1558299629060</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="TodoView">
@@ -514,6 +522,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="25" width="1366" height="696" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18787879" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -524,8 +533,8 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" visible="true" weight="0.31040564" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.6606061" visible="true" weight="0.23280424" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4909091" weight="0.46737212" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.6606061" visible="true" weight="0.16931216" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4909091" weight="0.45326278" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.41269842" />
@@ -544,7 +553,6 @@
     </layout>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Delete dummy concatenation in REPLACE()" />
     <MESSAGE value="Exemple pour Intouchables + ajouts de commentaires" />
     <MESSAGE value="Adding 'Info : LIMIT 100' to JSON + verification NULL values retrieved by the ResultSet" />
     <MESSAGE value="Fixing titre with filter" />
@@ -569,7 +577,8 @@
     <MESSAGE value="Terminé (normalement)" />
     <MESSAGE value="'\'' in titre, é en majus corrigé, ',' in titre" />
     <MESSAGE value="'\'' in titre, é en majus corrigé" />
-    <option name="LAST_COMMIT_MESSAGE" value="'\'' in titre, é en majus corrigé" />
+    <MESSAGE value="correction str.toUpperCase() pour verif si mot clef apres , ou OU" />
+    <option name="LAST_COMMIT_MESSAGE" value="correction str.toUpperCase() pour verif si mot clef apres , ou OU" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
@@ -696,8 +705,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/java_project/RechercheFilm.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="121" column="50" lean-forward="true" selection-start-line="121" selection-start-column="50" selection-end-line="121" selection-end-column="50" />
+        <state relative-caret-position="255">
+          <caret line="114" column="251" selection-start-line="114" selection-start-column="251" selection-end-line="114" selection-end-column="251" />
         </state>
       </provider>
     </entry>
