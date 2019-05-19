@@ -131,7 +131,7 @@ public class RechercheFilm {
                     }
                 }
                 else {
-                    if (str.equals("END")) break;
+                    if (str.equals("END") || (i == 0 && str.equals(",") && list[i+1].equals("END"))) break;
                     else if (i == 0){
                         this.erreur = true;
                         this.message_erreur = "Le mot-clef '" + str + "' n'existe pas ...";

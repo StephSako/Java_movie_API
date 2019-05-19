@@ -3,35 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="c203bad0-6597-4e90-81e6-42c9ec4fa239" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/allclasses-index.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/allclasses-index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/allpackages-index.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/allpackages-index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/constant-values.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/constant-values.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/deprecated-list.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/deprecated-list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/help-doc.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/help-doc.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/index-files/index-1.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/index-files/index-1.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/index-files/index-10.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/index-files/index-10.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/index-files/index-11.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/index-files/index-11.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/index-files/index-2.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/index-files/index-2.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/index-files/index-3.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/index-files/index-3.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/index-files/index-4.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/index-files/index-4.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/index-files/index-5.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/index-files/index-5.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/index-files/index-6.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/index-files/index-6.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/index-files/index-7.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/index-files/index-7.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/index-files/index-8.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/index-files/index-8.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/index-files/index-9.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/index-files/index-9.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/java_project/InfoFilm.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/java_project/InfoFilm.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/java_project/Main.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/java_project/Main.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/java_project/NomPersonne.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/java_project/NomPersonne.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/java_project/RechercheFilm.BDDManager.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/java_project/RechercheFilm.BDDManager.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/java_project/RechercheFilm.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/java_project/RechercheFilm.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/java_project/StringHelper.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/java_project/StringHelper.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/java_project/package-summary.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/java_project/package-summary.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/java_project/package-tree.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/java_project/package-tree.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/member-search-index.zip" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/member-search-index.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/overview-tree.html" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/overview-tree.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/package-search-index.zip" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/package-search-index.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaDoc/type-search-index.zip" beforeDir="false" afterPath="$PROJECT_DIR$/JavaDoc/type-search-index.zip" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/java_project/RechercheFilm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java_project/RechercheFilm.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -58,12 +29,10 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/java_project/RechercheFilm.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="46">
-              <caret line="592" column="48" selection-start-line="592" selection-start-column="48" selection-end-line="592" selection-end-column="48" />
+            <state relative-caret-position="240">
+              <caret line="131" column="17" lean-forward="true" selection-start-line="131" selection-start-column="17" selection-end-line="131" selection-end-column="17" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1956#1957#0" expanded="true" />
-                <element signature="e#2010#2011#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -149,9 +118,8 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="683" />
     <option name="y" value="25" />
-    <option name="width" value="683" />
+    <option name="width" value="796" />
     <option name="height" value="696" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -161,7 +129,6 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -184,6 +151,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -224,11 +192,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Main" />
-        <item itemvalue="Application.RechercheFilm" />
         <item itemvalue="Application.RechercheFilm" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />
+        <item itemvalue="Application.RechercheFilm" />
+        <item itemvalue="Application.RechercheFilm" />
       </list>
     </recent_temporary>
   </component>
@@ -495,7 +463,14 @@
       <option name="project" value="LOCAL" />
       <updated>1558018018348</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="JavaDoc à jour 2">
+      <created>1558273557199</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1558273557200</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="TodoView">
@@ -511,7 +486,7 @@
     <frame x="0" y="25" width="1366" height="696" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1689394" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17348485" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -520,7 +495,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.31040564" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.6606061" visible="true" weight="0.6084656" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.6606061" visible="true" weight="0.1005291" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4909091" weight="0.42151675" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -540,7 +515,6 @@
     </layout>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Autres titres DONE + TODO Bug first line not read (real + acteurs)" />
     <MESSAGE value="Fixing bug ArrayList dynamic allocation + TODO bug algo add InfoFilm" />
     <MESSAGE value="Package created + warnings fixed + JSON formatted to implement a list of films" />
     <MESSAGE value="Fixing AVEC + DE with many terms in names" />
@@ -565,7 +539,8 @@
     <MESSAGE value="Fixing OU before an AND" />
     <MESSAGE value="AND (... OU ... OU ...) fixed" />
     <MESSAGE value="JavaDoc à jour" />
-    <option name="LAST_COMMIT_MESSAGE" value="JavaDoc à jour" />
+    <MESSAGE value="JavaDoc à jour 2" />
+    <option name="LAST_COMMIT_MESSAGE" value="JavaDoc à jour 2" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
@@ -654,12 +629,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/java_project/RechercheFilm.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="46">
-          <caret line="592" column="48" selection-start-line="592" selection-start-column="48" selection-end-line="592" selection-end-column="48" />
+        <state relative-caret-position="240">
+          <caret line="131" column="17" lean-forward="true" selection-start-line="131" selection-start-column="17" selection-end-line="131" selection-end-column="17" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1956#1957#0" expanded="true" />
-            <element signature="e#2010#2011#0" expanded="true" />
           </folding>
         </state>
       </provider>
