@@ -3,9 +3,17 @@
   <component name="ChangeListManager">
     <list default="true" id="c203bad0-6597-4e90-81e6-42c9ec4fa239" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/GenieLogicielProjet/java_project/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/GenieLogicielProjet/java_project/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/java_project/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java_project/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/java_project/RechercheFilm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java_project/RechercheFilm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/GenieLogicielProjet/java_project/InfoFilm.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/GenieLogicielProjet/java_project/Main.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/GenieLogicielProjet/java_project/NomPersonne.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/GenieLogicielProjet/java_project/RechercheFilm.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/GenieLogicielProjet/java_project/StringHelper.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java_project/InfoFilm.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java_project/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java_project/NomPersonne.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java_project/RechercheFilm.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java_project/StringHelper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/script.sh" beforeDir="false" afterPath="$PROJECT_DIR$/src/script.sh" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -20,22 +28,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/java_project/Main.java">
+        <entry file="file://$PROJECT_DIR$/src/projet_GLPOO_3A/RechercheFilm.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="47" selection-start-line="8" selection-start-column="47" selection-end-line="8" selection-end-column="47" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/java_project/RechercheFilm.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="96">
-              <caret line="101" column="15" selection-start-line="101" selection-start-column="15" selection-end-line="101" selection-end-column="15" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="270">
+              <caret line="19" column="25" selection-start-line="19" selection-start-column="25" selection-end-line="19" selection-end-column="25" />
             </state>
           </provider>
         </entry>
@@ -108,8 +104,13 @@
         <option value="$PROJECT_DIR$/src/java_project/BDDManager.java" />
         <option value="$PROJECT_DIR$/src/java_project/NomPersonne.java" />
         <option value="$PROJECT_DIR$/GenieLogicielProjet.iml" />
-        <option value="$PROJECT_DIR$/src/java_project/RechercheFilm.java" />
         <option value="$PROJECT_DIR$/src/java_project/Main.java" />
+        <option value="$PROJECT_DIR$/src/java_project/RechercheFilm.java" />
+        <option value="$PROJECT_DIR$/src/projet_GLPOO_3A/InfoFilm.java" />
+        <option value="$PROJECT_DIR$/src/projet_GLPOO_3A/Main.java" />
+        <option value="$PROJECT_DIR$/src/projet_GLPOO_3A/NomPersonne.java" />
+        <option value="$PROJECT_DIR$/src/projet_GLPOO_3A/RechercheFilm.java" />
+        <option value="$PROJECT_DIR$/src/projet_GLPOO_3A/StringHelper.java" />
       </list>
     </option>
   </component>
@@ -147,7 +148,7 @@
               <item name="GenieLogicielProjet" type="b2602c69:ProjectViewProjectNode" />
               <item name="project" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="java_project" type="462c0819:PsiDirectoryNode" />
+              <item name="projet_GLPOO_3A" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -194,11 +195,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Main" />
-        <item itemvalue="Application.RechercheFilm" />
         <item itemvalue="Application.RechercheFilm" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />
+        <item itemvalue="Application.RechercheFilm" />
+        <item itemvalue="Application.RechercheFilm" />
       </list>
     </recent_temporary>
   </component>
@@ -495,7 +496,7 @@
     <frame x="0" y="25" width="1366" height="696" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18181819" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18484849" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -503,8 +504,8 @@
       <window_info id="Capture Tool" order="5" />
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.31040564" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.6606061" visible="true" weight="0.40035275" />
+      <window_info anchor="bottom" id="Find" order="1" visible="true" weight="0.31040564" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.6606061" weight="0.40035275" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4909091" weight="0.46737212" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -631,8 +632,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/java_project/RechercheFilm.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="101" column="15" selection-start-line="101" selection-start-column="15" selection-end-line="101" selection-end-column="15" />
+        <state relative-caret-position="135">
+          <caret line="9" column="15" lean-forward="true" selection-start-line="9" selection-start-column="15" selection-end-line="9" selection-end-column="15" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -641,8 +642,43 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/java_project/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="47" selection-start-line="8" selection-start-column="47" selection-end-line="8" selection-end-column="47" />
+        <state relative-caret-position="90">
+          <caret line="6" column="48" selection-start-line="6" selection-start-column="48" selection-end-line="6" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/projet_GLPOO_3A/InfoFilm.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="23" selection-start-column="8" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/projet_GLPOO_3A/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="23" selection-start-column="23" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/projet_GLPOO_3A/NomPersonne.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="23" selection-start-column="23" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/projet_GLPOO_3A/StringHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="23" selection-start-column="23" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/projet_GLPOO_3A/RechercheFilm.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="19" column="25" selection-start-line="19" selection-start-column="25" selection-end-line="19" selection-end-column="25" />
         </state>
       </provider>
     </entry>
