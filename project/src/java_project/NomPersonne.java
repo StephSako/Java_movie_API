@@ -1,4 +1,4 @@
-package projet_GLPOO_3A;
+package java_project;
 
 /**
  *    Gestion des noms (noms de famille + pr&eacute;nom) des personnes.

@@ -1,4 +1,4 @@
-package projet_GLPOO_3A;
+package java_project;
 
 import java.sql.*;
 import java.util.*;
