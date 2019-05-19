@@ -575,7 +575,7 @@ public class RechercheFilm {
                     newField = true;
                     tmpStorage.clear();
                 }
-                else if (!Arrays.asList(possibleTerms).contains(str)) value.append(str).append(" ");
+                else value.append(str).append(" ");
             }
         }
         sql.append(ORDER_BY_SQL);
