@@ -209,7 +209,7 @@ public class RechercheFilm {
                                     for (int k = 0; k < strings.size(); k++) {
                                         if (k > 0) sql.append("\nOR");
                                         sql.append(" f.id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique");
-                                        sql.append(" WHERE (prenom_sans_accent || ' ' || nom_sans_accent LIKE '%").append(strings.get(k)).append("%' OR nom_sans_accent || ' ' || prenom_sans_accent LIKE '%").append(strings.get(k)).append("%' OR nom_sans_accent LIKE '%").append(strings.get(k)).append("%')");
+                                        sql.append(" WHERE (prenom_sans_accent || ' ' || nom_sans_accent LIKE '%").append(strings.get(k).replace(' ', '%')).append("%' OR nom_sans_accent || ' ' || prenom_sans_accent LIKE '%").append(strings.get(k).replace(' ', '%')).append("%' OR nom_sans_accent LIKE '%").append(strings.get(k).replace(' ', '%')).append("%')");
                                         sql.append(" AND role = 'R')");
                                     }
                                     sql.append(")");
@@ -243,7 +243,7 @@ public class RechercheFilm {
                                     for (int k = 0; k < strings.size(); k++) {
                                         if (k > 0) sql.append("\nOR");
                                         sql.append(" f.id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique");
-                                        sql.append(" WHERE (prenom_sans_accent || ' ' || nom_sans_accent LIKE '%").append(strings.get(k)).append("%' OR nom_sans_accent || ' ' || prenom_sans_accent LIKE '%").append(strings.get(k)).append("%' OR nom_sans_accent LIKE '%").append(strings.get(k)).append("%')");
+                                        sql.append(" WHERE (prenom_sans_accent || ' ' || nom_sans_accent LIKE '%").append(strings.get(k).replace(' ', '%')).append("%' OR nom_sans_accent || ' ' || prenom_sans_accent LIKE '%").append(strings.get(k).replace(' ', '%')).append("%' OR nom_sans_accent LIKE '%").append(strings.get(k).replace(' ', '%')).append("%')");
                                         sql.append(" AND role = 'A')");
                                     }
                                     sql.append(")");
@@ -283,7 +283,7 @@ public class RechercheFilm {
                                     }
                                     catch (NumberFormatException err) {
                                         this.erreur = true;
-                                        this.message_erreur = "Une valeur non-numerique a ete saisie pour le mot-clef EN : [" + err.getMessage().replace('\"', '\'') + "]";
+                                        this.message_erreur = "Une valeur non-numerique a ete saisie pour le mot-clef EN.";
                                         break;
                                     }
                                 }
@@ -423,7 +423,7 @@ public class RechercheFilm {
                                 for (int k = 0; k < strings.size(); k++) {
                                     if (k > 0) sql.append("\nOR");
                                     sql.append(" f.id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique");
-                                    sql.append(" WHERE (prenom_sans_accent || ' ' || nom_sans_accent LIKE '%").append(strings.get(k)).append("%' OR nom_sans_accent || ' ' || prenom_sans_accent LIKE '%").append(strings.get(k)).append("%' OR nom_sans_accent LIKE '%").append(strings.get(k)).append("%')");
+                                    sql.append(" WHERE (prenom_sans_accent || ' ' || nom_sans_accent LIKE '%").append(strings.get(k).replace(' ', '%')).append("%' OR nom_sans_accent || ' ' || prenom_sans_accent LIKE '%").append(strings.get(k).replace(' ', '%')).append("%' OR nom_sans_accent LIKE '%").append(strings.get(k).replace(' ', '%')).append("%')");
                                     sql.append(" AND role = 'R')");
                                 }
                                 sql.append(")");
@@ -457,7 +457,7 @@ public class RechercheFilm {
                                 for (int k = 0; k < strings.size(); k++) {
                                     if (k > 0) sql.append("\nOR");
                                     sql.append(" f.id_film IN (SELECT id_film FROM personnes NATURAL JOIN generique");
-                                    sql.append(" WHERE (prenom_sans_accent || ' ' || nom_sans_accent LIKE '%").append(strings.get(k)).append("%' OR nom_sans_accent || ' ' || prenom_sans_accent LIKE '%").append(strings.get(k)).append("%' OR nom_sans_accent LIKE '%").append(strings.get(k)).append("%')");
+                                    sql.append(" WHERE (prenom_sans_accent || ' ' || nom_sans_accent LIKE '%").append(strings.get(k).replace(' ', '%')).append("%' OR nom_sans_accent || ' ' || prenom_sans_accent LIKE '%").append(strings.get(k).replace(' ', '%')).append("%' OR nom_sans_accent LIKE '%").append(strings.get(k).replace(' ', '%')).append("%')");
                                     sql.append(" AND role = 'A')");
                                 }
                                 sql.append(")");
