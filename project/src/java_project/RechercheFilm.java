@@ -112,7 +112,7 @@ public class RechercheFilm {
         String[] list = requete.split(" |((?<=,)|(?=,))");
         label:
         for (int i = 0; i<list.length; i++) {
-            String str = list[i];
+            String str = list[i].toUpperCase();
             if (newField) {
                 if (Arrays.asList(possibleTerms).contains(str)) {
                     if ((str.equals("TITRE") && TITRE_filled) || (str.equals("EN") && EN_filled) || (str.equals("PAYS") && PAYS_filled)) {
