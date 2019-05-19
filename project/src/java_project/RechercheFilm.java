@@ -105,8 +105,9 @@ public class RechercheFilm {
         String[] list = requete.split(" |((?<=,)|(?=,))");
         label:
         for (int i = 0; i<list.length; i++) {
-            String str = list[i].toUpperCase();
+            String str = list[i];
             if (newField) {
+                str = str.toUpperCase();
                 if (Arrays.asList(possibleTerms).contains(str)) {
                     if ((str.equals("TITRE") && TITRE_filled) || (str.equals("EN") && EN_filled) || (str.equals("PAYS") && PAYS_filled)) {
                         this.erreur = true;
@@ -142,7 +143,7 @@ public class RechercheFilm {
                 }
             }
             else {
-                if (str.equals("OU")) {
+                if (str.toUpperCase().equals("OU")) {
                     if (list[i+1].equals(",")) {
                         this.erreur = true;
                         this.message_erreur = "Une valeur est attendue apres le mot-clef 'OU'.";
@@ -171,7 +172,7 @@ public class RechercheFilm {
 
                                 for (int j = 0; j < tmpStorage.size(); j++) {
                                     if (j > 0) sql.append(" OR");
-                                    sql.append(" f.id_film IN (SELECT id_film FROM recherche_titre rt WHERE rt.titre LIKE '%' || replace('").append(tmpStorage.get(j)).append("', ' ', '%') || '%')");
+                                    sql.append(" f.id_film IN (SELECT id_film FROM recherche_titre rt WHERE rt.titre LIKE replace(\"%").append(tmpStorage.get(j)).append("%\", ' ', '%') || '%')");
                                 }
                                 sql.append(")");
                                 TITRE_filled = true;
@@ -385,7 +386,7 @@ public class RechercheFilm {
 
                             for (int j = 0; j < tmpStorage.size(); j++) {
                                 if (j > 0) sql.append(" OR");
-                                sql.append(" f.id_film IN (SELECT id_film FROM recherche_titre rt WHERE rt.titre LIKE '%' || replace('").append(tmpStorage.get(j)).append("', ' ', '%') || '%')");
+                                sql.append(" f.id_film IN (SELECT id_film FROM recherche_titre rt WHERE rt.titre LIKE '%' || replace(\"%").append(tmpStorage.get(j)).append("%\", ' ', '%') || '%')");
                             }
                             sql.append(")");
                             TITRE_filled = true;
