@@ -11,9 +11,9 @@ import java.util.Arrays;
 import java.util.Collections;
 
 /**
- * Classe de recherche dans la BDD SQLite d'IMDB.
- * @author Stephen Sakovitch 3A-32
- * @author Theo Machon 3A-32
+ * Classe de recherche dans la BDD SQLite d'IMDB.<br>
+ * @author Stephen Sakovitch 3A-32<br>
+ * @author Theo Machon 3A-32<br>
  * @version 0.3
  */
 public class RechercheFilm {
@@ -46,7 +46,7 @@ public class RechercheFilm {
         }
 
         /**
-         * Constructeur de l'accesseur a la BDD SQLite
+         * Constructeur de l'accesseur a la BDD SQLite.
          *  @param file Chemin d'acc&egrave;s au fichier BDD
          */
         public BDDManager(String file) {
@@ -70,8 +70,7 @@ public class RechercheFilm {
     }
 
     /**
-     * M&eacute;thode permettant la traduction de la pseudo-requ&ecirc;te en requ&ecirc;te SQL, effectue la recherche dans la BDD SQLite et renvoie les films au format JSON.
-     * @param requete Langage de recherce simplif&eacute;e:<br>
+     * M&eacute;thode permettant la traduction de la pseudo-requ&ecirc;te en requ&ecirc;te SQL, effectue la recherche dans la BDD SQLite et renvoie les films au format JSON.<br>
      * TITRE suivi d'un titre de film;<br>
      * DE suivi d'un nom de r&eacute;alisateur;<br>
      * AVEC suivi d'un nom d'acteur ou d'actrice;<br>
@@ -81,6 +80,7 @@ public class RechercheFilm {
      * APRES (ou APRES) suivi d'une ann&eacute;e de sortie (correspond &agrave; &gt;, on ne traite pas &gt;=).<br>
      * Les conditions ainsi exprim&eacute;es peuvent &ecirc;tre combin&eacute;es soit en les s&eacute;parant par une virgule ("et" implicite), soit avec OU.<br>
      * On peut omettre le mot-clef apr&egrave;s une virgule ou OU, dans ce cas c'est implicitement le m&ecirc;me type de crit&egrave;re que pr&eacute;c&eacute;demment qui s'applique.
+     * @param requete Langage de recherce simplif&eacute;e:<br>
      * @return R&eacute;ponse de la recherche au format JSON.
      */
     public String retrouve(String requete) {
@@ -90,7 +90,7 @@ public class RechercheFilm {
     }
 
     /**
-     * Convertit la pseudo-requ&ecirc;te en requ&ecirc;te SQL exploitable
+     * Convertit la pseudo-requ&ecirc;te en requ&ecirc;te SQL exploitable.
      * @param requete Pseudo-requ&ecirc;te
      * @return String Requete SQL cr&eacute;&eacute;e
      */
@@ -313,7 +313,7 @@ public class RechercheFilm {
                                     }
                                     catch (NumberFormatException err) {
                                         this.erreur = true;
-                                        this.message_erreur = "Une valeur non-numerique a ete saisie pour le mot-clef AVANT : [" + err.getMessage().replace('\"', '\'') + "]";
+                                        this.message_erreur = "Une valeur non-numerique a ete saisie pour le mot-clef AVANT : '" + tmpVal + "'.";
                                         break;
                                     }
                                 }
@@ -337,7 +337,7 @@ public class RechercheFilm {
                                     }
                                     catch (NumberFormatException err) {
                                         this.erreur = true;
-                                        this.message_erreur = "Une valeur non-numerique a ete saisie pour le mot-clef APRES : [" + err.getMessage().replace('\"', '\'') + "]";
+                                        this.message_erreur = "Une valeur non-numerique a ete saisie pour le mot-clef APRES : '" + tmpVal + "'.";
                                         break;
                                     }
                                 }
@@ -468,7 +468,7 @@ public class RechercheFilm {
                         case "PAYS":
                             if (tmpStorage.get(0).matches(".*\\d.*")) {
                                 this.erreur = true;
-                                this.message_erreur = "Une valeur numerique a ete saisie pour le mot-clef PAYS";
+                                this.message_erreur = "Une valeur numerique a ete saisie pour le mot-clef PAYS.";
                                 break label;
                             }
                             else {
@@ -498,7 +498,7 @@ public class RechercheFilm {
                                 }
                                 catch (NumberFormatException err) {
                                     this.erreur = true;
-                                    this.message_erreur = "Une valeur non-numerique a ete saisie pour le mot-clef EN : [" + err.getMessage().replace('\"', '\'') + "]";
+                                    this.message_erreur = "Une valeur non-numerique a ete saisie pour le mot-clef EN : '" + tmpVal + "'.";
                                     break;
                                 }
                             }
@@ -529,7 +529,7 @@ public class RechercheFilm {
                                 }
                                 catch (NumberFormatException err) {
                                     this.erreur = true;
-                                    this.message_erreur = "Une valeur non-numerique a ete saisie pour le mot-clef AVANT : [" + err.getMessage().replace('\"', '\'') + "]";
+                                    this.message_erreur = "Une valeur non-numerique a ete saisie pour le mot-clef AVANT : '" + tmpVal + "'.";
                                     break;
                                 }
                             }
@@ -554,7 +554,7 @@ public class RechercheFilm {
                                 }
                                 catch (NumberFormatException err) {
                                     this.erreur = true;
-                                    this.message_erreur = "Une valeur non-numerique a ete saisie pour le mot-clef APRES : [" + err.getMessage().replace('\"', '\'') + "]";
+                                    this.message_erreur = "Une valeur non-numerique a ete saisie pour le mot-clef APRES : '" + tmpVal + "'.";
                                     break;
                                 }
                             }
@@ -583,16 +583,17 @@ public class RechercheFilm {
     }
 
     /**
-     * Ordre des colonnes dans le resultSet (faire -1 pour l'ArrayList) :
-     * [1] f.id_film (ID du film)
-     * [2] prenom [3] p.nom (pr&eacute;nom/nom d'une personne)
-     * [4] titre (titre du film)
-     * [5] duree (dur&eacute;e du film en minutes)
-     * [6] annee (ann&eacute;e de sortie du film)
-     * [7] py.nom (nom du pays en entier)
-     * [8] role (r&ocirc;le de la personne =&gt; 'A' : acteur, 'R' : r&eacute;alisateur)
-     * [9] liste des autres titres sur une ligne
-     * @param sql ResultSet de la requ&ecirc;te SQL construite &agrave; partir du pseudo-langage
+     * Cette fonction permet de retourner un tableau d'InfoFilm &agrave; partir d'une requ&ecirc;te SQL.<br><br>
+     * Ordre des colonnes dans le resultSet (faire -1 pour l'ArrayList) :<br>
+     * [1] f.id_film (ID du film)<br>
+     * [2] prenom [3] p.nom (pr&eacute;nom/nom d'une personne)<br>
+     * [4] titre (titre du film)<br>
+     * [5] duree (dur&eacute;e du film en minutes)<br>
+     * [6] annee (ann&eacute;e de sortie du film)<br>
+     * [7] py.nom (nom du pays en entier)<br>
+     * [8] role (r&ocirc;le de la personne =&gt; 'A' : acteur, 'R' : r&eacute;alisateur)<br>
+     * [9] liste des autres titres sur une ligne<br>
+     * @param sql ResultSet de la requ&ecirc;te SQL construite &agrave; partir du pseudo-langage<br>
      * @return ArrayList&lt;java_project.InfoFilm&gt; liste des films
      */
     public ArrayList<InfoFilm> getInfoFilmArray(String sql){
