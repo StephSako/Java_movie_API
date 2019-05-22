@@ -113,6 +113,7 @@ public class RechercheFilm {
                         this.erreur = true;
                         this.message_erreur = "Le mot-clef '" + str + "' n'accepte qu'une seule valeur : utilisez des 'OU'.";
                         if (str.equals("TITRE")) this.message_erreur += " Si le titre comporte des virgules, utilisez un 'ou' a la place car il n'est pas possible de savoir si la suite de la pseudo-requete fais partie du titre ou pas.";
+                        else this.message_erreur += " Sinon, le mot clef '" + str + "' n'existe pas.";
                         break;
                     }
                     else if (list[i+1].equals("OU") || list[i+1].equals(",")) {
@@ -136,6 +137,7 @@ public class RechercheFilm {
                         this.erreur = true;
                         this.message_erreur = "Le mot-clef '" + field + "' n'accepte qu'une seule valeur : utilisez des 'OU'.";
                         if (field.equals("TITRE")) this.message_erreur += " Si le titre comporte des virgules, utilisez un 'ou' a la place car il n'est pas possible de savoir si la suite de la pseudo-requete fais partie du titre ou pas.";
+                        else this.message_erreur += " Sinon, le mot clef '" + str + "' n'existe pas.";
                         break;
                     }
                     else {
@@ -187,7 +189,17 @@ public class RechercheFilm {
                                         this.message_erreur = "Une valeur numerique a ete saisie pour le mot-clef DE";
                                         break;
                                     }
-                                    else tmpStorage2.add(tmpVal);
+                                    else{
+                                        String[] mots = tmpVal.split(" ");
+                                        for (int g = 0; g < mots.length; g++){
+                                            if (mots[i].matches("^[mc].*")) mots[i] = mots[i].replace("mc", "mac");
+                                        }
+                                        String tmpValue_ = String.join(" ", mots);
+                                        mots = null;
+
+                                        if (tmpValue_.matches("^[mc].*")) tmpValue_ = tmpValue_.replace("mc", "mac");
+                                        tmpStorage2.add(tmpValue_);
+                                    }
                                 }
                                 array2D.add(tmpStorage2);
 
@@ -221,7 +233,17 @@ public class RechercheFilm {
                                         this.message_erreur = "Une valeur numerique a ete saisie pour le mot-clef AVEC";
                                         break;
                                     }
-                                    else tmpStorage2.add(tmpVal);
+                                    else{
+                                        String[] mots = tmpVal.split(" ");
+                                        for (int g = 0; g < mots.length; g++){
+                                            if (mots[i].matches("^[mc].*")) mots[i] = mots[i].replace("mc", "mac");
+                                        }
+                                        String tmpValue_ = String.join(" ", mots);
+                                        mots = null;
+
+                                        if (tmpValue_.matches("^[mc].*")) tmpValue_ = tmpValue_.replace("mc", "mac");
+                                        tmpStorage2.add(tmpValue_);
+                                    }
                                 }
 
                                 array2D.add(tmpStorage2);
@@ -401,7 +423,17 @@ public class RechercheFilm {
                                     this.message_erreur = "Une valeur numerique a ete saisie pour le mot-clef DE";
                                     break;
                                 }
-                                else tmpStorage2.add(tmpVal);
+                                else{
+                                    String[] mots = tmpVal.split(" ");
+                                    for (int g = 0; g < mots.length; g++){
+                                        if (mots[g].matches("^[mc].*")) mots[g] = mots[g].replace("mc", "mac");
+                                    }
+                                    String tmpValue_ = String.join(" ", mots);
+                                    mots = null;
+
+                                    if (tmpValue_.matches("^[mc].*")) tmpValue_ = tmpValue_.replace("mc", "mac");
+                                    tmpStorage2.add(tmpValue_);
+                                }
                             }
                             array2D.add(tmpStorage2);
 
@@ -435,7 +467,17 @@ public class RechercheFilm {
                                     this.message_erreur = "Une valeur numerique a ete saisie pour le mot-clef AVEC";
                                     break;
                                 }
-                                else tmpStorage2.add(tmpVal);
+                                else {
+                                    String[] mots = tmpVal.split(" ");
+                                    for (int g = 0; g < mots.length; g++){
+                                        if (mots[g].matches("^[mc].*")) mots[g] = mots[g].replace("mc", "mac");
+                                    }
+                                    String tmpValue_ = String.join(" ", mots);
+                                    mots = null;
+
+                                    if (tmpValue_.matches("^[mc].*")) tmpValue_ = tmpValue_.replace("mc", "mac");
+                                    tmpStorage2.add(tmpValue_);
+                                }
                             }
 
                             array2D.add(tmpStorage2);
