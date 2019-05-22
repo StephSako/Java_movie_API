@@ -192,13 +192,9 @@ public class RechercheFilm {
                                     else{
                                         String[] mots = tmpVal.split(" ");
                                         for (int g = 0; g < mots.length; g++){
-                                            if (mots[i].matches("^[mc].*")) mots[i] = mots[i].replace("mc", "mac");
+                                            if (mots[g].matches("^[mc].*")) mots[g] = mots[g].replace("mc", "mac");
                                         }
-                                        String tmpValue_ = String.join(" ", mots);
-                                        mots = null;
-
-                                        if (tmpValue_.matches("^[mc].*")) tmpValue_ = tmpValue_.replace("mc", "mac");
-                                        tmpStorage2.add(tmpValue_);
+                                        tmpStorage2.add(String.join(" ", mots));
                                     }
                                 }
                                 array2D.add(tmpStorage2);
@@ -236,13 +232,9 @@ public class RechercheFilm {
                                     else{
                                         String[] mots = tmpVal.split(" ");
                                         for (int g = 0; g < mots.length; g++){
-                                            if (mots[i].matches("^[mc].*")) mots[i] = mots[i].replace("mc", "mac");
+                                            if (mots[g].matches("^[mc].*")) mots[g] = mots[g].replace("mc", "mac");
                                         }
-                                        String tmpValue_ = String.join(" ", mots);
-                                        mots = null;
-
-                                        if (tmpValue_.matches("^[mc].*")) tmpValue_ = tmpValue_.replace("mc", "mac");
-                                        tmpStorage2.add(tmpValue_);
+                                        tmpStorage2.add(String.join(" ", mots));
                                     }
                                 }
 
@@ -428,11 +420,7 @@ public class RechercheFilm {
                                     for (int g = 0; g < mots.length; g++){
                                         if (mots[g].matches("^[mc].*")) mots[g] = mots[g].replace("mc", "mac");
                                     }
-                                    String tmpValue_ = String.join(" ", mots);
-                                    mots = null;
-
-                                    if (tmpValue_.matches("^[mc].*")) tmpValue_ = tmpValue_.replace("mc", "mac");
-                                    tmpStorage2.add(tmpValue_);
+                                    tmpStorage2.add(String.join(" ", mots));
                                 }
                             }
                             array2D.add(tmpStorage2);
@@ -472,11 +460,7 @@ public class RechercheFilm {
                                     for (int g = 0; g < mots.length; g++){
                                         if (mots[g].matches("^[mc].*")) mots[g] = mots[g].replace("mc", "mac");
                                     }
-                                    String tmpValue_ = String.join(" ", mots);
-                                    mots = null;
-
-                                    if (tmpValue_.matches("^[mc].*")) tmpValue_ = tmpValue_.replace("mc", "mac");
-                                    tmpStorage2.add(tmpValue_);
+                                    tmpStorage2.add(String.join(" ", mots));
                                 }
                             }
 
